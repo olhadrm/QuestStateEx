@@ -1,19 +1,26 @@
-//Version:1.4.0
+VERSION = 1.45; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
 //cnt + questNoで、カウントを数える
 //そしてquest_stateEx.jsで表示するといった感じ
 
-load('nashorn:mozilla_compat.js');
 load("script/utils.js");
 load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 Calendar = Java.type("java.util.Calendar");
-importPackage(Packages.logbook.data);
+DataType = Java.type("logbook.data.DataType");
 ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 System = Java.type("java.lang.System");
+GlobalContext = Java.type("logbook.data.context.GlobalContext");
+
+var ID_TYPE96_FIGHTER = 19; //九六式艦戦のID
+var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
+var ID_TYPE0_FIGHTER_MODEL52 = 21; //零式五二型のID
+var ID_TYPE0_FIGHTER_MODEL21_SKILLED = 96; //零式二一型(熟練)のID
+var MAX_ALV = 7; //熟練度最大値
+var CVS = 14; //潜水空母
 
 function update(type, data){
 	var json = data.getJsonObject();
@@ -36,6 +43,15 @@ function update(type, data){
 				}
 			}
 			setData("questLastUpdateTime",questLastUpdateTime);
+		//母港
+		case DataType.PORT:
+			//機種転換任務で確認することリスト
+			//任務の前提条件はクリアしているか（廃棄）
+			//秘書艦は変わっていないか→getId()：キャラIDで問題なし
+			//装備は変わっていないか　→getSlotitemId()：装備IDで問題なし
+			//熟練度はどうなる？　　　→getId()：熟練度チェックだけで問題なし
+			//任務画面と母港で条件をチェックする
+			iniCntModelConversionCheck();
 			break;
 		//戦闘
 		case DataType.START:
@@ -48,7 +64,7 @@ function update(type, data){
 			break;
 		case DataType.BATTLE_RESULT:
 		case DataType.COMBINED_BATTLE_RESULT:
-			var getLastBattleDto = Packages.logbook.data.context.GlobalContext.getLastBattleDto();
+			var getLastBattleDto = GlobalContext.getLastBattleDto();
 			var getEnemy = getLastBattleDto.getEnemy();
 			var getNowEnemyHp = getLastBattleDto.getNowEnemyHp();
 			var getShips = getLastBattleDto.getDock().getShips();
@@ -278,6 +294,59 @@ function update(type, data){
 		case DataType.DESTROY_ITEM2:
 			//資源の再利用
 			if(getData("flg613")) setData("cnt613",getData("cnt613") + 1);
+			var oldItemArray = getItemArray(); //古いデータ
+			var newItemArray = getItemArray2(GlobalContext.getItemMap()); //最新のデータ
+			//母港・建造・開発経由必須
+			if(oldItemArray != null){
+				var adjustmentCount = 0; //調整回数
+				var secretary = GlobalContext.getSecretary();
+				var secretaryItem = secretary.getItem2(); //java.util.List<ItemDto>
+				for(var i = 0;i < oldItemArray[0].length;i++){
+					//もし一致しなかった場合
+					if(oldItemArray[0][i] != newItemArray[0][i - adjustmentCount]){
+						if(oldItemArray[1][i] == ID_TYPE96_FIGHTER){ //廃棄した装備が九六式艦戦だったら
+							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
+								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
+									if(secretaryItem[j] != null){
+										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
+											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
+												if(getData("flg626")) setData("cntScrapType96Fighter_626",getData("cntScrapType96Fighter_626") + 1);
+											}
+										}
+									}
+								}
+							}
+						}
+						if(oldItemArray[1][i] == ID_TYPE0_FIGHTER_MODEL21){ //廃棄した装備が零式二一型だったら
+							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
+								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
+									if(secretaryItem[j] != null){
+										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
+											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
+												if(getData("flg626")) setData("cntScrapType0FighterModel21_626",getData("cntScrapType0FighterModel21_626") + 1);
+											}
+										}
+									}
+								}
+							}
+						}
+						if(oldItemArray[1][i] == ID_TYPE0_FIGHTER_MODEL52){ //廃棄した装備が零式五二型だったら
+							if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == CVS)){ //秘書艦が空母なら
+								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
+									if(secretaryItem[j] != null){
+										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21_SKILLED){ //零式艦戦21型(熟練)を積んでいるか
+											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
+												if(getData("flg628")) setData("cnt628",getData("cnt628") + 1);
+											}
+										}
+									}
+								}
+							}
+						}
+						adjustmentCount++;
+					}
+				}
+			}
 			break;
 		//近代化改修
 		case DataType.POWERUP:
@@ -343,14 +412,95 @@ function update(type, data){
 		default :
 			break;
 	}
+	//精鋭「艦戦」隊の新編成・機種転換用(Ver1.4.1)
+	setItemArray2();
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
+}
+
+//オーバーロード下さい（懇願）
+
+//精鋭「艦戦」隊の新編成・機種転換用(Ver1.4.1)
+function setItemArray2(){
+	var itemMap = GlobalContext.getItemMap();
+	var itemArray = getItemArray2(itemMap);
+	setItemArray(itemArray);
+}
+
+function setItemArray(itemArray){
+	setTmpData("itemArray",itemArray);
+}
+
+function getItemArray(){
+	return getData("itemArray");
+}
+
+/**
+ * @return 二次元配列=[装備ID(個別)、装備ID(マスター)、改修度、熟練度、ロック]
+ */
+function getItemArray2(itemMap){
+	return [getItemIdArray(itemMap),
+			getSlotItemIdArray(itemMap),
+			getItemLevelArray(itemMap),
+			getItemAlvArray(itemMap),
+			getItemIsLockedArray(itemMap)];
+}
+
+function getItemIdArray(itemMap){
+	var result = [];
+	for(var it = itemMap.entrySet().iterator();it.hasNext();){
+		var entry = it.next();
+		var id = entry.getKey();
+		result.push(Math.floor(entry.getValue().getId()));
+	}
+	return result;
+}
+
+function getSlotItemIdArray(itemMap){
+	var result = [];
+	for(var it = itemMap.entrySet().iterator();it.hasNext();){
+		var entry = it.next();
+		var id = entry.getKey();
+		result.push(entry.getValue().getSlotitemId());
+	}
+	return result;
+}
+
+function getItemLevelArray(itemMap){
+	var result = [];
+	for(var it = itemMap.entrySet().iterator();it.hasNext();){
+		var entry = it.next();
+		var id = entry.getKey();
+		result.push(Math.floor(entry.getValue().getLevel()));
+	}
+	return result;
+}
+
+function getItemAlvArray(itemMap){
+	var result = [];
+	for(var it = itemMap.entrySet().iterator();it.hasNext();){
+		var entry = it.next();
+		var id = entry.getKey();
+		result.push(Math.floor(entry.getValue().getAlv()));
+	}
+	return result;
+}
+
+function getItemIsLockedArray(itemMap){
+	var result = [];
+	for(var it = itemMap.entrySet().iterator();it.hasNext();){
+		var entry = it.next();
+		var id = entry.getKey();
+		result.push(entry.getValue().isLocked());
+	}
+	return result;
 }
 
 function updateCheck() {
 	//最初は絶対null取得する…はず（それをフラグにして初期化）
 	var questLastUpdateTime = getData("questLastUpdateTime");
 	if (questLastUpdateTime != null) {
+		versionCheck();
 		var nowTime = Calendar.getInstance();
 		//5時間マイナスして、0時に更新したように見せる
 		nowTime.add(Calendar.HOUR_OF_DAY, -5);
@@ -377,24 +527,26 @@ function updateCheck() {
 	}
 }
 
+//任務ID
+var dairyId = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702]; //デイリーid
+var weeklyId = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613]; //ウィークリーid（214は除外）
+var monthlyId = [249,256,257,259,264,265,266,311,628]; //マンスリーid(626は除外)
+
 //5時以降で更新したら初期化
 function initializeDairyCount() {
-	var id = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702]; //デイリーid＋精鋭艦隊演習(id:311)
-
-	for(var i = 0;i < id.length;i++){
-		setData("cnt"+ id[i],0);
-		setData("flg"+ id[i],false);
+	for(var i = 0;i < dairyId.length;i++){
+		setData("cnt"+ dairyId[i],0);
+		setData("flg"+ dairyId[i],false);
 	}
 	setData("cnt311",0); //精鋭艦隊演習
 }
 
 function initializeWeeklyCount() {
-	var id = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613]; //ウィークリーid（214は除外）
-
-	for(var i = 0;i < id.length;i++){
-		setData("cnt"+ id[i],0);
-		setData("flg"+ id[i],false);
+	for(var i = 0;i < weeklyId.length;i++){
+		setData("cnt"+ weeklyId[i],0);
+		setData("flg"+ weeklyId[i],false);
 	}
+	//あ号作戦
 	setData("flg214",false);
 	setData("cntSally214", 0);
 	setData("cntSWin214", 0);
@@ -403,12 +555,14 @@ function initializeWeeklyCount() {
 }
 
 function initializeMonthlyCount() {
-	var id = [249,256,257,259,264,265,266,311]; //マンスリーid
-
-	for (var i = 0; i < id.length;i++) {
-		setData("cnt"+ id[i],0);
-		setData("flg"+ id[i],false);
+	for (var i = 0; i < monthlyId.length;i++) {
+		setData("cnt"+ monthlyId[i],0);
+		setData("flg"+ monthlyId[i],false);
 	}
+	//精鋭「艦戦」隊の新編成
+	setData("flg626",false);
+	setData("cntScrapType96Fighter_626",0);
+	setData("cntScrapType0FighterModel21_626",0);
 }
 
 //任務更新判定（一日）
@@ -572,12 +726,18 @@ function initializeMaxCount(){
 	setData("max266",1);
 	//精鋭艦隊演習(Ver1.4.0)
 	setData("max311",7);
+	//精鋭「艦戦」隊の新編成(Ver1.4.1)
+	setData("maxScrapType96Fighter_626",1);
+	setData("maxScrapType0FighterModel21_626",2);
+	//機種転換
+	setData("max628",2);
 }
 
 function questCountAdjustment(questNo, questProgressFlag, questType, questState){
-	//1回限りとあ号作戦を除去
-	//開発系も多少数がおかしくなるので除去（というより対策方法がない） Ver.1.3.8追記
-	if(questType != 1 && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608)){
+	//1回限りとあ号作戦を除外
+	//開発系も多少数がおかしくなるので除外（というより対策方法がない） Ver.1.3.8追記
+	//精鋭「艦戦」隊の新編成も対処不可なので除外 Ver.1.4.1追記
+	if(questType != 1 && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
 		switch(questProgressFlag){
 			case 1: //50%
 				//カウンタが50%を下回ってるのに、「50%以上」表示になっていたら
@@ -622,6 +782,98 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 						break;
 				}
 				break;
+		}
+	}
+}
+
+//新しい任務追加した際に、-1となるのを防ぐ
+function updateCount(){
+	for(var i = 0;i < dairyId.length;i++){
+		if(getData("cnt" + dairyId[i])   == null || getData("cnt" + dairyId[i]) < 0)   setData("cnt"+ dairyId[i],0);
+	}
+	for(var i = 0;i < weeklyId.length;i++){
+		if(getData("cnt" + weeklyId[i])  == null || getData("cnt" + weeklyId[i]) < 0)  setData("cnt"+ weeklyId[i],0);
+	}
+	for(var i = 0;i < monthlyId.length;i++){
+		if(getData("cnt" + monthlyId[i]) == null || getData("cnt" + monthlyId[i]) < 0) setData("cnt"+ monthlyId[i],0);
+	}
+	//あ号作戦
+	if(getData("cntSally214")   == null || getData("cntSally214") < 0)   setData("cntSally214", 0);
+	if(getData("cntSWin214")    == null || getData("cntSWin214") < 0)    setData("cntSWin214", 0);
+	if(getData("cntBoss214")    == null || getData("cntBoss214") < 0)    setData("cntBoss214", 0);
+	if(getData("cntBossWin214") == null || getData("cntBossWin214") < 0) setData("cntBossWin214", 0);
+	//精鋭「艦戦」隊の新編成
+	if(getData("cntScrapType96Fighter_626") == null       || getData("cntScrapType96Fighter_626") < 0)       setData("cntScrapType96Fighter_626",0);
+	if(getData("cntScrapType0FighterModel21_626") == null || getData("cntScrapType0FighterModel21_626") < 0) setData("cntScrapType0FighterModel21_626",0);
+}
+
+function versionCheck(){
+	if(getData("version") == null || getData("version") < VERSION){
+		updateCount();
+	}
+	setData("version",VERSION);
+}
+
+function iniCnt626(){
+	setData("flg626",false);
+	setData("cntScrapType96Fighter_626",0);
+	setData("cntScrapType0FighterModel21_626",0);
+}
+
+function iniCnt628(){
+	setData("flg628",false);
+	setData("cnt628",0);
+}
+
+function isCrear626(){
+	if(getData("flg626") != null){
+		if(getData("cntScrapType96Fighter_626") >= getData("maxScrapType96Fighter_626")){
+			if(getData("cntScrapType0FighterModel21_626") >= getData("maxScrapType0FighterModel21_626")){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function isCrear628(){
+	if(getData("flg628") != null){
+		if(getData("cnt628") >= getData("max628")){
+				return true;
+		}
+	}
+	return false;
+}
+
+function iniCntModelConversionCheck(){
+	var secretary = GlobalContext.getSecretary();
+	var secretaryItem = secretary.getItem2();
+	
+	//精鋭「艦戦」隊の新編成
+	if(isCrear626()){
+		if(secretary.getName().indexOf("鳳翔") > -1){
+			for(var i = 0;i < secretaryItem.getSlotNum();i++){
+				if(secretaryItem[i].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21 && secretaryItem[i].getLevel() == MAX_ALV){
+					break;
+				}
+				if(i == secretaryItem.getSlotNum() - 1) iniCnt626();
+			}
+		} else {
+			iniCnt626();
+		}
+	}
+	
+	//機種転換
+	if(isCrear628()){
+		if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == CVS)){
+			for(var i = 0;i < secretaryItem.getSlotNum();i++){
+				if(secretaryItem[i].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21_SKILLED){
+					break;
+				}
+				if(i == secretaryItem.getSlotNum() - 1) iniCnt628();
+			}
+		} else {
+			iniCnt628();
 		}
 	}
 }
