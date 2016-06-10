@@ -614,7 +614,6 @@ function checkMonthly(questLastUpdateTime, nowTime) {
 //3=マンスリー
 //4=単発
 //5=他
-//6=マンスリー
 
 //questState
 //1=未受注
