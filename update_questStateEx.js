@@ -1,4 +1,4 @@
-VERSION = 1.45; //使うので変更不可
+VERSION = 1.46; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -609,11 +609,11 @@ function checkMonthly(questLastUpdateTime, nowTime) {
 }
 
 //questType
-//1=1回限り
-//2=デイリー
-//3=ウィークリー
-//4=敵空母を３隻撃沈せよ!(日付下一桁0|3|7)
-//5=敵輸送船団を叩け!(日付下一桁2|8)
+//1=デイリー
+//2=ウィークリー
+//3=マンスリー
+//4=単発
+//5=他
 //6=マンスリー
 
 //questState
@@ -622,7 +622,7 @@ function checkMonthly(questLastUpdateTime, nowTime) {
 //3=達成
 
 function setState(questNo ,questState, questType) {
-	if (questType != 1) { //1回限りは除外（そんな影響ないけど）
+	if (questType != 4) { //1回限りは除外（そんな影響ないけど）
 		setData("flg"+ questNo,questState == 2);
 	}
 }
@@ -737,7 +737,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 	//1回限りとあ号作戦を除外
 	//開発系も多少数がおかしくなるので除外（というより対策方法がない） Ver.1.3.8追記
 	//精鋭「艦戦」隊の新編成も対処不可なので除外 Ver.1.4.1追記
-	if(questType != 1 && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
+	if(questType != 4 && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
 		switch(questProgressFlag){
 			case 1: //50%
 				//カウンタが50%を下回ってるのに、「50%以上」表示になっていたら

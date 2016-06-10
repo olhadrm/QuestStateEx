@@ -1,4 +1,4 @@
-//ver1.4.5β
+//ver1.4.6
 //Author: Nishisonic
 //        Nekopanda
 
@@ -20,7 +20,7 @@ function body(quest) {
 function end() {}
 
 function getProgress(questNo, questType, questProgressFlag) {
-	if(questType != 1) {	//1回限りの任務は除外
+	if(questType != 4) {	//1回限りの任務は除外
 		switch(questNo){
 			case 214:	//あ号は特別扱い（切り捨てで計算）
 				var cntSally214 = getData("cntSally214");
@@ -56,7 +56,6 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" S勝利:" + Math.min(cntSWin214,maxSWin214) + "/" + maxSWin214 +
 					" ボス戦:" + Math.min(cntBoss214,maxBoss214) + "/" + maxBoss214 +
 					" ボス勝利:" + Math.min(cntBossWin214,maxBossWin214) + "/" + maxBossWin214);
-				break;
 			case 626: //精鋭「艦戦」隊の新編成(Ver1.4.1)
 				var cntScrapType96Fighter_626 = getData("cntScrapType96Fighter_626");
 				var maxScrapType96Fighter_626 = getData("maxScrapType96Fighter_626");
@@ -81,14 +80,12 @@ function getProgress(questNo, questType, questProgressFlag) {
 				return String(sum626 + "%" +
 					" 96式:" + Math.min(cntScrapType96Fighter_626,maxScrapType96Fighter_626) + "/" + maxScrapType96Fighter_626 +
 					" 21式:" + Math.min(cntScrapType0FighterModel21_626,maxScrapType0FighterModel21_626) + "/" + maxScrapType0FighterModel21_626);
-				break;
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);
 				var max = getData("max"+ questNo);
 				setData("rate" + questNo, cnt / max);
 				return String(Math.min(cnt, max) + "/"+ max);
-				break;
 		}
 	} else {
 		setData("rate" + questNo, -1);
