@@ -1,4 +1,4 @@
-VERSION = 1.46; //使うので変更不可
+VERSION = 1.47; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -10,6 +10,8 @@ load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 Calendar = Java.type("java.util.Calendar");
+TimeZone = Java.type("java.util.TimeZone");
+Ship = Java.type("logbook.internal.Ship");
 DataType = Java.type("logbook.data.DataType");
 ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 System = Java.type("java.lang.System");
@@ -20,7 +22,11 @@ var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
 var ID_TYPE0_FIGHTER_MODEL52 = 21; //零式五二型のID
 var ID_TYPE0_FIGHTER_MODEL21_SKILLED = 96; //零式二一型(熟練)のID
 var MAX_ALV = 7; //熟練度最大値
+var CVL = 7;  //軽空母
+var CV  = 11; //正規空母
+var SS  = 13; //潜水艦
 var CVS = 14; //潜水空母
+var AO  = 15; //補給艦(敵)
 
 function update(type, data){
 	var json = data.getJsonObject();
@@ -28,7 +34,8 @@ function update(type, data){
 		//任務
 		case DataType.QUEST_LIST:
 			updateCheck();
-			var questLastUpdateTime = Calendar.getInstance();
+			var questLastUpdateTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
+			questLastUpdateTime.setFirstDayOfWeek(Calendar.MONDAY);
 			if(json.api_data.api_list[0] != null) {
 				//仕様変更で無限ループ起こると怖いので（起こってもいいなら↓でも良い）
 				//for(var i = 0;parseInt(json.api_data.api_list[i]) == -1;i++){
@@ -70,10 +77,10 @@ function update(type, data){
 			var getShips = getLastBattleDto.getDock().getShips();
 			var getNowFriendHp = getLastBattleDto.getNowFriendHp();
 
-			for(var i=0;i<getEnemy.length;i++){
+			for(var i=0;i<getEnemy.size();i++){
 				if(getNowEnemyHp[i] == 0){
-					switch(getEnemy[i].type){
-						case "補給艦":
+					switch(getEnemy[i].stype){
+						case AO: //"補給艦"
 							//敵補給艦を３隻撃沈せよ！
 							if(getData("flg218")) setData("cnt218",getData("cnt218") + 1);
 							//敵輸送船団を叩け！
@@ -83,14 +90,14 @@ function update(type, data){
 							//ろ号作戦
 							if(getData("flg221")) setData("cnt221",getData("cnt221") + 1);
 							break;
-						case "軽空母":
-						case "正規空母":
+						case CVL: //"軽空母"
+						case CV:  //"正規空母"
 							//敵空母を３隻撃沈せよ！
 							if(getData("flg211")) setData("cnt211",getData("cnt211") + 1);
 							//い号作戦
 							if(getData("flg220")) setData("cnt220",getData("cnt220") + 1);
 							break;
-						case "潜水艦":
+						case SS: //"潜水艦"
 							//敵潜水艦を制圧せよ！
 							if(getData("flg230")) setData("cnt230",getData("cnt230") + 1);
 							//海上護衛戦
@@ -136,9 +143,9 @@ function update(type, data){
 							if(getData("mapInfoNo") == 4 && winRank == "S"){
 								var cntCL = 1;
 								var cntDD = 0;
-								var i; //getShips.length - 1が長いので
+								var i; //getShips.size() - 1が長いので
 								if(getShips.get(0).getType() == "軽巡洋艦"){
-									for(i = 1;i < getShips.length;i++){
+									for(i = 1;i < getShips.size();i++){
 										if(getShips.get(i).getType() == "駆逐艦"){
 											cntDD++;
 											continue;
@@ -169,7 +176,7 @@ function update(type, data){
 								var cntCA = 0;
 								var cntCL = 0;
 								var cntDD = 0;
-								for(var i = 0;i < getShips.length;i++){
+								for(var i = 0;i < getShips.size();i++){
 									//idの方が良かったかな…？
 									//同じ艦を二隻以上入れられない特性を生かす
 									if(getShips.get(i).getName().indexOf("妙高") != -1) check249++;
@@ -209,7 +216,7 @@ function update(type, data){
 							if(getData("mapInfoNo") == 2 && winRank == "S"){
 								var cntCV = 0;
 								var cntDD = 0;
-								for(var i = 0;i < getShips.length;i++){
+								for(var i = 0;i < getShips.size();i++){
 									//idの方が良かったかな…？
 									//同じ艦を二隻以上入れられない特性を生かす
 									if(getShips.get(i).getType().indexOf("空母") > -1){
@@ -237,7 +244,7 @@ function update(type, data){
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
 								var cntSlowBB = 0;
 								var cntCL = 0;
-								for(var i = 0;i < getShips.length;i++){
+								for(var i = 0;i < getShips.size();i++){
 									//stype!=8で高速戦艦を弾く
 									//indexOf("戦艦")で戦艦以外を弾く
 									//∴低速戦艦だけ残る（べた書きが嫌なだけ）
@@ -501,22 +508,17 @@ function updateCheck() {
 	var questLastUpdateTime = getData("questLastUpdateTime");
 	if (questLastUpdateTime != null) {
 		versionCheck();
-		var nowTime = Calendar.getInstance();
-		//5時間マイナスして、0時に更新したように見せる
-		nowTime.add(Calendar.HOUR_OF_DAY, -5);
-		questLastUpdateTime.add(Calendar.HOUR_OF_DAY, - 5);
+        /** タイムゾーン(任務が更新される05:00JSTに0:00になるタイムゾーン) */
+ 		var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
+ 		nowTime.setFirstDayOfWeek(Calendar.MONDAY);
 		//maxcountを頻繁に更新するように変更(ver1.3.0)
 		initializeMaxCount();
 		//デイリー
 		updateCheckDairy(questLastUpdateTime, nowTime);
-		//一日マイナス（こうすることによって、月曜日判定から日曜日判定に変える）
-		nowTime.add(Calendar.DAY_OF_MONTH, - 1);
-		questLastUpdateTime.add(Calendar.DAY_OF_MONTH, - 1);
+
 		//ウィークリー
 		updateCheckWeekly(questLastUpdateTime, nowTime);
-		//元に戻す（こうしないと月の判定がおかしくなる）
-		nowTime.add(Calendar.DAY_OF_MONTH, 1);
-		questLastUpdateTime.add(Calendar.DAY_OF_MONTH, 1);
+
 		//マンスリー
 		updateCheckMonthly(questLastUpdateTime, nowTime);
 	} else {
