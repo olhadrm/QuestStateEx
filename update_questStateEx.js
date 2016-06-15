@@ -1,4 +1,4 @@
-VERSION = 1.47006; //使うので変更不可
+VERSION = 1.47007; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -272,43 +272,54 @@ function update(type, data){
 							//南西諸島海域の制海権を握れ！
 							if(getData("flg226")) setData("cnt226",getData("cnt226") + 1);
 							if(getData("mapInfoNo") == 5 && winRank == "S"){
+								//「第五戦隊」出撃せよ！
 								var check249 = 0;
-								var cntCA = 0;
-								var cntCL = 0;
-								var cntDD = 0;
-								for(var i = 0;i < ships.size();i++){
-									//idの方が良かったかな…？
-									//同じ艦を二隻以上入れられない特性を生かす
-									if(ships.get(i).getName().indexOf("妙高") != -1) check249++;
-									if(ships.get(i).getName().indexOf("那智") != -1) check249++;
-									if(ships.get(i).getName().indexOf("羽黒") != -1) check249++;
-									if(ships.get(i).getType() == "重巡洋艦"){
-										cntCA++;
-										continue;
-									}
-									if(ships.get(i).getType() == "軽巡洋艦"){
-										cntCL++;
-										continue;
-									}
-									if(ships.get(i).getType() == "駆逐艦"){
-										cntDD++;
-										continue;
-									}
-								}
-								//「第五戦隊」出撃せよ！(Ver1.3.3)
+
+								ships.stream().map(function(ship){
+									return ship.getName();
+								}).forEach(function(name){
+									//IDではなく名前を使う
+									if(name.indexOf("妙高") != -1) check249++;
+									if(name.indexOf("那智") != -1) check249++;
+									if(name.indexOf("羽黒") != -1) check249++;
+								});
 								if(check249 == 3){
 									if(getData("flg249")) setData("cnt249",getData("cnt249") + 1);
 								}
-								//「水上反撃部隊」突入せよ！(Ver1.3.3)
-								if(cntCA == 1 && cntCL == 1 && cntDD == 4 && ships.get(0).getType() == "駆逐艦"){
-									if(getData("flg266")) setData("cnt266",getData("cnt266") + 1);
+
+								//「水上反撃部隊」突入せよ！
+								var cntCA = 0;
+								var cntCL = 0;
+								var cntDD = 0;
+
+								if(ships.get(0).getStype() == SHIP_TYPE.DD){
+									ships.stream().map(function(ship){
+										return ship.getStype();
+									}).forEach(function(stype){
+										switch(stype){
+											case SHIP_TYPE.CA: //重巡洋艦
+												cntCA++;
+												break;
+											case SHIP_TYPE.CL: //軽巡洋艦
+												cntCL++;
+												break;
+											case SHIP_TYPE.DD: //駆逐艦
+												cntDD++;
+												break;
+											default :
+												break;
+										}
+									});
+									if(cntCA == 1 && cntCL == 1 && cntDD == 4){
+										if(getData("flg266")) setData("cnt266",getData("cnt266") + 1);
+									}
 								}
 							}
 							break;
 						case 3:
 							//敵北方艦隊主力を撃滅せよ！
 							if(getData("mapInfoNo") >= 3){
-									if(getData("flg241")) setData("cnt241",getData("cnt241") + 1);
+								if(getData("flg241")) setData("cnt241",getData("cnt241") + 1);
 							}
 							break;
 						case 4:
