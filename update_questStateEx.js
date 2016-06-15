@@ -1,4 +1,4 @@
-VERSION = 1.47001; //使うので変更不可
+VERSION = 1.47002; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -23,6 +23,8 @@ var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
 var ID_TYPE0_FIGHTER_MODEL52 = 21; //零式五二型のID
 var ID_TYPE0_FIGHTER_MODEL21_SKILLED = 96; //零式二一型(熟練)のID
 var MAX_ALV = 7; //熟練度最大値
+
+/** 艦種 */
 var SHIP_TYPE = {
 	/** 海防艦(造語(-ω-)) */
 	EE:1,
@@ -68,6 +70,30 @@ var SHIP_TYPE = {
 	TV:21,
 	/** 補給艦 */
 	AO:22,
+};
+
+/** 任務種別 */
+var QUEST_TYPE = {
+	/** デイリー */
+	DAILY:1,
+	/** ウィークリー */
+	WEEKLY:2,
+	/** マンスリー */
+	MONTHLY:3,
+	/** 単発 */
+	ONCE:4,
+	/** その他 */
+	OTHERS:5,
+};
+
+/** 任務状態 */
+var QUEST_STATE = {
+	/** 未受注 */
+	NOT_ORDER:1,
+	/** 遂行中 */
+	DOING:2,
+	/**達成 */
+	COMPLETE:3,
 };
 
 var CVL = 7;  //軽空母
@@ -656,21 +682,9 @@ function checkMonthly(questLastUpdateTime, nowTime) {
 	return false;
 }
 
-//questType
-//1=デイリー
-//2=ウィークリー
-//3=マンスリー
-//4=単発
-//5=他
-
-//questState
-//1=未受注
-//2=遂行中
-//3=達成
-
 function setState(questNo ,questState, questType) {
-	if (questType != 4) { //1回限りは除外（そんな影響ないけど）
-		setData("flg"+ questNo,questState == 2);
+if (questType != QUEST_TYPE.ONCE) { //1回限りは除外（そんな影響ないけど）
+		setData("flg"+ questNo,questState == QUEST_STATE.DOING);
 	}
 }
 
@@ -784,7 +798,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 	//1回限りとあ号作戦を除外
 	//開発系も多少数がおかしくなるので除外（というより対策方法がない） Ver.1.3.8追記
 	//精鋭「艦戦」隊の新編成も対処不可なので除外 Ver.1.4.1追記
-	if(questType != 4 && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
+	if(questType != QUEST_TYPE.ONCE && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
 		switch(questProgressFlag){
 			case 1: //50%
 				//カウンタが50%を下回ってるのに、「50%以上」表示になっていたら
