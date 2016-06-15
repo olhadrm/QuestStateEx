@@ -1,4 +1,4 @@
-VERSION = 1.47; //使うので変更不可
+VERSION = 1.47001; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -16,12 +16,60 @@ DataType = Java.type("logbook.data.DataType");
 ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 System = Java.type("java.lang.System");
 GlobalContext = Java.type("logbook.data.context.GlobalContext");
+List = Java.type("java.util.List");
 
 var ID_TYPE96_FIGHTER = 19; //九六式艦戦のID
 var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
 var ID_TYPE0_FIGHTER_MODEL52 = 21; //零式五二型のID
 var ID_TYPE0_FIGHTER_MODEL21_SKILLED = 96; //零式二一型(熟練)のID
 var MAX_ALV = 7; //熟練度最大値
+var SHIP_TYPE = {
+	/** 海防艦(造語(-ω-)) */
+	EE:1,
+	/** 駆逐艦 */
+	DD:2,
+	/** 軽巡洋艦 */
+	CL:3,
+	/** 重雷装巡洋艦 */
+	CLT:4,
+	/** 重巡洋艦 */
+	CA:5,
+	/** 航空巡洋艦 */
+	CVA:6,
+	/** 軽空母 */
+	CVL:7,
+	/** 巡洋戦艦(高速戦艦) */
+	BC:8,
+	/** 戦艦 */
+	BB:9,
+	/** 航空戦艦 */
+	CVB:10,
+	/** 正規空母 */
+	CV:11,
+	/** 超弩級戦艦(造語(-ω-)) */
+	BSD:12,
+	/** 潜水艦 */
+	SS:13,
+	/** 潜水空母 */
+	CVS:14,
+	/** 補給艦(敵) */
+	AOe:15,
+	/** 水上機母艦 */
+	AV:16,
+	/**揚陸艦 */
+	LHA:17,
+	/** 装甲空母 */
+	ACV:18,
+	/** 工作艦 */
+	AR:19,
+	/** 潜水母艦 */
+	AS:20,
+	/** 練習巡洋艦 */
+	TV:21,
+	/** 補給艦 */
+	AO:22,
+};
+
 var CVL = 7;  //軽空母
 var CV  = 11; //正規空母
 var SS  = 13; //潜水艦
@@ -34,22 +82,18 @@ function update(type, data){
 		//任務
 		case DataType.QUEST_LIST:
 			updateCheck();
-			var questLastUpdateTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
-			questLastUpdateTime.setFirstDayOfWeek(Calendar.MONDAY);
-			if(json.api_data.api_list[0] != null) {
-				//仕様変更で無限ループ起こると怖いので（起こってもいいなら↓でも良い）
-				//for(var i = 0;parseInt(json.api_data.api_list[i]) == -1;i++){
-				for(var i = 0;i < 5;i++){
-					if(parseInt(json.api_data.api_list[i]) == -1) break;
-					var api_no = json.api_data.api_list[i].api_no.intValue();
-					var api_state = json.api_data.api_list[i].api_state.intValue();
-					var api_type = json.api_data.api_list[i].api_type.intValue();
+			if(json.api_data.api_list instanceof List){
+				json.api_data.api_list.stream().filter(function(data){
+					return data != -1;
+				}).forEach(function(data){
+					var api_no = data.api_no.intValue();
+					var api_state = data.api_state.intValue();
+					var api_type = data.api_type.intValue();
 					setState(api_no, api_state, api_type);
-					var api_progress_flag = json.api_data.api_list[i].api_progress_flag.intValue();
+					var api_progress_flag = data.api_progress_flag.intValue();
 					questCountAdjustment(api_no, api_progress_flag, api_type, api_state);
-				}
+				});
 			}
-			setData("questLastUpdateTime",questLastUpdateTime);
 		//母港
 		case DataType.PORT:
 			//機種転換任務で確認することリスト
@@ -506,11 +550,12 @@ function getItemIsLockedArray(itemMap){
 function updateCheck() {
 	//最初は絶対null取得する…はず（それをフラグにして初期化）
 	var questLastUpdateTime = getData("questLastUpdateTime");
+    /** タイムゾーン(任務が更新される05:00JSTに0:00になるタイムゾーン) */
+ 	var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
+ 	nowTime.setFirstDayOfWeek(Calendar.MONDAY);
+	
 	if (questLastUpdateTime != null) {
 		versionCheck();
-        /** タイムゾーン(任務が更新される05:00JSTに0:00になるタイムゾーン) */
- 		var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
- 		nowTime.setFirstDayOfWeek(Calendar.MONDAY);
 		//maxcountを頻繁に更新するように変更(ver1.3.0)
 		initializeMaxCount();
 		//デイリー
@@ -527,6 +572,7 @@ function updateCheck() {
 		initializeWeeklyCount();
 		initializeMonthlyCount();
 	}
+	setData("questLastUpdateTime",nowTime);
 }
 
 //任務ID
