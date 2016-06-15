@@ -1,4 +1,4 @@
-VERSION = 1.47002; //使うので変更不可
+VERSION = 1.47003; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -95,6 +95,16 @@ var QUEST_STATE = {
 	/**達成 */
 	COMPLETE:3,
 };
+
+/**任務進捗状況 */
+var QUEST_PROGRESS_FLAG = {
+	/** 空白(達成含) */
+	NONE:0,
+	/** 50%以上 */
+	HALF:1,
+	/** 80%以上 */
+	EIGHTY:2,
+}
 
 var CVL = 7;  //軽空母
 var CV  = 11; //正規空母
@@ -800,7 +810,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 	//精鋭「艦戦」隊の新編成も対処不可なので除外 Ver.1.4.1追記
 	if(questType != QUEST_TYPE.ONCE && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
 		switch(questProgressFlag){
-			case 1: //50%
+			case QUEST_PROGRESS_FLAG.HALF: //50%以上
 				//カウンタが50%を下回ってるのに、「50%以上」表示になっていたら
 				if(getData("cnt" + questNo) < Math.ceil(getData("max" + questNo) * 0.5)){
 					//maxの値を半分にして切り上げ
@@ -811,7 +821,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 					setData("cnt" + questNo,Math.ceil(getData("max" + questNo) * 0.8) - 1);
 				}
 				break;
-			case 2: //80%
+			case QUEST_PROGRESS_FLAG.EIGHTY: //80%以上
 				//カウンタが80%を下回ってるのに、「80%以上」表示になっていたら
 				if(getData("cnt" + questNo) < Math.ceil(getData("max" + questNo) * 0.8)){
 					//maxの値を80%にして切り上げ
@@ -824,18 +834,15 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 				break;
 			default : //それ以外
 				switch(questState){
-					//未受注
-					case 1:
-					//遂行中
-					case 2:
+					case QUEST_STATE.NOT_ORDER: //未受注
+					case QUEST_STATE.DOING: //遂行中
 						//カウンタが50%を超えたのに「50%以上」とかの表示がなかったら
 						if(getData("cnt" + questNo) >= Math.ceil(getData("max" + questNo) * 0.5)){
 							//maxの値を半分にしたやつを-1する
 							setData("cnt" + questNo,Math.ceil(getData("max" + questNo) * 0.5) - 1);
 						}
 						break;
-					//達成
-					case 3:
+					case QUEST_STATE.COMPLETE: //達成
 						//maxの値に合わせる
 						setData("cnt" + questNo,getData("max" + questNo));
 						break;
