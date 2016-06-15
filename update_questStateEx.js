@@ -1,4 +1,4 @@
-VERSION = 1.47003; //使うので変更不可
+VERSION = 1.47004; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -104,7 +104,33 @@ var QUEST_PROGRESS_FLAG = {
 	HALF:1,
 	/** 80%以上 */
 	EIGHTY:2,
-}
+};
+
+/** マス */
+var EVENT_ID = {
+	/** 初期位置 */
+	INITIAL_POSITION:0,
+	/** 存在せず */
+	NONE:1,
+	/** 資源 */
+	MATERIAL:2,
+	/** 渦潮 */
+	MAELSTROM:3,
+	/** 通常戦闘 */
+	NORMAL_BATTLE:4,
+	/** ボス戦闘 */
+	BOSS_BATTLE:5,
+	/** 気のせいだった */
+	BATTLE_AVOIDED:6,
+	/** 航空戦or航空偵察 */
+	AIR:7,
+	/** 船団護衛成功 */
+	ESCORT_SUCCESS:8,
+	/** 揚陸地点 */
+	LANDING_POINT:9,
+	/** 空襲戦 */
+	AIR_RAID_BATTLE:10,
+};
 
 var CVL = 7;  //軽空母
 var CV  = 11; //正規空母
@@ -151,16 +177,15 @@ function update(type, data){
 			break;
 		case DataType.BATTLE_RESULT:
 		case DataType.COMBINED_BATTLE_RESULT:
-			var getLastBattleDto = GlobalContext.getLastBattleDto();
-			var getEnemy = getLastBattleDto.getEnemy();
-			var getNowEnemyHp = getLastBattleDto.getNowEnemyHp();
-			var getShips = getLastBattleDto.getDock().getShips();
-			var getNowFriendHp = getLastBattleDto.getNowFriendHp();
+			var lastBattleDto = GlobalContext.getLastBattleDto();
+			var enemys = getLastBattleDto.getEnemy();
+			var nowEnemyHp = getLastBattleDto.getNowEnemyHp();
+			var ships = getLastBattleDto.getDock().getShips();
 
-			for(var i=0;i<getEnemy.size();i++){
-				if(getNowEnemyHp[i] == 0){
-					switch(getEnemy[i].stype){
-						case AO: //"補給艦"
+			for(var i=0;i<enemys.size();i++){
+				if(nowEnemyHp[i] == 0){
+					switch(enemys[i].stype){
+						case SHIP_TYPE.AOe: //"補給艦"
 							//敵補給艦を３隻撃沈せよ！
 							if(getData("flg218")) setData("cnt218",getData("cnt218") + 1);
 							//敵輸送船団を叩け！
@@ -170,14 +195,14 @@ function update(type, data){
 							//ろ号作戦
 							if(getData("flg221")) setData("cnt221",getData("cnt221") + 1);
 							break;
-						case CVL: //"軽空母"
-						case CV:  //"正規空母"
+						case SHIP_TYPE.CVL: //"軽空母"
+						case SHIP_TYPE.CV:  //"正規空母"
 							//敵空母を３隻撃沈せよ！
 							if(getData("flg211")) setData("cnt211",getData("cnt211") + 1);
 							//い号作戦
 							if(getData("flg220")) setData("cnt220",getData("cnt220") + 1);
 							break;
-						case SS: //"潜水艦"
+						case SHIP_TYPE.SS: //"潜水艦"
 							//敵潜水艦を制圧せよ！
 							if(getData("flg230")) setData("cnt230",getData("cnt230") + 1);
 							//海上護衛戦
@@ -190,7 +215,7 @@ function update(type, data){
 			}
 			//追記したから変な位置に
 			//あ号作戦（ボス到達）
-			if(getData("eventId") == 5){
+			if(getData("eventId") == EVENT_ID.BOSS_BATTLE){
 				if(getData("flg214")) setData("cntBoss214",getData("cntBoss214") + 1);
 			}
 			//敵艦隊主力を撃滅せよ！
@@ -205,16 +230,8 @@ function update(type, data){
 				}
 				//敵艦隊を撃滅せよ！
 				if(getData("flg201")) setData("cnt201",getData("cnt201") + 1);
-				//eventId
-				//0=初期位置
-				//2=資源
-				//3=渦潮
-				//4=通常戦闘
-				//5=ボス戦闘
-				//6=気のせいだった
-				//7=航空戦
-				//8=船団護衛成功
-				if(getData("eventId") == 5){
+
+				if(getData("eventId") == EVENT_ID.BOSS_BATTLE){
 					//あ号作戦（ボス勝利）
 					if(getData("flg214")) setData("cntBossWin214",getData("cntBossWin214") + 1);
 					switch(getData("mapAreaId")){
@@ -223,14 +240,14 @@ function update(type, data){
 							if(getData("mapInfoNo") == 4 && winRank == "S"){
 								var cntCL = 1;
 								var cntDD = 0;
-								var i; //getShips.size() - 1が長いので
-								if(getShips.get(0).getType() == "軽巡洋艦"){
-									for(i = 1;i < getShips.size();i++){
-										if(getShips.get(i).getType() == "駆逐艦"){
+								var i; //ships.size() - 1が長いので
+								if(ships.get(0).getType() == "軽巡洋艦"){
+									for(i = 1;i < ships.size();i++){
+										if(ships.get(i).getType() == "駆逐艦"){
 											cntDD++;
 											continue;
 										}
-										if(getShips.get(i).getType() == "軽巡洋艦"){
+										if(ships.get(i).getType() == "軽巡洋艦"){
 											cntCL++;
 											continue;
 										}
@@ -256,21 +273,21 @@ function update(type, data){
 								var cntCA = 0;
 								var cntCL = 0;
 								var cntDD = 0;
-								for(var i = 0;i < getShips.size();i++){
+								for(var i = 0;i < ships.size();i++){
 									//idの方が良かったかな…？
 									//同じ艦を二隻以上入れられない特性を生かす
-									if(getShips.get(i).getName().indexOf("妙高") != -1) check249++;
-									if(getShips.get(i).getName().indexOf("那智") != -1) check249++;
-									if(getShips.get(i).getName().indexOf("羽黒") != -1) check249++;
-									if(getShips.get(i).getType() == "重巡洋艦"){
+									if(ships.get(i).getName().indexOf("妙高") != -1) check249++;
+									if(ships.get(i).getName().indexOf("那智") != -1) check249++;
+									if(ships.get(i).getName().indexOf("羽黒") != -1) check249++;
+									if(ships.get(i).getType() == "重巡洋艦"){
 										cntCA++;
 										continue;
 									}
-									if(getShips.get(i).getType() == "軽巡洋艦"){
+									if(ships.get(i).getType() == "軽巡洋艦"){
 										cntCL++;
 										continue;
 									}
-									if(getShips.get(i).getType() == "駆逐艦"){
+									if(ships.get(i).getType() == "駆逐艦"){
 										cntDD++;
 										continue;
 									}
@@ -280,7 +297,7 @@ function update(type, data){
 									if(getData("flg249")) setData("cnt249",getData("cnt249") + 1);
 								}
 								//「水上反撃部隊」突入せよ！(Ver1.3.3)
-								if(cntCA == 1 && cntCL == 1 && cntDD == 4 && getShips.get(0).getType() == "駆逐艦"){
+								if(cntCA == 1 && cntCL == 1 && cntDD == 4 && ships.get(0).getType() == "駆逐艦"){
 									if(getData("flg266")) setData("cnt266",getData("cnt266") + 1);
 								}
 							}
@@ -296,14 +313,14 @@ function update(type, data){
 							if(getData("mapInfoNo") == 2 && winRank == "S"){
 								var cntCV = 0;
 								var cntDD = 0;
-								for(var i = 0;i < getShips.size();i++){
+								for(var i = 0;i < ships.size();i++){
 									//idの方が良かったかな…？
 									//同じ艦を二隻以上入れられない特性を生かす
-									if(getShips.get(i).getType().indexOf("空母") > -1){
+									if(ships.get(i).getType().indexOf("空母") > -1){
 										cntCV++;
 										continue;
 									}
-									if(getShips.get(i).getType() == "駆逐艦"){
+									if(ships.get(i).getType() == "駆逐艦"){
 										cntDD++;
 										continue;
 									}
@@ -324,15 +341,15 @@ function update(type, data){
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
 								var cntSlowBB = 0;
 								var cntCL = 0;
-								for(var i = 0;i < getShips.size();i++){
+								for(var i = 0;i < ships.size();i++){
 									//stype!=8で高速戦艦を弾く
 									//indexOf("戦艦")で戦艦以外を弾く
 									//∴低速戦艦だけ残る（べた書きが嫌なだけ）
-									if(getShips[i].stype != 8 && getShips.get(i).getType().indexOf("戦艦") > -1){
+									if(ships[i].stype != SHIP_TYPE.BC && ships.get(i).getType().indexOf("戦艦") > -1){
 										cntSlowBB++;
 										continue;
 									}
-									if(getShips.get(i).getType() == "軽巡洋艦"){
+									if(ships.get(i).getType() == "軽巡洋艦"){
 										cntCL++;
 										continue;
 									}
