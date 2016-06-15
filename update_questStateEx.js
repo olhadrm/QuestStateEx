@@ -1,4 +1,4 @@
-VERSION = 1.47004; //使うので変更不可
+VERSION = 1.47005; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -238,22 +238,25 @@ function update(type, data){
 						case 1:
 							//「水雷戦隊」南西へ！(Ver1.3.3)
 							if(getData("mapInfoNo") == 4 && winRank == "S"){
-								var cntCL = 1;
+								var cntCL = 0;
 								var cntDD = 0;
-								var i; //ships.size() - 1が長いので
-								if(ships.get(0).getType() == "軽巡洋艦"){
-									for(i = 1;i < ships.size();i++){
-										if(ships.get(i).getType() == "駆逐艦"){
-											cntDD++;
-											continue;
+								if(ships.get(0).getStype() == SHIP_TYPE.CL){
+									ships.stream().map(function(ship){
+										return ship.getStype();
+									}).forEach(function(stype){
+										switch(stype){
+											case SHIP_TYPE.DD:
+												cntDD++;
+												break;
+											case SHIP_TYPE.CL:
+												cntCL++;
+												break;
+											default :
+												break;
 										}
-										if(ships.get(i).getType() == "軽巡洋艦"){
-											cntCL++;
-											continue;
-										}
-									}
+									});
 									//軽巡3隻以下、駆逐1隻以上、軽巡と駆逐のみ
-									if(cntCL < 4 && cntDD > 0 && (i - 1) == (cntCL + cntDD)){
+									if(cntCL < 4 && cntDD > 0 && ships.size() == (cntCL + cntDD)){
 										if(getData("flg257")) setData("cnt257",getData("cnt257") + 1);
 									}
 								}
