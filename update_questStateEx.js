@@ -1,4 +1,4 @@
-VERSION = 1.47005; //使うので変更不可
+VERSION = 1.47006; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -178,9 +178,9 @@ function update(type, data){
 		case DataType.BATTLE_RESULT:
 		case DataType.COMBINED_BATTLE_RESULT:
 			var lastBattleDto = GlobalContext.getLastBattleDto();
-			var enemys = getLastBattleDto.getEnemy();
-			var nowEnemyHp = getLastBattleDto.getNowEnemyHp();
-			var ships = getLastBattleDto.getDock().getShips();
+			var enemys = lastBattleDto.getEnemy();
+			var nowEnemyHp = lastBattleDto.getNowEnemyHp();
+			var ships = lastBattleDto.getDock().getShips();
 
 			for(var i=0;i<enemys.size();i++){
 				if(nowEnemyHp[i] == 0){
