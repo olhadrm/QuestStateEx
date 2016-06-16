@@ -1,4 +1,4 @@
-VERSION = 1.47010; //使うので変更不可
+VERSION = 1.47011; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -507,10 +507,8 @@ function update(type, data){
 			//0=失敗、1=成功、2=大成功
 			var clear_result = json.api_data.api_clear_result.intValue();
 			switch(clear_result){
-				/** 大成功 */
-				case CLEAR_RESULT.GREAT_SUCCESS:
-				/** 成功 */
-				case CLEAR_RESULT.SUCESS:
+				case CLEAR_RESULT.GREAT_SUCCESS: //大成功
+				case CLEAR_RESULT.SUCESS: //成功
 					var quest_name = json.api_data.api_quest_name.toString();
 
 					//「遠征」を3回成功させよう！
@@ -518,14 +516,17 @@ function update(type, data){
 					//「遠征」を10回成功させよう！
 					if(getData("flg403")) setData("cnt403",getData("cnt403") + 1);
 					//大規模遠征作戦、発令！
-				if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
-				//api_no渡してこないので仕方なく
-				if(quest_name.indexOf("東京急行") > - 1){
-					//南方への輸送作戦を成功させよ！
-					if(getData("flg410")) setData("cnt410",getData("cnt410") + 1);
-					//南方への鼠輸送を継続実施せよ!
-					if(getData("flg411")) setData("cnt411",getData("cnt411") + 1);
-				}
+					if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
+					//api_no渡してこないので仕方なく
+					if(quest_name.indexOf("東京急行") > - 1){
+						//南方への輸送作戦を成功させよ！
+						if(getData("flg410")) setData("cnt410",getData("cnt410") + 1);
+						//南方への鼠輸送を継続実施せよ!
+						if(getData("flg411")) setData("cnt411",getData("cnt411") + 1);
+					}
+					break;
+				default :
+					break;
 			}
 			break;
 		//補給
