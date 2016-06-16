@@ -1,4 +1,4 @@
-VERSION = 1.47009; //使うので変更不可
+VERSION = 1.47010; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -132,11 +132,33 @@ var EVENT_ID = {
 	AIR_RAID_BATTLE:10,
 };
 
-var CVL = 7;  //軽空母
-var CV  = 11; //正規空母
-var SS  = 13; //潜水艦
-var CVS = 14; //潜水空母
-var AO  = 15; //補給艦(敵)
+/** 近代化改修 */
+var POWERUP_FLAG = {
+	/** 成功 */
+	SUCCESS:1,
+	/** 失敗 */
+	FAILURE:0,
+}
+
+/** 遠征帰還 */
+var CLEAR_RESULT = {
+	/** 失敗 */
+	FAILURE:0,
+	/** 成功 */
+	SUCESS:1,
+	/** 大成功 */
+	GREAT_SUCCESS:2,
+};
+
+/** 装備ID */
+var ITEM_ID = {
+
+};
+
+/** 艦娘ID */
+var SHIP_ID = {
+
+};
 
 function update(type, data){
 	var json = data.getJsonObject();
@@ -453,7 +475,7 @@ function update(type, data){
 							}
 						}
 						if(oldItemArray[1][i] == ID_TYPE0_FIGHTER_MODEL52){ //廃棄した装備が零式五二型だったら
-							if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == CVS)){ //秘書艦が空母なら
+							if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == SHIP_TYPE.CVS)){ //秘書艦が空母なら
 								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
 									if(secretaryItem[j] != null){
 										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21_SKILLED){ //零式艦戦21型(熟練)を積んでいるか
@@ -473,7 +495,7 @@ function update(type, data){
 		//近代化改修
 		case DataType.POWERUP:
 			var powerup_flag = json.api_data.api_powerup_flag.intValue();
-			if(powerup_flag != 0){
+			if(powerup_flag == POWERUP_FLAG.SUCCESS){
 				//艦の「近代化改修」を実施せよ！
 				if(getData("flg702")) setData("cnt702",getData("cnt702") + 1);
 				//「近代化改修」を進め、戦備を整えよ！
@@ -484,14 +506,18 @@ function update(type, data){
 		case DataType.MISSION_RESULT:
 			//0=失敗、1=成功、2=大成功
 			var clear_result = json.api_data.api_clear_result.intValue();
-			if(clear_result != 0){
-				var quest_name = json.api_data.api_quest_name.toString();
+			switch(clear_result){
+				/** 大成功 */
+				case CLEAR_RESULT.GREAT_SUCCESS:
+				/** 成功 */
+				case CLEAR_RESULT.SUCESS:
+					var quest_name = json.api_data.api_quest_name.toString();
 
-				//「遠征」を3回成功させよう！
-				if(getData("flg402")) setData("cnt402",getData("cnt402") + 1);
-				//「遠征」を10回成功させよう！
-				if(getData("flg403")) setData("cnt403",getData("cnt403") + 1);
-				//大規模遠征作戦、発令！
+					//「遠征」を3回成功させよう！
+					if(getData("flg402")) setData("cnt402",getData("cnt402") + 1);
+					//「遠征」を10回成功させよう！
+					if(getData("flg403")) setData("cnt403",getData("cnt403") + 1);
+					//大規模遠征作戦、発令！
 				if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
 				//api_no渡してこないので仕方なく
 				if(quest_name.indexOf("東京急行") > - 1){
