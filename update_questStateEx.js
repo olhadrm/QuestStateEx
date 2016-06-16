@@ -1,4 +1,4 @@
-VERSION = 1.47008; //使うので変更不可
+VERSION = 1.47009; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -331,12 +331,12 @@ function update(type, data){
 									return ship.getStype();
 								}).forEach(function(stype){
 									switch(stype){
-										case SHIP_TYPE.CVL:
-										case SHIP_TYPE.CV:
-										case SHIP_TYPE.ACV:
+										case SHIP_TYPE.CVL: //軽空母
+										case SHIP_TYPE.CV:  //正規空母
+										case SHIP_TYPE.ACV: //装甲空母
 											cntCV++;
 											break;
-										case SHIP_TYPE.DD:
+										case SHIP_TYPE.DD:  //駆逐艦
 											cntDD++;
 											break;
 									}
@@ -357,19 +357,21 @@ function update(type, data){
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
 								var cntSlowBB = 0;
 								var cntCL = 0;
-								for(var i = 0;i < ships.size();i++){
-									//stype!=8で高速戦艦を弾く
-									//indexOf("戦艦")で戦艦以外を弾く
-									//∴低速戦艦だけ残る（べた書きが嫌なだけ）
-									if(ships[i].stype != SHIP_TYPE.BC && ships.get(i).getType().indexOf("戦艦") > -1){
-										cntSlowBB++;
-										continue;
+								ships.stream().map(function(ship){
+									return ship.getStype();
+								}).forEach(function(stype){
+									switch(stype){
+										case SHIP_TYPE.BB:  //戦艦
+										case SHIP_TYPE.BSD: //超弩級戦艦
+											cntSlowBB++;
+											break;
+										case SHIP_TYPE.CL:  //軽巡洋艦
+											cntCL++;
+											break;
+										default :
+											break;
 									}
-									if(ships.get(i).getType() == "軽巡洋艦"){
-										cntCL++;
-										continue;
-									}
-								}
+								});
 								if(cntSlowBB == 3 && cntCL == 1){
 									if(getData("flg259")) setData("cnt259",getData("cnt259") + 1);
 								}
