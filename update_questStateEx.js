@@ -1,4 +1,4 @@
-VERSION = 1.47011; //使うので変更不可
+VERSION = 1.47012; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -17,6 +17,8 @@ ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 System = Java.type("java.lang.System");
 GlobalContext = Java.type("logbook.data.context.GlobalContext");
 List = Java.type("java.util.List");
+IntArrayType = Java.type("int[]");
+Arrays = Java.type("java.util.Arrays");
 
 var ID_TYPE96_FIGHTER = 19; //九六式艦戦のID
 var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
@@ -162,6 +164,7 @@ var SHIP_ID = {
 
 function update(type, data){
 	var json = data.getJsonObject();
+
 	switch(type){
 		//任務
 		case DataType.QUEST_LIST:
@@ -657,7 +660,7 @@ function updateCheck() {
 		//maxcountを頻繁に更新するように変更(ver1.3.0)
 		initializeMaxCount();
 		//デイリー
-		updateCheckDairy(questLastUpdateTime, nowTime);
+		updateCheckDaily(questLastUpdateTime, nowTime);
 
 		//ウィークリー
 		updateCheckWeekly(questLastUpdateTime, nowTime);
@@ -666,7 +669,7 @@ function updateCheck() {
 		updateCheckMonthly(questLastUpdateTime, nowTime);
 	} else {
 		initializeMaxCount();
-		initializeDairyCount();
+		initializeDailyCount();
 		initializeWeeklyCount();
 		initializeMonthlyCount();
 	}
@@ -674,24 +677,24 @@ function updateCheck() {
 }
 
 //任務ID
-var dairyId = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702]; //デイリーid
-var weeklyId = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613]; //ウィークリーid（214は除外）
-var monthlyId = [249,256,257,259,264,265,266,311,628]; //マンスリーid(626は除外)
+var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702]; //デイリーid
+var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613]; //ウィークリーid（214は除外）
+var monthlyIDs = [249,256,257,259,264,265,266,311,628]; //マンスリーid(626は除外)
 
 //5時以降で更新したら初期化
-function initializeDairyCount() {
-	for(var i = 0;i < dairyId.length;i++){
-		setData("cnt"+ dairyId[i],0);
-		setData("flg"+ dairyId[i],false);
-	}
+function initializeDailyCount() {
+	Arrays.stream(Java.to(dailyIDs,IntArrayType)).forEach(function(dailyID){
+		setData("cnt"+ dailyID, 0);
+		setData("flg"+ dailyID, false);
+	});
 	setData("cnt311",0); //精鋭艦隊演習
 }
 
 function initializeWeeklyCount() {
-	for(var i = 0;i < weeklyId.length;i++){
-		setData("cnt"+ weeklyId[i],0);
-		setData("flg"+ weeklyId[i],false);
-	}
+	Arrays.stream(Java.to(weeklyIDs,IntArrayType)).forEach(function(weeklyID){
+		setData("cnt"+ weeklyID, 0);
+		setData("flg"+ weeklyID, false);
+	});
 	//あ号作戦
 	setData("flg214",false);
 	setData("cntSally214", 0);
@@ -701,10 +704,10 @@ function initializeWeeklyCount() {
 }
 
 function initializeMonthlyCount() {
-	for (var i = 0; i < monthlyId.length;i++) {
-		setData("cnt"+ monthlyId[i],0);
-		setData("flg"+ monthlyId[i],false);
-	}
+	Arrays.stream(Java.to(monthlyIDs,IntArrayType)).forEach(function(monthlyID){
+		setData("cnt"+ monthlyID, 0);
+		setData("flg"+ monthlyID, false);
+	});
 	//精鋭「艦戦」隊の新編成
 	setData("flg626",false);
 	setData("cntScrapType96Fighter_626",0);
@@ -712,9 +715,9 @@ function initializeMonthlyCount() {
 }
 
 //任務更新判定（一日）
-function updateCheckDairy(questLastUpdateTime, nowTime) {
-	if (checkDairy(questLastUpdateTime, nowTime)) {
-		initializeDairyCount();
+function updateCheckDaily(questLastUpdateTime, nowTime) {
+	if (checkDaily(questLastUpdateTime, nowTime)) {
+		initializeDailyCount();
 	}
 }
 
@@ -734,7 +737,7 @@ function updateCheckMonthly(questLastUpdateTime, nowTime) {
 
 //trueなら実行
 
-function checkDairy(questLastUpdateTime, nowTime) {
+function checkDaily(questLastUpdateTime, nowTime) {
 	//同じ日じゃないならtrue
 	if(nowTime.get(Calendar.DAY_OF_YEAR) != questLastUpdateTime.get(Calendar.DAY_OF_YEAR)) return true;
 	return false;
@@ -755,7 +758,7 @@ function checkMonthly(questLastUpdateTime, nowTime) {
 }
 
 function setState(questNo ,questState, questType) {
-if (questType != QUEST_TYPE.ONCE) { //1回限りは除外（そんな影響ないけど）
+	if (questType != QUEST_TYPE.ONCE) { //1回限りは除外（そんな影響ないけど）
 		setData("flg"+ questNo,questState == QUEST_STATE.DOING);
 	}
 }
@@ -918,8 +921,8 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 
 //新しい任務追加した際に、-1となるのを防ぐ
 function updateCount(){
-	for(var i = 0;i < dairyId.length;i++){
-		if(getData("cnt" + dairyId[i])   == null || getData("cnt" + dairyId[i]) < 0)   setData("cnt"+ dairyId[i],0);
+	for(var i = 0;i < dailyId.length;i++){
+		if(getData("cnt" + dailyId[i])   == null || getData("cnt" + dailyId[i]) < 0)   setData("cnt"+ dailyId[i],0);
 	}
 	for(var i = 0;i < weeklyId.length;i++){
 		if(getData("cnt" + weeklyId[i])  == null || getData("cnt" + weeklyId[i]) < 0)  setData("cnt"+ weeklyId[i],0);
@@ -927,6 +930,8 @@ function updateCount(){
 	for(var i = 0;i < monthlyId.length;i++){
 		if(getData("cnt" + monthlyId[i]) == null || getData("cnt" + monthlyId[i]) < 0) setData("cnt"+ monthlyId[i],0);
 	}
+	//精鋭艦隊演習
+	if(getData("cnt311") == null) setData("cnt311", 0);
 	//あ号作戦
 	if(getData("cntSally214")   == null || getData("cntSally214") < 0)   setData("cntSally214", 0);
 	if(getData("cntSWin214")    == null || getData("cntSWin214") < 0)    setData("cntSWin214", 0);
