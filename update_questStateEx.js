@@ -1,4 +1,4 @@
-VERSION = 1.47012; //使うので変更不可
+VERSION = 1.47013; //使うので変更不可
 //Author:Nishisonic
 
 //flg + questNoでbooleanを確認（trueなら任務遂行中）
@@ -921,17 +921,23 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 
 //新しい任務追加した際に、-1となるのを防ぐ
 function updateCount(){
-	for(var i = 0;i < dailyId.length;i++){
-		if(getData("cnt" + dailyId[i])   == null || getData("cnt" + dailyId[i]) < 0)   setData("cnt"+ dailyId[i],0);
-	}
-	for(var i = 0;i < weeklyId.length;i++){
-		if(getData("cnt" + weeklyId[i])  == null || getData("cnt" + weeklyId[i]) < 0)  setData("cnt"+ weeklyId[i],0);
-	}
-	for(var i = 0;i < monthlyId.length;i++){
-		if(getData("cnt" + monthlyId[i]) == null || getData("cnt" + monthlyId[i]) < 0) setData("cnt"+ monthlyId[i],0);
-	}
+	Arrays.stream(Java.to(dailyIDs,IntArrayType)).filter(function(dailyID){
+		return getData("cnt" + dailyID) == null   || getData("cnt" + dailyID) < 0;
+	}).forEach(function(dailyID){
+		setData("cnt"+ dailyID, 0);
+	});
+	Arrays.stream(Java.to(weeklyIDs,IntArrayType)).filter(function(weeklyID){
+		return getData("cnt" + weeklyID) == null  || getData("cnt" + weeklyID) < 0;
+	}).forEach(function(weeklyID){
+		setData("cnt"+ weeklyID, 0);
+	});
+	Arrays.stream(Java.to(monthlyIDs,IntArrayType)).filter(function(monthlyID){
+		return getData("cnt" + monthlyID) == null || getData("cnt" + monthlyID) < 0;
+	}).forEach(function(monthlyID){
+		setData("cnt"+ monthlyID, 0);
+	});
 	//精鋭艦隊演習
-	if(getData("cnt311") == null) setData("cnt311", 0);
+	if(getData("cnt311") == null || getData("cnt311") < 0) setData("cnt311", 0);
 	//あ号作戦
 	if(getData("cntSally214")   == null || getData("cntSally214") < 0)   setData("cntSally214", 0);
 	if(getData("cntSWin214")    == null || getData("cntSWin214") < 0)    setData("cntSWin214", 0);
