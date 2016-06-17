@@ -1,14 +1,22 @@
-VERSION = 1.47013; //使うので変更不可
+VERSION = 1.47014; //使うので変更不可
 //Author:Nishisonic
 
-//flg + questNoでbooleanを確認（trueなら任務遂行中）
-//cnt + questNoで、カウントを数える
-//そしてquest_stateEx.jsで表示するといった感じ
+/**
+ * 任務進捗詳細Ver1.4.7β14
+ * 
+ * ローカルで値を保持し、今○○回というのを表示します。
+ * 
+ * ScriptData.jsでよく使うものについて
+ * flg + questNo：任務遂行中かどうか
+ * cnt + questNo：カウントに使用
+ */
 
-load("script/utils.js");
+//importするjsのメソッド
 load("script/ScriptData.js");
+/**  ScriptData.jsで使用 */
 data_prefix = "questStateEx_";
 
+//importするClass
 Calendar = Java.type("java.util.Calendar");
 TimeZone = Java.type("java.util.TimeZone");
 Ship = Java.type("logbook.internal.Ship");
@@ -20,11 +28,8 @@ List = Java.type("java.util.List");
 IntArrayType = Java.type("int[]");
 Arrays = Java.type("java.util.Arrays");
 
-var ID_TYPE96_FIGHTER = 19; //九六式艦戦のID
-var ID_TYPE0_FIGHTER_MODEL21 = 20; //零式二一型のID
-var ID_TYPE0_FIGHTER_MODEL52 = 21; //零式五二型のID
-var ID_TYPE0_FIGHTER_MODEL21_SKILLED = 96; //零式二一型(熟練)のID
-var MAX_ALV = 7; //熟練度最大値
+/** 熟練度最大値 */
+var MAX_ALV = 7;
 
 /** 艦種 */
 var SHIP_TYPE = {
@@ -154,14 +159,49 @@ var CLEAR_RESULT = {
 
 /** 装備ID */
 var ITEM_ID = {
-
+	/** 九六式艦戦 */
+	TYPE96_FIGHTER:19,
+	/** 零式艦戦21型 */
+	TYPE0_FIGHTER_MODEL21:20,
+	/** 零式艦戦52型 */
+	TYPE0_FIGHTER_MODEL52:21,
+	/** 零式艦戦21型(熟練) */
+	TYPE0_FIGHTER_MODEL21_SKILLED:96,
 };
 
 /** 艦娘ID */
 var SHIP_ID = {
-
+	/** 妙高 */
+	MYOKO:62,
+	/** 妙高改 */
+	MYOKO_R:265,
+	/** 妙高改二 */
+	MYOKO_R2:319,
+	/** 那智 */
+	NACHI:63,
+	/** 那智改 */
+	NACHI_R:266,
+	/** 那智改二 */
+	NACHI_R2:192,
+	/** 羽黒 */
+	HAGURO:65,
+	/** 羽黒改 */
+	HAGURO_R:268,
+	/** 羽黒改二 */
+	HAGURO_R2:194,
+	/** 鳳翔 */
+	HOSHO:89,
+	/** 鳳翔改 */
+	HOSHO_R:285,
 };
 
+/** 
+ * @Override
+ * 通信データを処理します
+ * 
+ * @param type データの種類
+ * @param data データ
+ */
 function update(type, data){
 	var json = data.getJsonObject();
 
@@ -210,7 +250,7 @@ function update(type, data){
 			for(var i=0;i<enemys.size();i++){
 				if(nowEnemyHp[i] == 0){
 					switch(enemys[i].stype){
-						case SHIP_TYPE.AOe: //"補給艦"
+						case SHIP_TYPE.AOe: //補給艦
 							//敵補給艦を３隻撃沈せよ！
 							if(getData("flg218")) setData("cnt218",getData("cnt218") + 1);
 							//敵輸送船団を叩け！
@@ -220,14 +260,14 @@ function update(type, data){
 							//ろ号作戦
 							if(getData("flg221")) setData("cnt221",getData("cnt221") + 1);
 							break;
-						case SHIP_TYPE.CVL: //"軽空母"
-						case SHIP_TYPE.CV:  //"正規空母"
+						case SHIP_TYPE.CVL: //軽空母
+						case SHIP_TYPE.CV:  //正規空母
 							//敵空母を３隻撃沈せよ！
 							if(getData("flg211")) setData("cnt211",getData("cnt211") + 1);
 							//い号作戦
 							if(getData("flg220")) setData("cnt220",getData("cnt220") + 1);
 							break;
-						case SHIP_TYPE.SS: //"潜水艦"
+						case SHIP_TYPE.SS: //潜水艦
 							//敵潜水艦を制圧せよ！
 							if(getData("flg230")) setData("cnt230",getData("cnt230") + 1);
 							//海上護衛戦
@@ -301,12 +341,22 @@ function update(type, data){
 								var check249 = 0;
 
 								ships.stream().map(function(ship){
-									return ship.getName();
-								}).forEach(function(name){
-									//IDではなく名前を使う
-									if(name.indexOf("妙高") != -1) check249++;
-									if(name.indexOf("那智") != -1) check249++;
-									if(name.indexOf("羽黒") != -1) check249++;
+									return ship.getShipId();
+								}).forEach(function(shipId){
+									switch(shipId){
+										case SHIP_ID.MYOKO:
+										case SHIP_ID.MYOKO_R:
+										case SHIP_ID.MYOKO_R2:
+										case SHIP_ID.NACHI:
+										case SHIP_ID.NACHI_R:
+										case SHIP_ID.NACHI_R2:
+										case SHIP_ID.HAGURO:
+										case SHIP_ID.HAGURO_R:
+										case SHIP_ID.HAGURO_R2:
+											check249++;
+										default :
+											break;
+									}
 								});
 								if(check249 == 3){
 									if(getData("flg249")) setData("cnt249",getData("cnt249") + 1);
@@ -451,11 +501,11 @@ function update(type, data){
 				for(var i = 0;i < oldItemArray[0].length;i++){
 					//もし一致しなかった場合
 					if(oldItemArray[0][i] != newItemArray[0][i - adjustmentCount]){
-						if(oldItemArray[1][i] == ID_TYPE96_FIGHTER){ //廃棄した装備が九六式艦戦だったら
+						if(oldItemArray[1][i] == ITEM_ID.TYPE96_FIGHTER){ //廃棄した装備が九六式艦戦だったら
 							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
 								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
 									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
+										if(secretaryItem[j].getSlotitemId() == ITEM_ID.TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
 											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
 												if(getData("flg626")) setData("cntScrapType96Fighter_626",getData("cntScrapType96Fighter_626") + 1);
 											}
@@ -464,11 +514,11 @@ function update(type, data){
 								}
 							}
 						}
-						if(oldItemArray[1][i] == ID_TYPE0_FIGHTER_MODEL21){ //廃棄した装備が零式二一型だったら
+						if(oldItemArray[1][i] == ITEM_ID.TYPE0_FIGHTER_MODEL21){ //廃棄した装備が零式二一型だったら
 							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
 								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
 									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
+										if(secretaryItem[j].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
 											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
 												if(getData("flg626")) setData("cntScrapType0FighterModel21_626",getData("cntScrapType0FighterModel21_626") + 1);
 											}
@@ -477,11 +527,11 @@ function update(type, data){
 								}
 							}
 						}
-						if(oldItemArray[1][i] == ID_TYPE0_FIGHTER_MODEL52){ //廃棄した装備が零式五二型だったら
+						if(oldItemArray[1][i] == ITEMID.TYPE0_FIGHTER_MODEL52){ //廃棄した装備が零式五二型だったら
 							if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == SHIP_TYPE.CVS)){ //秘書艦が空母なら
 								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
 									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21_SKILLED){ //零式艦戦21型(熟練)を積んでいるか
+										if(secretaryItem[j].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21_SKILLED){ //零式艦戦21型(熟練)を積んでいるか
 											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
 												if(getData("flg628")) setData("cnt628",getData("cnt628") + 1);
 											}
@@ -648,6 +698,10 @@ function getItemIsLockedArray(itemMap){
 	return result;
 }
 
+/**
+ * 日付が変わって回数がリセットされたり、
+ * バージョンアップで新任務が追加されてないかなどをチェックします
+ */
 function updateCheck() {
 	//最初は絶対null取得する…はず（それをフラグにして初期化）
 	var questLastUpdateTime = getData("questLastUpdateTime");
@@ -656,15 +710,12 @@ function updateCheck() {
  	nowTime.setFirstDayOfWeek(Calendar.MONDAY);
 	
 	if (questLastUpdateTime != null) {
+		//バージョンを確認(バージョンが低い場合は値を色々更新)
 		versionCheck();
-		//maxcountを頻繁に更新するように変更(ver1.3.0)
-		initializeMaxCount();
 		//デイリー
 		updateCheckDaily(questLastUpdateTime, nowTime);
-
 		//ウィークリー
 		updateCheckWeekly(questLastUpdateTime, nowTime);
-
 		//マンスリー
 		updateCheckMonthly(questLastUpdateTime, nowTime);
 	} else {
@@ -676,12 +727,16 @@ function updateCheck() {
 	setData("questLastUpdateTime",nowTime);
 }
 
-//任務ID
-var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702]; //デイリーid
-var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613]; //ウィークリーid（214は除外）
-var monthlyIDs = [249,256,257,259,264,265,266,311,628]; //マンスリーid(626は除外)
+/** デイリーID */
+var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702];
+/** ウイークリーID (あ号作戦(ID:214)は除外) */
+var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613];
+/** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)は除外) */
+var monthlyIDs = [249,256,257,259,264,265,266,311,628];
 
-//5時以降で更新したら初期化
+/**
+ * 任務の回数を初期化します(デイリー)
+ */
 function initializeDailyCount() {
 	Arrays.stream(Java.to(dailyIDs,IntArrayType)).forEach(function(dailyID){
 		setData("cnt"+ dailyID, 0);
@@ -690,6 +745,9 @@ function initializeDailyCount() {
 	setData("cnt311",0); //精鋭艦隊演習
 }
 
+/**
+ * 任務の回数を初期化します(ウイークリー)
+ */
 function initializeWeeklyCount() {
 	Arrays.stream(Java.to(weeklyIDs,IntArrayType)).forEach(function(weeklyID){
 		setData("cnt"+ weeklyID, 0);
@@ -703,6 +761,9 @@ function initializeWeeklyCount() {
 	setData("cntBossWin214", 0);
 }
 
+/**
+ * 任務の回数を初期化します(マンスリー)
+ */
 function initializeMonthlyCount() {
 	Arrays.stream(Java.to(monthlyIDs,IntArrayType)).forEach(function(monthlyID){
 		setData("cnt"+ monthlyID, 0);
@@ -714,57 +775,59 @@ function initializeMonthlyCount() {
 	setData("cntScrapType0FighterModel21_626",0);
 }
 
-//任務更新判定（一日）
+/**
+ * 任務更新判定(デイリー)
+ * 
+ * @param questLastUpdateTime 最後に任務が更新された時間
+ * @param nowTime 現在の時間
+ */
 function updateCheckDaily(questLastUpdateTime, nowTime) {
-	if (checkDaily(questLastUpdateTime, nowTime)) {
+	if (nowTime.get(Calendar.DAY_OF_YEAR) != questLastUpdateTime.get(Calendar.DAY_OF_YEAR)) {
 		initializeDailyCount();
 	}
 }
 
-//任務更新判定（一週間）
+/**
+ * 任務更新判定(ウイークリー)
+ * 
+ * @param questLastUpdateTime 最後に任務が更新された時間
+ * @param nowTime 現在の時間
+ */
 function updateCheckWeekly(questLastUpdateTime, nowTime) {
-	if (checkWeekly(questLastUpdateTime, nowTime)) {
+	if (nowTime.get(Calendar.WEEK_OF_YEAR) != questLastUpdateTime.get(Calendar.WEEK_OF_YEAR)) {
 		initializeWeeklyCount();
 	}
 }
 
-//任務更新判定（一か月）
+/**
+ * 任務更新判定(マンスリー)
+ * 
+ * @param questLastUpdateTime 最後に任務が更新された時間
+ * @param nowTime 現在の時間
+ */
 function updateCheckMonthly(questLastUpdateTime, nowTime) {
-	if (checkMonthly(questLastUpdateTime, nowTime)) {
+	if (nowTime.get(Calendar.MONTH) != questLastUpdateTime.get(Calendar.MONTH)) {
 		initializeMonthlyCount();
 	}
 }
 
-//trueなら実行
-
-function checkDaily(questLastUpdateTime, nowTime) {
-	//同じ日じゃないならtrue
-	if(nowTime.get(Calendar.DAY_OF_YEAR) != questLastUpdateTime.get(Calendar.DAY_OF_YEAR)) return true;
-	return false;
-}
-
-/* 判定方法変更:1.3.7beta */
-function checkWeekly(questLastUpdateTime, nowTime){
-	//同じ週じゃないならtrue
-	if (nowTime.get(Calendar.WEEK_OF_YEAR) != questLastUpdateTime.get(Calendar.WEEK_OF_YEAR)) return true;
-	return false;
-}
-
-/* 判定方法変更:1.3.7beta */
-function checkMonthly(questLastUpdateTime, nowTime) {
-	//同じ月じゃないならtrue
-	if (nowTime.get(Calendar.MONTH) != questLastUpdateTime.get(Calendar.MONTH)) return true;
-	return false;
-}
-
+/** 
+ * 任務の遂行状態を変更します
+ * 
+ * @param questNo 任務ID
+ * @param questState 遂行状態
+ * @param questType 任務の種類
+ */
 function setState(questNo ,questState, questType) {
-	if (questType != QUEST_TYPE.ONCE) { //1回限りは除外（そんな影響ないけど）
+	if (questType != QUEST_TYPE.ONCE) { //1回限りは除外
 		setData("flg"+ questNo,questState == QUEST_STATE.DOING);
 	}
 }
 
-//地獄のべた書き
-//api_noはAndanteさんのソースとスレの情報を参考にしています
+/**
+ * 任務クリアに必要な値を設定します
+ * api_noはAndanteさんのソースとスレの情報を参考にしています
+ */
 function initializeMaxCount(){
 	/* デイリー */
 	//敵艦隊を撃滅せよ！
@@ -869,6 +932,14 @@ function initializeMaxCount(){
 	setData("max628",2);
 }
 
+/** 
+ * 回数のズレを調整します
+ * 
+ * @param questNo 任務ID
+ * @param questProgressFlag 進捗フラグ
+ * @param questType 任務の種類
+ * @param questState 遂行状態
+ */
 function questCountAdjustment(questNo, questProgressFlag, questType, questState){
 	//1回限りとあ号作戦を除外
 	//開発系も多少数がおかしくなるので除外（というより対策方法がない） Ver.1.3.8追記
@@ -919,7 +990,10 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 	}
 }
 
-//新しい任務追加した際に、-1となるのを防ぐ
+/**
+ * 新しい任務追加した際に、-1となるのを防ぎます
+ * バージョンアップ時に使用
+ */
 function updateCount(){
 	Arrays.stream(Java.to(dailyIDs,IntArrayType)).filter(function(dailyID){
 		return getData("cnt" + dailyID) == null   || getData("cnt" + dailyID) < 0;
@@ -946,8 +1020,14 @@ function updateCount(){
 	//精鋭「艦戦」隊の新編成
 	if(getData("cntScrapType96Fighter_626") == null       || getData("cntScrapType96Fighter_626") < 0)       setData("cntScrapType96Fighter_626",0);
 	if(getData("cntScrapType0FighterModel21_626") == null || getData("cntScrapType0FighterModel21_626") < 0) setData("cntScrapType0FighterModel21_626",0);
+	//任務クリアに必要な値を更新
+	initializeMaxCount();
 }
 
+/** 
+ * バージョンをチェックします
+ * もしバージョンを下回っていた場合は、任務の回数をアップデートします
+ */
 function versionCheck(){
 	if(getData("version") == null || getData("version") < VERSION){
 		updateCount();
@@ -994,7 +1074,7 @@ function iniCntModelConversionCheck(){
 	if(isCrear626()){
 		if(secretary.getName().indexOf("鳳翔") > -1){
 			for(var i = 0;i < secretaryItem.getSlotNum();i++){
-				if(secretaryItem[i].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21 && secretaryItem[i].getLevel() == MAX_ALV){
+				if(secretaryItem[i].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21 && secretaryItem[i].getLevel() == MAX_ALV){
 					break;
 				}
 				if(i == secretaryItem.getSlotNum() - 1) iniCnt626();
@@ -1008,7 +1088,7 @@ function iniCntModelConversionCheck(){
 	if(isCrear628()){
 		if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == CVS)){
 			for(var i = 0;i < secretaryItem.getSlotNum();i++){
-				if(secretaryItem[i].getSlotitemId() == ID_TYPE0_FIGHTER_MODEL21_SKILLED){
+				if(secretaryItem[i].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21_SKILLED){
 					break;
 				}
 				if(i == secretaryItem.getSlotNum() - 1) iniCnt628();
