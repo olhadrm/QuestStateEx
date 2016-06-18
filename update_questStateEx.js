@@ -1,8 +1,8 @@
-VERSION = 1.47015; //使うので変更不可
+VERSION = 1.47016; //使うので変更不可
 //Author:Nishisonic
 
 /**
- * 任務進捗詳細Ver1.4.7β15
+ * 任務進捗詳細Ver1.4.7β16
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -204,6 +204,7 @@ var SHIP_ID = {
  */
 function update(type, data){
 	var json = data.getJsonObject();
+
 	switch(type){
 		//任務
 		case DataType.QUEST_LIST:
@@ -222,13 +223,18 @@ function update(type, data){
 			}
 		//母港
 		case DataType.PORT:
-			//機種転換任務で確認することリスト
-			//任務の前提条件はクリアしているか（廃棄）
-			//秘書艦は変わっていないか→getId()：キャラIDで問題なし
-			//装備は変わっていないか　→getSlotitemId()：装備IDで問題なし
-			//熟練度はどうなる？　　　→getId()：熟練度チェックだけで問題なし
-			//任務画面と母港で条件をチェックする
-			iniCntModelConversionCheck();
+			var secretary = GlobalContext.getSecretary();
+			//精鋭「艦戦」隊の新編成
+			if(isMatchSecretary626(secretary) && canClear626()){
+				setData("flg626", false);
+				setData("cntScrapType96Fighter_626", 0);
+				setData("cntScrapType0FighterModel21_626", 0);
+			}
+			//機種転換
+			if(isMatchSecretary628(secretary) && canClear628()){
+				setData("flg628", false);
+				setData("cnt628", 0);
+			}
 			break;
 		//戦闘
 		case DataType.START:
@@ -495,67 +501,41 @@ function update(type, data){
 			if(storedItemMap != null){
 				var destroyItemMap = getDestroyItemMap(getStoredItemMap(),GlobalContext.getItemMap());
 				var secretary = GlobalContext.getSecretary();
+				
 				//精鋭「艦戦」隊の新編成
-				switch(secretary.getShipId()){
-					case SHIP_ID.HOSHO:
-					case SHIP_ID.HOSHO_R:
-						var conditions = secretary.getItem2().stream().filter(function(itemDto){
-							return itemDto != null;
-						}).anyMatch(function(itemDto){
-							return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21 && itemDto.alv == MAX_ALV;
-						});
-
-						if(conditions){
-							destroyItemMap.entrySet().stream().map(function(item){
-								return item.getValue();
-							}).map(function(itemDto){
-								return itemDto.slotitemId;
-							}).forEach(function(slotitemId){
-								switch(slotitemId){
-									case ITEM_ID.TYPE96_FIGHTER:
-										if(getData("flg626")) setData("cntScrapType96Fighter_626", getData("cntScrapType96Fighter_626") + 1);
-										break;
-									case ITEM_ID.TYPE0_FIGHTER_MODEL21:
-										if(getData("flg626")) setData("cntScrapType0FighterModel21_626", getData("cntScrapType0FighterModel21_626") + 1);
-										break;
-									default :
-										break;
-								}
-							});
+				if(isMatchSecretary626(secretary)){
+					destroyItemMap.entrySet().stream().map(function(item){
+						return item.getValue();
+					}).map(function(itemDto){
+						return itemDto.slotitemId;
+					}).forEach(function(slotitemId){
+						switch(slotitemId){
+							case ITEM_ID.TYPE96_FIGHTER:
+								if(getData("flg626")) setData("cntScrapType96Fighter_626", getData("cntScrapType96Fighter_626") + 1);
+								break;
+							case ITEM_ID.TYPE0_FIGHTER_MODEL21:
+								if(getData("flg626")) setData("cntScrapType0FighterModel21_626", getData("cntScrapType0FighterModel21_626") + 1);
+								break;
+							default :
+								break;
 						}
-						break;
-					default :
-						break;
+					});
 				}
 				//機種転換
-				switch(secretary.getStype()){
-					case SHIP_TYPE.CVL:
-					case SHIP_TYPE.CV:
-					case SHIP_TYPE.ACV:
-						var conditions = secretary.getItem2().stream().filter(function(itemDto){
-							return itemDto != null;
-						}).anyMatch(function(itemDto){
-							return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
-						});
-
-						if(conditions){
-							destroyItemMap.entrySet().stream().map(function(item){
-								return item.getValue();
-							}).map(function(itemDto){
-								return itemDto.slotitemId;
-							}).forEach(function(slotitemId){
-								switch(slotitemId){
-									case ITEM_ID.TYPE0_FIGHTER_MODEL52:
-										if(getData("flg628")) setData("cnt628", getData("cnt628") + 1);
-										break;
-									default :
-										break;
-								}
-							});
+				if(isMatchSecretary628(secretary)){
+					destroyItemMap.entrySet().stream().map(function(item){
+						return item.getValue();
+					}).map(function(itemDto){
+						return itemDto.slotitemId;
+					}).forEach(function(slotitemId){
+						switch(slotitemId){
+							case ITEM_ID.TYPE0_FIGHTER_MODEL52:
+								if(getData("flg628")) setData("cnt628", getData("cnt628") + 1);
+								break;
+							default :
+								break;
 						}
-						break;
-					default :
-						break;
+					});
 				}
 			}
 			break;
@@ -628,7 +608,7 @@ function update(type, data){
 		default :
 			break;
 	}
-	//精鋭「艦戦」隊の新編成・機種転換用(Ver1.4.1)
+	//精鋭「艦戦」隊の新編成・機種転換用
 	storeItemMap();
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
@@ -639,7 +619,7 @@ function update(type, data){
  * 
  * @param oldItemMap 古いItemMap
  * @param newItemMap 新しいItemMap
- * @return destroyItemMap 廃棄した装備のItemMap
+ * @returns {TreeMap} 廃棄した装備のItemMap
  */
 function getDestroyItemMap(oldItemMap,newItemMap){
 	var destroyItemMap = new TreeMap();
@@ -660,6 +640,8 @@ function storeItemMap(){
 
 /**
  * 保存されたitemMapを取り出します
+ * 
+ * @return {ItemMap} 装備一覧
  */
 function getStoredItemMap(){
 	return getData("itemMap");
@@ -1002,66 +984,59 @@ function versionCheck(){
 	setData("version",VERSION);
 }
 
-function iniCnt626(){
-	setData("flg626",false);
-	setData("cntScrapType96Fighter_626",0);
-	setData("cntScrapType0FighterModel21_626",0);
+/**
+ * 任務がクリア可能状態かを返します(ID:626)
+ * @return {Boolean} クリア可能状態ならtrue
+ */
+function canClear626(){
+	return getData("flg626") != null && getData("cntScrapType96Fighter_626") >= getData("maxScrapType96Fighter_626") && getData("cntScrapType0FighterModel21_626") >= getData("maxScrapType0FighterModel21_626");
 }
 
-function iniCnt628(){
-	setData("flg628",false);
-	setData("cnt628",0);
+/**
+ * 任務がクリア可能状態かを返します(ID:628)
+ * @return {Boolean} クリア可能状態ならtrue
+ */
+function canClear628(){
+	return getData("flg628") != null && getData("cnt628") >= getData("max628");
 }
 
-function isCrear626(){
-	if(getData("flg626") != null){
-		if(getData("cntScrapType96Fighter_626") >= getData("maxScrapType96Fighter_626")){
-			if(getData("cntScrapType0FighterModel21_626") >= getData("maxScrapType0FighterModel21_626")){
-				return true;
-			}
-		}
+/**
+ * 秘書艦が任務(ID:626)の条件と一致しているか
+ * 
+ * @param secretary 秘書艦
+ * @returns {Boolean} 一致しているならtrue
+ */
+function isMatchSecretary626(secretary){
+	switch(secretary.getShipId()){
+		case SHIP_ID.HOSHO:
+		case SHIP_ID.HOSHO_R:
+			return secretary.getItem2().stream().filter(function(itemDto){
+				return itemDto != null;
+			}).anyMatch(function(itemDto){
+				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21 && itemDto.alv == MAX_ALV;
+			});
+		default :
+			return false;
 	}
-	return false;
 }
 
-function isCrear628(){
-	if(getData("flg628") != null){
-		if(getData("cnt628") >= getData("max628")){
-				return true;
-		}
-	}
-	return false;
-}
-
-function iniCntModelConversionCheck(){
-	var secretary = GlobalContext.getSecretary();
-	var secretaryItem = secretary.getItem2();
-	
-	//精鋭「艦戦」隊の新編成
-	if(isCrear626()){
-		if(secretary.getName().indexOf("鳳翔") > -1){
-			for(var i = 0;i < secretaryItem.getSlotNum();i++){
-				if(secretaryItem[i].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21 && secretaryItem[i].getLevel() == MAX_ALV){
-					break;
-				}
-				if(i == secretaryItem.getSlotNum() - 1) iniCnt626();
-			}
-		} else {
-			iniCnt626();
-		}
-	}
-	
-	//機種転換
-	if(isCrear628()){
-		if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == CVS)){
-			for(var i = 0;i < secretaryItem.getSlotNum();i++){
-				if(secretaryItem[i].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21_SKILLED){
-					break;
-				}
-				if(i == secretaryItem.getSlotNum() - 1) iniCnt628();
-			}
-		} else {
-			iniCnt628();
-		}
+/**
+ * 秘書艦が任務(ID:628)の条件と一致しているか
+ * 
+ * @param secretary 秘書艦
+ * @returns {Boolean} 一致しているならtrue
+ */
+function isMatchSecretary628(secretary){
+	switch(secretary.getStype()){
+		case SHIP_TYPE.CVL:
+		case SHIP_TYPE.CV:
+		case SHIP_TYPE.ACV:
+			return secretary.getItem2().stream().filter(function(itemDto){
+				return itemDto != null;
+			}).anyMatch(function(itemDto){
+				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
+			});
+		default :
+			return false;
 	}
 }
