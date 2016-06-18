@@ -1,8 +1,8 @@
-VERSION = 1.47014; //使うので変更不可
+VERSION = 1.47015; //使うので変更不可
 //Author:Nishisonic
 
 /**
- * 任務進捗詳細Ver1.4.7β14
+ * 任務進捗詳細Ver1.4.7β15
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -17,16 +17,16 @@ load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 //importするClass
-Calendar = Java.type("java.util.Calendar");
-TimeZone = Java.type("java.util.TimeZone");
-Ship = Java.type("logbook.internal.Ship");
-DataType = Java.type("logbook.data.DataType");
 ApplicationMain = Java.type("logbook.gui.ApplicationMain");
-System = Java.type("java.lang.System");
-GlobalContext = Java.type("logbook.data.context.GlobalContext");
-List = Java.type("java.util.List");
+DataType        = Java.type("logbook.data.DataType");
+GlobalContext   = Java.type("logbook.data.context.GlobalContext");
+
 IntArrayType = Java.type("int[]");
-Arrays = Java.type("java.util.Arrays");
+Arrays       = Java.type("java.util.Arrays");
+Calendar     = Java.type("java.util.Calendar");
+List         = Java.type("java.util.List");
+TimeZone     = Java.type("java.util.TimeZone");
+TreeMap      = Java.type("java.util.TreeMap");
 
 /** 熟練度最大値 */
 var MAX_ALV = 7;
@@ -204,7 +204,6 @@ var SHIP_ID = {
  */
 function update(type, data){
 	var json = data.getJsonObject();
-
 	switch(type){
 		//任務
 		case DataType.QUEST_LIST:
@@ -491,57 +490,72 @@ function update(type, data){
 		case DataType.DESTROY_ITEM2:
 			//資源の再利用
 			if(getData("flg613")) setData("cnt613",getData("cnt613") + 1);
-			var oldItemArray = getItemArray(); //古いデータ
-			var newItemArray = getItemArray2(GlobalContext.getItemMap()); //最新のデータ
-			//母港・建造・開発経由必須
-			if(oldItemArray != null){
-				var adjustmentCount = 0; //調整回数
+
+			var storedItemMap = getStoredItemMap();
+			if(storedItemMap != null){
+				var destroyItemMap = getDestroyItemMap(getStoredItemMap(),GlobalContext.getItemMap());
 				var secretary = GlobalContext.getSecretary();
-				var secretaryItem = secretary.getItem2(); //java.util.List<ItemDto>
-				for(var i = 0;i < oldItemArray[0].length;i++){
-					//もし一致しなかった場合
-					if(oldItemArray[0][i] != newItemArray[0][i - adjustmentCount]){
-						if(oldItemArray[1][i] == ITEM_ID.TYPE96_FIGHTER){ //廃棄した装備が九六式艦戦だったら
-							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
-								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
-									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ITEM_ID.TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
-											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
-												if(getData("flg626")) setData("cntScrapType96Fighter_626",getData("cntScrapType96Fighter_626") + 1);
-											}
-										}
-									}
+				//精鋭「艦戦」隊の新編成
+				switch(secretary.getShipId()){
+					case SHIP_ID.HOSHO:
+					case SHIP_ID.HOSHO_R:
+						var conditions = secretary.getItem2().stream().filter(function(itemDto){
+							return itemDto != null;
+						}).anyMatch(function(itemDto){
+							return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21 && itemDto.alv == MAX_ALV;
+						});
+
+						if(conditions){
+							destroyItemMap.entrySet().stream().map(function(item){
+								return item.getValue();
+							}).map(function(itemDto){
+								return itemDto.slotitemId;
+							}).forEach(function(slotitemId){
+								switch(slotitemId){
+									case ITEM_ID.TYPE96_FIGHTER:
+										if(getData("flg626")) setData("cntScrapType96Fighter_626", getData("cntScrapType96Fighter_626") + 1);
+										break;
+									case ITEM_ID.TYPE0_FIGHTER_MODEL21:
+										if(getData("flg626")) setData("cntScrapType0FighterModel21_626", getData("cntScrapType0FighterModel21_626") + 1);
+										break;
+									default :
+										break;
 								}
-							}
+							});
 						}
-						if(oldItemArray[1][i] == ITEM_ID.TYPE0_FIGHTER_MODEL21){ //廃棄した装備が零式二一型だったら
-							if(secretary.getName().indexOf("鳳翔") > -1){ //秘書艦が鳳翔なら
-								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
-									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21){ //零式艦戦21型を積んでいるか
-											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
-												if(getData("flg626")) setData("cntScrapType0FighterModel21_626",getData("cntScrapType0FighterModel21_626") + 1);
-											}
-										}
-									}
+						break;
+					default :
+						break;
+				}
+				//機種転換
+				switch(secretary.getStype()){
+					case SHIP_TYPE.CVL:
+					case SHIP_TYPE.CV:
+					case SHIP_TYPE.ACV:
+						var conditions = secretary.getItem2().stream().filter(function(itemDto){
+							return itemDto != null;
+						}).anyMatch(function(itemDto){
+							return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
+						});
+
+						if(conditions){
+							destroyItemMap.entrySet().stream().map(function(item){
+								return item.getValue();
+							}).map(function(itemDto){
+								return itemDto.slotitemId;
+							}).forEach(function(slotitemId){
+								switch(slotitemId){
+									case ITEM_ID.TYPE0_FIGHTER_MODEL52:
+										if(getData("flg628")) setData("cnt628", getData("cnt628") + 1);
+										break;
+									default :
+										break;
 								}
-							}
+							});
 						}
-						if(oldItemArray[1][i] == ITEMID.TYPE0_FIGHTER_MODEL52){ //廃棄した装備が零式五二型だったら
-							if(secretary.getType().indexOf("空母") > -1 && !(secretary.getStype() == SHIP_TYPE.CVS)){ //秘書艦が空母なら
-								for(var j = 0;j < secretary.getSlotNum();j++){ //装備スロット検索
-									if(secretaryItem[j] != null){
-										if(secretaryItem[j].getSlotitemId() == ITEMID.TYPE0_FIGHTER_MODEL21_SKILLED){ //零式艦戦21型(熟練)を積んでいるか
-											if(secretaryItem[j].getAlv() == MAX_ALV){ //また熟練度は最大か
-												if(getData("flg628")) setData("cnt628",getData("cnt628") + 1);
-											}
-										}
-									}
-								}
-							}
-						}
-						adjustmentCount++;
-					}
+						break;
+					default :
+						break;
 				}
 			}
 			break;
@@ -615,87 +629,40 @@ function update(type, data){
 			break;
 	}
 	//精鋭「艦戦」隊の新編成・機種転換用(Ver1.4.1)
-	setItemArray2();
+	storeItemMap();
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
 }
 
-//オーバーロード下さい（懇願）
-
-//精鋭「艦戦」隊の新編成・機種転換用(Ver1.4.1)
-function setItemArray2(){
-	var itemMap = GlobalContext.getItemMap();
-	var itemArray = getItemArray2(itemMap);
-	setItemArray(itemArray);
-}
-
-function setItemArray(itemArray){
-	setTmpData("itemArray",itemArray);
-}
-
-function getItemArray(){
-	return getData("itemArray");
+/**
+ * 廃棄した装備を取得する
+ * 
+ * @param oldItemMap 古いItemMap
+ * @param newItemMap 新しいItemMap
+ * @return destroyItemMap 廃棄した装備のItemMap
+ */
+function getDestroyItemMap(oldItemMap,newItemMap){
+	var destroyItemMap = new TreeMap();
+	oldItemMap.keySet().stream().filter(function(key){
+		return !newItemMap.containsKey(key);
+	}).forEach(function(key){
+		destroyItemMap.put(key, oldItemMap.get(key));
+	});
+	return destroyItemMap;
 }
 
 /**
- * @return 二次元配列=[装備ID(個別)、装備ID(マスター)、改修度、熟練度、ロック]
+ * 最新のitemMapをScriptData内に保存します
  */
-function getItemArray2(itemMap){
-	return [getItemIdArray(itemMap),
-			getSlotItemIdArray(itemMap),
-			getItemLevelArray(itemMap),
-			getItemAlvArray(itemMap),
-			getItemIsLockedArray(itemMap)];
+function storeItemMap(){
+	setTmpData("itemMap",new TreeMap(GlobalContext.getItemMap()));
 }
 
-function getItemIdArray(itemMap){
-	var result = [];
-	for(var it = itemMap.entrySet().iterator();it.hasNext();){
-		var entry = it.next();
-		var id = entry.getKey();
-		result.push(Math.floor(entry.getValue().getId()));
-	}
-	return result;
-}
-
-function getSlotItemIdArray(itemMap){
-	var result = [];
-	for(var it = itemMap.entrySet().iterator();it.hasNext();){
-		var entry = it.next();
-		var id = entry.getKey();
-		result.push(entry.getValue().getSlotitemId());
-	}
-	return result;
-}
-
-function getItemLevelArray(itemMap){
-	var result = [];
-	for(var it = itemMap.entrySet().iterator();it.hasNext();){
-		var entry = it.next();
-		var id = entry.getKey();
-		result.push(Math.floor(entry.getValue().getLevel()));
-	}
-	return result;
-}
-
-function getItemAlvArray(itemMap){
-	var result = [];
-	for(var it = itemMap.entrySet().iterator();it.hasNext();){
-		var entry = it.next();
-		var id = entry.getKey();
-		result.push(Math.floor(entry.getValue().getAlv()));
-	}
-	return result;
-}
-
-function getItemIsLockedArray(itemMap){
-	var result = [];
-	for(var it = itemMap.entrySet().iterator();it.hasNext();){
-		var entry = it.next();
-		var id = entry.getKey();
-		result.push(entry.getValue().isLocked());
-	}
-	return result;
+/**
+ * 保存されたitemMapを取り出します
+ */
+function getStoredItemMap(){
+	return getData("itemMap");
 }
 
 /**
