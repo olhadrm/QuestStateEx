@@ -1,8 +1,10 @@
-VERSION = 1.47016; //使うので変更不可
-//Author:Nishisonic
+/** 現在のバージョン */
+VERSION = 1.48;
 
 /**
- * 任務進捗詳細Ver1.4.7β16
+ * 任務進捗詳細Ver1.4.8
+ * Author:Nishisonic
+ * LastUpdate:2016/06/19
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -17,23 +19,21 @@ load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 //importするClass
-ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 DataType        = Java.type("logbook.data.DataType");
 GlobalContext   = Java.type("logbook.data.context.GlobalContext");
-
-IntArrayType = Java.type("int[]");
-Arrays       = Java.type("java.util.Arrays");
-Calendar     = Java.type("java.util.Calendar");
-List         = Java.type("java.util.List");
-TimeZone     = Java.type("java.util.TimeZone");
-TreeMap      = Java.type("java.util.TreeMap");
+IntArrayType    = Java.type("int[]");
+Arrays          = Java.type("java.util.Arrays");
+Calendar        = Java.type("java.util.Calendar");
+List            = Java.type("java.util.List");
+TimeZone        = Java.type("java.util.TimeZone");
+TreeMap         = Java.type("java.util.TreeMap");
 
 /** 熟練度最大値 */
 var MAX_ALV = 7;
 
 /** 艦種 */
 var SHIP_TYPE = {
-	/** 海防艦(造語(-ω-)) */
+	/** 海防艦(造語) */
 	EE:1,
 	/** 駆逐艦 */
 	DD:2,
@@ -55,7 +55,7 @@ var SHIP_TYPE = {
 	CVB:10,
 	/** 正規空母 */
 	CV:11,
-	/** 超弩級戦艦(造語(-ω-)) */
+	/** 超弩級戦艦(造語) */
 	BSD:12,
 	/** 潜水艦 */
 	SS:13,
@@ -195,6 +195,12 @@ var SHIP_ID = {
 	HOSHO_R:285,
 };
 
+/** 任務ID */
+var QUEST_ID = {
+	/** 調整例外リスト */
+	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626],
+};
+
 /** 
  * @Override
  * 通信データを処理します
@@ -278,7 +284,7 @@ function update(type, data){
 							//海上護衛戦
 							if(getData("flg228")) setData("cnt228",getData("cnt228") + 1);
 							break;
-						default :
+						default:
 							break;
 					}
 				}
@@ -310,9 +316,9 @@ function update(type, data){
 							if(getData("mapInfoNo") == 4 && winRank == "S"){
 								var cntCL = 0;
 								var cntDD = 0;
-								if(ships.get(0).getStype() == SHIP_TYPE.CL){
+								if(ships.get(0).stype == SHIP_TYPE.CL){
 									ships.stream().map(function(ship){
-										return ship.getStype();
+										return ship.stype;
 									}).forEach(function(stype){
 										switch(stype){
 											case SHIP_TYPE.DD:
@@ -321,7 +327,7 @@ function update(type, data){
 											case SHIP_TYPE.CL:
 												cntCL++;
 												break;
-											default :
+											default:
 												break;
 										}
 									});
@@ -346,7 +352,7 @@ function update(type, data){
 								var check249 = 0;
 
 								ships.stream().map(function(ship){
-									return ship.getShipId();
+									return ship.shipId;
 								}).forEach(function(shipId){
 									switch(shipId){
 										case SHIP_ID.MYOKO:
@@ -359,7 +365,7 @@ function update(type, data){
 										case SHIP_ID.HAGURO_R:
 										case SHIP_ID.HAGURO_R2:
 											check249++;
-										default :
+										default:
 											break;
 									}
 								});
@@ -372,9 +378,9 @@ function update(type, data){
 								var cntCL = 0;
 								var cntDD = 0;
 
-								if(ships.get(0).getStype() == SHIP_TYPE.DD){
+								if(ships.get(0).stype == SHIP_TYPE.DD){
 									ships.stream().map(function(ship){
-										return ship.getStype();
+										return ship.stype;
 									}).forEach(function(stype){
 										switch(stype){
 											case SHIP_TYPE.CA: //重巡洋艦
@@ -386,7 +392,7 @@ function update(type, data){
 											case SHIP_TYPE.DD: //駆逐艦
 												cntDD++;
 												break;
-											default :
+											default:
 												break;
 										}
 									});
@@ -408,7 +414,7 @@ function update(type, data){
 								var cntCV = 0;
 								var cntDD = 0;
 								ships.stream().map(function(ship){
-									return ship.getStype();
+									return ship.stype;
 								}).forEach(function(stype){
 									switch(stype){
 										case SHIP_TYPE.CVL: //軽空母
@@ -438,7 +444,7 @@ function update(type, data){
 								var cntSlowBB = 0;
 								var cntCL = 0;
 								ships.stream().map(function(ship){
-									return ship.getStype();
+									return ship.stype;
 								}).forEach(function(stype){
 									switch(stype){
 										case SHIP_TYPE.BB:  //戦艦
@@ -448,7 +454,7 @@ function update(type, data){
 										case SHIP_TYPE.CL:  //軽巡洋艦
 											cntCL++;
 											break;
-										default :
+										default:
 											break;
 									}
 								});
@@ -499,8 +505,8 @@ function update(type, data){
 
 			var storedItemMap = getStoredItemMap();
 			if(storedItemMap != null){
-				var destroyItemMap = getDestroyItemMap(getStoredItemMap(),GlobalContext.getItemMap());
-				var secretary = GlobalContext.getSecretary();
+				var destroyItemMap = getDestroyItemMap(storedItemMap,GlobalContext.itemMap);
+				var secretary = GlobalContext.secretary;
 				
 				//精鋭「艦戦」隊の新編成
 				if(isMatchSecretary626(secretary)){
@@ -516,7 +522,7 @@ function update(type, data){
 							case ITEM_ID.TYPE0_FIGHTER_MODEL21:
 								if(getData("flg626")) setData("cntScrapType0FighterModel21_626", getData("cntScrapType0FighterModel21_626") + 1);
 								break;
-							default :
+							default:
 								break;
 						}
 					});
@@ -532,7 +538,7 @@ function update(type, data){
 							case ITEM_ID.TYPE0_FIGHTER_MODEL52:
 								if(getData("flg628")) setData("cnt628", getData("cnt628") + 1);
 								break;
-							default :
+							default:
 								break;
 						}
 					});
@@ -572,7 +578,7 @@ function update(type, data){
 						if(getData("flg411")) setData("cnt411",getData("cnt411") + 1);
 					}
 					break;
-				default :
+				default:
 					break;
 			}
 			break;
@@ -605,13 +611,11 @@ function update(type, data){
 				if(getData("flg311")) setData("cnt311",getData("cnt311") + 1);
 			}
 			break;
-		default :
+		default:
 			break;
 	}
 	//精鋭「艦戦」隊の新編成・機種転換用
 	storeItemMap();
-	//任務一覧の更新
-	ApplicationMain.main.getQuestTable().update();
 }
 
 /**
@@ -619,7 +623,7 @@ function update(type, data){
  * 
  * @param oldItemMap 古いItemMap
  * @param newItemMap 新しいItemMap
- * @returns {TreeMap} 廃棄した装備のItemMap
+ * @return {TreeMap} 廃棄した装備のItemMap
  */
 function getDestroyItemMap(oldItemMap,newItemMap){
 	var destroyItemMap = new TreeMap();
@@ -635,7 +639,7 @@ function getDestroyItemMap(oldItemMap,newItemMap){
  * 最新のitemMapをScriptData内に保存します
  */
 function storeItemMap(){
-	setTmpData("itemMap",new TreeMap(GlobalContext.getItemMap()));
+	setTmpData("itemMap",new TreeMap(GlobalContext.itemMap));
 }
 
 /**
@@ -652,13 +656,13 @@ function getStoredItemMap(){
  * バージョンアップで新任務が追加されてないかなどをチェックします
  */
 function updateCheck() {
-	//最初は絶対null取得する…はず（それをフラグにして初期化）
+	//最後に取得した任務更新時刻
 	var questLastUpdateTime = getData("questLastUpdateTime");
     /** タイムゾーン(任務が更新される05:00JSTに0:00になるタイムゾーン) */
  	var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
  	nowTime.setFirstDayOfWeek(Calendar.MONDAY);
 	
-	if (questLastUpdateTime != null) {
+	if (questLastUpdateTime instanceof Calendar) {
 		//バージョンを確認(バージョンが低い場合は値を色々更新)
 		versionCheck();
 		//デイリー
@@ -890,10 +894,8 @@ function initializeMaxCount(){
  * @param questState 遂行状態
  */
 function questCountAdjustment(questNo, questProgressFlag, questType, questState){
-	//1回限りとあ号作戦を除外
-	//開発系も多少数がおかしくなるので除外（というより対策方法がない） Ver.1.3.8追記
-	//精鋭「艦戦」隊の新編成も対処不可なので除外 Ver.1.4.1追記
-	if(questType != QUEST_TYPE.ONCE && !(questNo == 214 || questNo == 605 || questNo == 606 || questNo == 607 || questNo == 608 || questNo == 626)){
+	//1回限り、あ号作戦、開発系、建造系、精鋭「艦戦」隊の新編成は除外
+	if(questType != QUEST_TYPE.ONCE && !isQuestCountAdjustmentException(questNo)){
 		switch(questProgressFlag){
 			case QUEST_PROGRESS_FLAG.HALF: //50%以上
 				//カウンタが50%を下回ってるのに、「50%以上」表示になっていたら
@@ -917,7 +919,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 					setData("cnt" + questNo,getData("max" + questNo) - 1);
 				}
 				break;
-			default : //それ以外
+			default: //それ以外
 				switch(questState){
 					case QUEST_STATE.NOT_ORDER: //未受注
 					case QUEST_STATE.DOING: //遂行中
@@ -931,7 +933,7 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 						//maxの値に合わせる
 						setData("cnt" + questNo,getData("max" + questNo));
 						break;
-					default :
+					default:
 						break;
 				}
 				break;
@@ -986,7 +988,7 @@ function versionCheck(){
 
 /**
  * 任務がクリア可能状態かを返します(ID:626)
- * @return {Boolean} クリア可能状態ならtrue
+ * @return {boolean} クリア可能状態ならtrue
  */
 function canClear626(){
 	return getData("flg626") != null && getData("cntScrapType96Fighter_626") >= getData("maxScrapType96Fighter_626") && getData("cntScrapType0FighterModel21_626") >= getData("maxScrapType0FighterModel21_626");
@@ -994,7 +996,7 @@ function canClear626(){
 
 /**
  * 任務がクリア可能状態かを返します(ID:628)
- * @return {Boolean} クリア可能状態ならtrue
+ * @return {boolean} クリア可能状態ならtrue
  */
 function canClear628(){
 	return getData("flg628") != null && getData("cnt628") >= getData("max628");
@@ -1004,7 +1006,7 @@ function canClear628(){
  * 秘書艦が任務(ID:626)の条件と一致しているか
  * 
  * @param secretary 秘書艦
- * @returns {Boolean} 一致しているならtrue
+ * @return {boolean} 一致しているならtrue
  */
 function isMatchSecretary626(secretary){
 	switch(secretary.getShipId()){
@@ -1015,7 +1017,7 @@ function isMatchSecretary626(secretary){
 			}).anyMatch(function(itemDto){
 				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21 && itemDto.alv == MAX_ALV;
 			});
-		default :
+		default:
 			return false;
 	}
 }
@@ -1024,7 +1026,7 @@ function isMatchSecretary626(secretary){
  * 秘書艦が任務(ID:628)の条件と一致しているか
  * 
  * @param secretary 秘書艦
- * @returns {Boolean} 一致しているならtrue
+ * @return {boolean} 一致しているならtrue
  */
 function isMatchSecretary628(secretary){
 	switch(secretary.getStype()){
@@ -1036,7 +1038,19 @@ function isMatchSecretary628(secretary){
 			}).anyMatch(function(itemDto){
 				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
 			});
-		default :
+		default:
 			return false;
 	}
+}
+
+/**
+ * 任務回数の調整例外IDに入っているか
+ * 
+ * @param questID 任務ID
+ * @return {boolean} 例外IDならtrue
+ */
+function isQuestCountAdjustmentException(questID){
+	return Arrays.stream(Java.to(QUEST_ID.ADJUSTMENT_EXCEPTION_LIST,IntArrayType)).anyMatch(function(excetipnQuestID){
+		return questID == excetipnQuestID;
+	});
 }
