@@ -1,8 +1,8 @@
 /** 現在のバージョン */
-VERSION = 1.48;
+VERSION = 1.49;
 
 /**
- * 任務進捗詳細Ver1.4.8
+ * 任務進捗詳細Ver1.4.9
  * Author:Nishisonic
  * LastUpdate:2016/06/19
  * 
@@ -19,6 +19,7 @@ load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 //importするClass
+ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 DataType        = Java.type("logbook.data.DataType");
 GlobalContext   = Java.type("logbook.data.context.GlobalContext");
 IntArrayType    = Java.type("int[]");
@@ -616,6 +617,8 @@ function update(type, data){
 	}
 	//精鋭「艦戦」隊の新編成・機種転換用
 	storeItemMap();
+	//任務一覧の更新
+	ApplicationMain.main.getQuestTable().update();
 }
 
 /**
