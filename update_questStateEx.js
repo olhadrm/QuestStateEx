@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.49;
+VERSION = 1.50;
 
 /**
- * 任務進捗詳細Ver1.4.9
+ * 任務進捗詳細Ver1.5.0
  * Author:Nishisonic
- * LastUpdate:2016/06/19
+ * LastUpdate:2016/06/28
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -13,19 +13,22 @@ VERSION = 1.49;
  * cnt + questNo：カウントに使用
  */
 
-//importするjsのメソッド
+//import js method
 load("script/ScriptData.js");
 /**  ScriptData.jsで使用 */
 data_prefix = "questStateEx_";
 
-//importするClass
+//import class
 ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 DataType        = Java.type("logbook.data.DataType");
 GlobalContext   = Java.type("logbook.data.context.GlobalContext");
+ItemDto         = Java.type("logbook.dto.ItemDto");
+ShipDto         = Java.type("logbook.dto.ShipDto");
 IntArrayType    = Java.type("int[]");
 Arrays          = Java.type("java.util.Arrays");
 Calendar        = Java.type("java.util.Calendar");
 List            = Java.type("java.util.List");
+Map             = Java.type("java.util.Map");
 TimeZone        = Java.type("java.util.TimeZone");
 TreeMap         = Java.type("java.util.TreeMap");
 
@@ -218,7 +221,8 @@ function update(type, data){
 			updateCheck();
 			if(json.api_data.api_list instanceof List){
 				json.api_data.api_list.stream().filter(function(data){
-					return data != -1;
+					//Ver1.5.0修正箇所:ちゃんとフィルターが掛けられてなかったので修正
+					return parseInt(data) != -1;
 				}).forEach(function(data){
 					var api_no = data.api_no.intValue();
 					var api_state = data.api_state.intValue();
@@ -231,21 +235,24 @@ function update(type, data){
 		//母港
 		case DataType.PORT:
 			var secretary = GlobalContext.getSecretary();
-			//精鋭「艦戦」隊の新編成
-			if(isMatchSecretary626(secretary) && canClear626()){
-				setData("flg626", false);
-				setData("cntScrapType96Fighter_626", 0);
-				setData("cntScrapType0FighterModel21_626", 0);
-			}
-			//機種転換
-			if(isMatchSecretary628(secretary) && canClear628()){
-				setData("flg628", false);
-				setData("cnt628", 0);
+			//Ver1.5.0修正箇所:null回避
+			if(secretary instanceof ShipDto){
+				//精鋭「艦戦」隊の新編成
+				if(isMatchSecretary626(secretary) && canClear626()){
+					setData("flg626", false);
+					setData("cntScrapType96Fighter_626", 0);
+					setData("cntScrapType0FighterModel21_626", 0);
+				}
+				//機種転換
+				if(isMatchSecretary628(secretary) && canClear628()){
+					setData("flg628", false);
+					setData("cnt628", 0);
+				}
 			}
 			break;
 		//戦闘
 		case DataType.START:
-			//あ号作戦（出撃） /* Ver1.3.9修正箇所 */
+			//あ号作戦（出撃）(Ver1.3.9修正箇所)
 			if(getData("flg214")) setData("cntSally214",getData("cntSally214") + 1);
 		case DataType.NEXT:
 			setData("mapAreaId",json.api_data.api_maparea_id.intValue());
@@ -290,7 +297,6 @@ function update(type, data){
 					}
 				}
 			}
-			//追記したから変な位置に
 			//あ号作戦（ボス到達）
 			if(getData("eventId") == EVENT_ID.BOSS_BATTLE){
 				if(getData("flg214")) setData("cntBoss214",getData("cntBoss214") + 1);
@@ -505,7 +511,7 @@ function update(type, data){
 			if(getData("flg613")) setData("cnt613",getData("cnt613") + 1);
 
 			var storedItemMap = getStoredItemMap();
-			if(storedItemMap != null){
+			if(storedItemMap instanceof Map){
 				var destroyItemMap = getDestroyItemMap(storedItemMap,GlobalContext.itemMap);
 				var secretary = GlobalContext.secretary;
 				
@@ -1012,11 +1018,11 @@ function canClear628(){
  * @return {boolean} 一致しているならtrue
  */
 function isMatchSecretary626(secretary){
-	switch(secretary.getShipId()){
+	switch(secretary.shipId){
 		case SHIP_ID.HOSHO:
 		case SHIP_ID.HOSHO_R:
 			return secretary.getItem2().stream().filter(function(itemDto){
-				return itemDto != null;
+				return itemDto instanceof ItemDto;
 			}).anyMatch(function(itemDto){
 				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21 && itemDto.alv == MAX_ALV;
 			});
@@ -1032,12 +1038,12 @@ function isMatchSecretary626(secretary){
  * @return {boolean} 一致しているならtrue
  */
 function isMatchSecretary628(secretary){
-	switch(secretary.getStype()){
+	switch(secretary.stype){
 		case SHIP_TYPE.CVL:
 		case SHIP_TYPE.CV:
 		case SHIP_TYPE.ACV:
 			return secretary.getItem2().stream().filter(function(itemDto){
-				return itemDto != null;
+				return itemDto instanceof ItemDto;
 			}).anyMatch(function(itemDto){
 				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
 			});
