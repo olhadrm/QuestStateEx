@@ -1,8 +1,8 @@
 /** 現在のバージョン */
-VERSION = 1.51;
+VERSION = 1.52;
 
 /**
- * 任務進捗詳細Ver1.5.1β
+ * 任務進捗詳細Ver1.5.2β
  * Author:Nishisonic
  * LastUpdate:2016/06/30
  * 
@@ -704,11 +704,14 @@ function updateCheck() {
 		updateCheckWeekly(questLastUpdateTime, nowTime);
 		//マンスリー
 		updateCheckMonthly(questLastUpdateTime, nowTime);
+		//シーズン
+		updateCheckEverySeason(questLastUpdateTime, nowTime);
 	} else {
 		initializeMaxCount();
 		initializeDailyCount();
 		initializeWeeklyCount();
 		initializeMonthlyCount();
+		initializeEverySeasonCount();
 	}
 	setData("questLastUpdateTime",nowTime);
 }
