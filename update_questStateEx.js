@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.50;
+VERSION = 1.51;
 
 /**
- * 任務進捗詳細Ver1.5.0
+ * 任務進捗詳細Ver1.5.1β
  * Author:Nishisonic
- * LastUpdate:2016/06/28
+ * LastUpdate:2016/06/30
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -159,6 +159,12 @@ var CLEAR_RESULT = {
 	SUCESS:1,
 	/** 大成功 */
 	GREAT_SUCCESS:2,
+};
+
+/** 図鑑表示 */
+var ITEM_TYPE1 = {
+	/** 機銃 */
+	AA_GUN:6,
 };
 
 /** 装備ID */
@@ -354,6 +360,10 @@ function update(type, data){
 						case 2:
 							//南西諸島海域の制海権を握れ！
 							if(getData("flg226")) setData("cnt226",getData("cnt226") + 1);
+							if(getData("mapInfoNo") == 4 && winRank == "S"){
+								//沖ノ島海域迎撃戦
+								if(getData("flg822")) setData("cnt822",getData("cnt822") + 1);
+							}
 							if(getData("mapInfoNo") == 5 && winRank == "S"){
 								//「第五戦隊」出撃せよ！
 								var check249 = 0;
@@ -550,6 +560,20 @@ function update(type, data){
 						}
 					});
 				}
+				//対空機銃量産
+				destroyItemMap.entrySet().stream().map(function(item){
+					return item.getValue();
+				}).map(function(itemDto){
+					return itemDto.type1;
+				}).forEach(function(type1){
+					switch(type1){
+						case ITEM_TYPE1.AA_GUN:
+							if(getData("flg638")) setData("cnt638", getData("cnt638") + 1);
+							break;
+						default:
+							break;
+					}
+				});
 			}
 			break;
 		//近代化改修
@@ -692,9 +716,11 @@ function updateCheck() {
 /** デイリーID */
 var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702];
 /** ウイークリーID (あ号作戦(ID:214)は除外) */
-var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613];
+var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628];
+/** シーズンID */
+var everySeasonIDs = [822];
 
 /**
  * 任務の回数を初期化します(デイリー)
@@ -738,6 +764,16 @@ function initializeMonthlyCount() {
 }
 
 /**
+ * 任務の回数を初期化します(シーズン)
+ */
+function initializeEverySeasonCount() {
+	Arrays.stream(Java.to(everySeasonIDs,IntArrayType)).forEach(function(everySeasonID){
+		setData("cnt"+ everySeasonID, 0);
+		setData("flg"+ everySeasonID, false);
+	});
+}
+
+/**
  * 任務更新判定(デイリー)
  * 
  * @param questLastUpdateTime 最後に任務が更新された時間
@@ -770,6 +806,40 @@ function updateCheckWeekly(questLastUpdateTime, nowTime) {
 function updateCheckMonthly(questLastUpdateTime, nowTime) {
 	if (nowTime.get(Calendar.MONTH) != questLastUpdateTime.get(Calendar.MONTH)) {
 		initializeMonthlyCount();
+	}
+}
+
+/**
+ * 任務更新判定(シーズン)
+ * 
+ * @param questLastUpdateTime 最後に任務が更新された時間
+ * @param nowTime 現在の時間
+ */
+function updateCheckEverySeason(questLastUpdateTime, nowTime) {
+	var season = function(month){
+		switch(month){
+			case Calendar.MARCH:
+			case Calendar.APRIL:
+			case Calendar.MAY:
+				return 0;
+			case Calendar.JUNE:
+			case Calendar.JULY:
+			case Calendar.AUGUST:
+				return 1;
+			case Calendar.SEPTEMBER:
+			case Calendar.OCTOBER:
+			case Calendar.NOVEMBER:
+				return 2;
+			case Calendar.DECEMBER:
+			case Calendar.JANUARY:
+			case Calendar.FEBRUARY:
+				return 3;
+			default:
+				return -1;
+		}
+	};
+	if (season(nowTime.get(Calendar.MONTH)) != season(questLastUpdateTime.get(Calendar.MONTH))) {
+		initializeEverySeasonCount();
 	}
 }
 
@@ -870,6 +940,8 @@ function initializeMaxCount(){
 	setData("max703",15);
 	//資源の再利用
 	setData("max613",24);
+	//対空機銃量産
+	setData("max638",6);
 	/* マンスリー */
 	//「第五戦隊」出撃せよ！
 	setData("max249",1);
@@ -892,6 +964,9 @@ function initializeMaxCount(){
 	setData("maxScrapType0FighterModel21_626",2);
 	//機種転換
 	setData("max628",2);
+	/** シーズン */
+	//沖ノ島海域迎撃戦
+	setData("max822",2);
 }
 
 /** 
@@ -969,6 +1044,11 @@ function updateCount(){
 		return getData("cnt" + monthlyID) == null || getData("cnt" + monthlyID) < 0;
 	}).forEach(function(monthlyID){
 		setData("cnt"+ monthlyID, 0);
+	});
+	Arrays.stream(Java.to(everySeasonIDs,IntArrayType)).filter(function(everySeasonID){
+		return getData("cnt" + everySeasonID) == null || getData("cnt" + everySeasonID) < 0;
+	}).forEach(function(everySeasonID){
+		setData("cnt"+ everySeasonID, 0);
 	});
 	//精鋭艦隊演習
 	if(getData("cnt311") == null || getData("cnt311") < 0) setData("cnt311", 0);
