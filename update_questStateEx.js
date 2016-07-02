@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.52;
+VERSION = 1.53;
 
 /**
- * 任務進捗詳細Ver1.5.2β
+ * 任務進捗詳細Ver1.5.3
  * Author:Nishisonic
- * LastUpdate:2016/06/30
+ * LastUpdate:2016/07/03
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -704,14 +704,14 @@ function updateCheck() {
 		updateCheckWeekly(questLastUpdateTime, nowTime);
 		//マンスリー
 		updateCheckMonthly(questLastUpdateTime, nowTime);
-		//シーズン
-		updateCheckEverySeason(questLastUpdateTime, nowTime);
+		//クォータリー
+		updateCheckQuarterly(questLastUpdateTime, nowTime);
 	} else {
 		initializeMaxCount();
 		initializeDailyCount();
 		initializeWeeklyCount();
 		initializeMonthlyCount();
-		initializeEverySeasonCount();
+		initializeQuarterlyCount();
 	}
 	setData("questLastUpdateTime",nowTime);
 }
@@ -722,8 +722,8 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628];
-/** シーズンID */
-var everySeasonIDs = [822];
+/** クォータリーID */
+var quarterlyIDs = [822];
 
 /**
  * 任務の回数を初期化します(デイリー)
@@ -767,12 +767,12 @@ function initializeMonthlyCount() {
 }
 
 /**
- * 任務の回数を初期化します(シーズン)
+ * 任務の回数を初期化します(クォータリー)
  */
-function initializeEverySeasonCount() {
-	Arrays.stream(Java.to(everySeasonIDs,IntArrayType)).forEach(function(everySeasonID){
-		setData("cnt"+ everySeasonID, 0);
-		setData("flg"+ everySeasonID, false);
+function initializeQuarterlyCount() {
+	Arrays.stream(Java.to(quarterlyIDs,IntArrayType)).forEach(function(quarterlyID){
+		setData("cnt"+ quarterlyID, 0);
+		setData("flg"+ quarterlyID, false);
 	});
 }
 
@@ -813,12 +813,12 @@ function updateCheckMonthly(questLastUpdateTime, nowTime) {
 }
 
 /**
- * 任務更新判定(シーズン)
+ * 任務更新判定(クォータリー)
  * 
  * @param questLastUpdateTime 最後に任務が更新された時間
  * @param nowTime 現在の時間
  */
-function updateCheckEverySeason(questLastUpdateTime, nowTime) {
+function updateCheckQuarterly(questLastUpdateTime, nowTime) {
 	var season = function(month){
 		switch(month){
 			case Calendar.MARCH:
@@ -842,7 +842,7 @@ function updateCheckEverySeason(questLastUpdateTime, nowTime) {
 		}
 	};
 	if (season(nowTime.get(Calendar.MONTH)) != season(questLastUpdateTime.get(Calendar.MONTH))) {
-		initializeEverySeasonCount();
+		initializeQuarterlyCount();
 	}
 }
 
@@ -967,7 +967,7 @@ function initializeMaxCount(){
 	setData("maxScrapType0FighterModel21_626",2);
 	//機種転換
 	setData("max628",2);
-	/** シーズン */
+	/* クォーター */
 	//沖ノ島海域迎撃戦
 	setData("max822",2);
 }
@@ -1048,10 +1048,10 @@ function updateCount(){
 	}).forEach(function(monthlyID){
 		setData("cnt"+ monthlyID, 0);
 	});
-	Arrays.stream(Java.to(everySeasonIDs,IntArrayType)).filter(function(everySeasonID){
-		return getData("cnt" + everySeasonID) == null || getData("cnt" + everySeasonID) < 0;
-	}).forEach(function(everySeasonID){
-		setData("cnt"+ everySeasonID, 0);
+	Arrays.stream(Java.to(quarterlyIDs,IntArrayType)).filter(function(quarterlyID){
+		return getData("cnt" + quarterlyID) == null || getData("cnt" + quarterlyID) < 0;
+	}).forEach(function(quarterlyID){
+		setData("cnt"+ quarterlyID, 0);
 	});
 	//精鋭艦隊演習
 	if(getData("cnt311") == null || getData("cnt311") < 0) setData("cnt311", 0);
