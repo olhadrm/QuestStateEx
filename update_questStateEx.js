@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.53;
+VERSION = 1.54;
 
 /**
- * 任務進捗詳細Ver1.5.3
+ * 任務進捗詳細Ver1.5.4β
  * Author:Nishisonic
- * LastUpdate:2016/07/03
+ * LastUpdate:2016/07/15
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -34,6 +34,8 @@ TreeMap         = Java.type("java.util.TreeMap");
 
 /** 熟練度最大値 */
 var MAX_ALV = 7;
+/** 改修最大値 */
+var MAX_LV = 10;
 
 /** 艦種 */
 var SHIP_TYPE = {
@@ -244,15 +246,21 @@ function update(type, data){
 			//Ver1.5.0修正箇所:null回避
 			if(secretary instanceof ShipDto){
 				//精鋭「艦戦」隊の新編成
-				if(isMatchSecretary626(secretary) && canClear626()){
+				if(canClear626() && !isMatchSecretary626(secretary)){
 					setData("flg626", false);
 					setData("cntScrapType96Fighter_626", 0);
 					setData("cntScrapType0FighterModel21_626", 0);
 				}
 				//機種転換
-				if(isMatchSecretary628(secretary) && canClear628()){
+				if(canClear628() && !isMatchSecretary628(secretary)){
 					setData("flg628", false);
 					setData("cnt628", 0);
+				}
+				//「熟練搭乗員」養成
+				if(isMatchSecretary637(secretary)){
+					if(getData("flg637")) setData("cnt637",getData("cnt637") + 1);
+				} else {
+					setData("cnt637", 0);
 				}
 			}
 			break;
@@ -723,7 +731,7 @@ var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628];
 /** クォータリーID */
-var quarterlyIDs = [822];
+var quarterlyIDs = [822,637];
 
 /**
  * 任務の回数を初期化します(デイリー)
@@ -967,9 +975,11 @@ function initializeMaxCount(){
 	setData("maxScrapType0FighterModel21_626",2);
 	//機種転換
 	setData("max628",2);
-	/* クォーター */
+	/* クォータリー */
 	//沖ノ島海域迎撃戦
 	setData("max822",2);
+	//「熟練搭乗員」養成
+	setData("max637",1);
 }
 
 /** 
@@ -1129,6 +1139,26 @@ function isMatchSecretary628(secretary){
 				return itemDto instanceof ItemDto;
 			}).anyMatch(function(itemDto){
 				return itemDto.slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL21_SKILLED && itemDto.alv == MAX_ALV;
+			});
+		default:
+			return false;
+	}
+}
+
+/**
+ * 秘書艦が任務(ID:637)の条件と一致しているか
+ * 
+ * @param secretary 秘書艦
+ * @return {boolean} 一致しているならtrue
+ */
+function isMatchSecretary637(secretary){
+	switch(secretary.shipId){
+		case SHIP_ID.HOSHO:
+		case SHIP_ID.HOSHO_R:
+			return secretary.getItem2().stream().filter(function(itemDto){
+				return itemDto instanceof ItemDto;
+			}).anyMatch(function(itemDto){
+				return itemDto.slotitemId == ITEM_ID.TYPE96_FIGHTER && itemDto.alv == MAX_ALV && itemDto.level == MAX_LV;
 			});
 		default:
 			return false;
