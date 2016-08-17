@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.54;
+VERSION = 1.55;
 
 /**
- * 任務進捗詳細Ver1.5.4β
+ * 任務進捗詳細Ver1.5.5
  * Author:Nishisonic
- * LastUpdate:2016/07/15
+ * LastUpdate:2016/08/18
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -205,6 +205,46 @@ var SHIP_ID = {
 	HOSHO:89,
 	/** 鳳翔改 */
 	HOSHO_R:285,
+	/** 大和 */
+	YAMATO:131,
+	/** 大和改 */
+	YAMATO_R:136,
+	/** 武蔵 */
+	MUSASHI:143,
+	/** 武蔵改 */
+	MUSASHI_R:148,
+	/** 長門 */
+	NAGATO:80,
+	/** 長門改 */
+	NAGATO_R:275,
+	/** 陸奥 */
+	MUTSU:81,
+	/** 陸奥改 */
+	MUTSU_R:276,
+	/** 扶桑 */
+	FUSO:26,
+	/** 扶桑改 */
+	FUSO_R:286,
+	/** 扶桑改二 */
+	FUSO_R2:411,
+	/** 山城 */
+	YAMASHIRO:27,
+	/** 山城改 */
+	YAMASHIRO_R:287,
+	/** 山城改二 */
+	YAMASHIRO_R2:412,
+	/** 伊勢 */
+	ISE:77,
+	/** 伊勢改 */
+	ISE_R:82,
+	/** 日向 */
+	HYUGA:87,
+	/** 日向改 */
+	HYUGA_R:88,
+	/** Warspite */
+	WARSPITE:439,
+	/** Warspite改 */
+	WARSPITE_R:364,
 };
 
 /** 任務ID */
@@ -466,15 +506,18 @@ function update(type, data){
 						case 5:
 							//「水上打撃部隊」南方へ！
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
-								var cntSlowBB = 0;
+								var cnt259 = 0;
 								var cntCL = 0;
-								ships.stream().map(function(ship){
+
+								ships.stream().filter(function(ship){
+									return !(ship.shipId == SHIP_ID.WARSPITE || ship.shipId == SHIP_ID.WARSPITE_R); //運営式その場凌ぎ対応
+								}).map(function(ship){
 									return ship.stype;
 								}).forEach(function(stype){
 									switch(stype){
 										case SHIP_TYPE.BB:  //戦艦
 										case SHIP_TYPE.BSD: //超弩級戦艦
-											cntSlowBB++;
+											cnt259++;
 											break;
 										case SHIP_TYPE.CL:  //軽巡洋艦
 											cntCL++;
@@ -483,7 +526,7 @@ function update(type, data){
 											break;
 									}
 								});
-								if(cntSlowBB == 3 && cntCL == 1){
+								if(cnt259 == 3 && cntCL == 1){
 									if(getData("flg259")) setData("cnt259",getData("cnt259") + 1);
 								}
 							}
