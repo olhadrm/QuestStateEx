@@ -1,4 +1,4 @@
-//ver1.5.9β
+//ver1.6.0β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -114,8 +114,8 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" 陸攻:"   + Math.min(cntType96LandBasedAttackAircraft_643, maxType96LandBasedAttackAircraft_643) + "/" + maxType96LandBasedAttackAircraft_643);
 			case 645: //「洋上補給」物資の調達
 				//三式弾
-				var cntScrapType3Shell_645 = getData("cnt645");
-				var maxScrapType3Shell_645 = getData("max645");
+				var cntScrapType3Shell_645 = getData("cntScrapType3Shell_645");
+				var maxScrapType3Shell_645 = getData("maxScrapType3Shell_645");
 				var rateScrapType3Shell_645 = Math.min(cntScrapType3Shell_645, maxScrapType3Shell_645) / maxScrapType3Shell_645 * 100;
 
 				//九一式徹甲弾
