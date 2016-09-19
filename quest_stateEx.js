@@ -1,4 +1,4 @@
-//ver1.5.5
+//ver1.5.6
 //Author: Nishisonic
 //        Nekopanda
 
@@ -80,6 +80,39 @@ function getProgress(questNo, questType, questProgressFlag) {
 				return String(sum626 + "%" +
 					" 96式:" + Math.min(cntScrapType96Fighter_626,maxScrapType96Fighter_626) + "/" + maxScrapType96Fighter_626 +
 					" 21式:" + Math.min(cntScrapType0FighterModel21_626,maxScrapType0FighterModel21_626) + "/" + maxScrapType0FighterModel21_626);
+			case 645: //「洋上補給」物資の調達
+				//三式弾
+				var cntScrapType3Shell_645 = getData("cnt645");
+				var maxScrapType3Shell_645 = getData("max645");
+				var rateScrapType3Shell_645 = Math.min(cntScrapType3Shell_645, maxScrapType3Shell_645) / maxScrapType3Shell_645 * 100;
+
+				//九一式徹甲弾
+				var cntType91AP_Shell_645 = getData("cntType91AP_Shell_645");
+				var maxType91AP_Shell_645 = getData("maxType91AP_Shell_645");
+				var rateType91AP_Shell_645 = Math.min(cntType91AP_Shell_645, maxType91AP_Shell_645) / maxType91AP_Shell_645 * 100;
+
+				//ドラム缶(輸送用)
+				var cntDrumCanisters_645 = getData("cntDrumCanisters_645");
+				var maxDrumCanisters_645 = getData("maxDrumCanisters_645");
+				var rateDrumCanisters_645 = Math.min(cntDrumCanisters_645, maxDrumCanisters_645) / maxDrumCanisters_645 * 100;
+
+				//燃料
+				var cntFuel_645 = getData("cntFuel_645");
+				var maxFuel_645 = getData("maxFuel_645");
+				var rateFuel_645 = Math.min(cntFuel_645, maxFuel_645) / maxFuel_645 * 100;
+
+				//弾薬
+				var cntAmmo_645 = getData("cntAmmo_645");
+				var maxAmmo_645 = getData("maxAmmo_645");
+				var rateAmmo_645 = Math.min(cntAmmo_645, maxAmmo_645) / maxAmmo_645 * 100;
+
+				var sum645 = Math.floor((rateScrapType3Shell_645 + rateType91AP_Shell_645 + rateDrumCanisters_645 + rateFuel_645 + rateAmmo_645) / 5);
+				return String(sum645 + "%" +
+					" 三式弾:" + Math.min(cntScrapType3Shell_645, maxScrapType3Shell_645) + "/" + maxScrapType3Shell_645 +
+					" 徹甲弾:" + Math.min(cntType91AP_Shell_645, maxType91AP_Shell_645)   + "/" + maxType91AP_Shell_645 +
+					" ﾄﾞﾗﾑ缶:" + Math.min(cntDrumCanisters_645, maxDrumCanisters_645)     + "/" + maxDrumCanisters_645 +
+					" 燃料:"   + Math.min(cntFuel_645, maxFuel_645)                       + "/" + maxFuel_645 +
+					" 弾薬:"   + Math.min(cntAmmo_645, maxAmmo_645)                       + "/" + maxAmmo_645);
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);

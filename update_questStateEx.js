@@ -1,5 +1,5 @@
 /** 現在のバージョン */
-VERSION = 1.55;
+VERSION = 1.56;
 
 /**
  * 任務進捗詳細Ver1.5.5
@@ -177,6 +177,12 @@ var ITEM_ID = {
 	TYPE0_FIGHTER_MODEL21:20,
 	/** 零式艦戦52型 */
 	TYPE0_FIGHTER_MODEL52:21,
+	/** 三式弾 */
+	TYPE3_SHELL:35,
+	/** 九一式徹甲弾 */
+	TYPE91_AP_SHELL:36,
+	/** ドラム缶(輸送用) */
+	DRUM_CANISTERS:75,
 	/** 零式艦戦21型(熟練) */
 	TYPE0_FIGHTER_MODEL21_SKILLED:96,
 };
@@ -250,7 +256,7 @@ var SHIP_ID = {
 /** 任務ID */
 var QUEST_ID = {
 	/** 調整例外リスト */
-	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626],
+	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,645],
 };
 
 /** 
@@ -302,6 +308,28 @@ function update(type, data){
 				} else {
 					setData("cnt637", 0);
 				}
+			}
+			var itemMap = GlobalContext.getItemMap();
+			if(itemMap instanceof ItemDto){
+				//「洋上補給」物資の調達
+				//初期化
+				setData("cntType91AP_Shell_645",0);
+				setData("cntDrumCanisters_645",0);
+				itemMap.entrySet().stream().map(function(item){
+					return item.getValue();
+				}).map(function(itemDto){
+					return itemDto.slotitemId;
+				}).forEach(function(slotitemId){
+					switch(slotitemId){
+						case ITEM_ID.TYPE91_AP_SHELL: //九一式徹甲弾
+							setData("cntType91AP_Shell_645", getData("cntType91AP_Shell_645") + 1);
+							break;
+						case ITEM_ID.DRUM_CANISTERS: //ドラム缶(輸送用)
+							setData("cntDrumCanisters_645", getData("cntDrumCanisters_645") + 1);
+						default:
+							break;
+					}
+				});
 			}
 			break;
 		//戦闘
@@ -625,6 +653,20 @@ function update(type, data){
 							break;
 					}
 				});
+				//「洋上補給」物資の調達
+				destroyItemMap.entrySet().stream().map(function(item){
+					return item.getValue();
+				}).map(function(itemDto){
+					return itemDto.slotitemId;
+				}).forEach(function(slotitemId){
+					switch(slotitemId){
+						case ITEM_ID.TYPE3_SHELL:
+							if(getData("flg645")) setData("cntScrapType3Shell_645", getData("cntScrapType3Shell_645") + 1);
+							break;
+						default:
+							break;
+					}
+				});
 			}
 			break;
 		//近代化改修
@@ -698,6 +740,12 @@ function update(type, data){
 	}
 	//精鋭「艦戦」隊の新編成・機種転換用
 	storeItemMap();
+	//「洋上補給」物資の調達
+	var material = GlobalContext.getMaterial();
+	var fuel = material.getFuel();
+	var ammo = material.getAmmo();
+	setData("cntFuel_645",fuel);
+	setData("cntAmmo_645",ammo);
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
 }
@@ -815,6 +863,13 @@ function initializeMonthlyCount() {
 	setData("flg626",false);
 	setData("cntScrapType96Fighter_626",0);
 	setData("cntScrapType0FighterModel21_626",0);
+	//「洋上補給」物資の調達
+	setData("flg645",false);
+	setData("cntScrapType3Shell_645",0);
+	//setData("cntFuel_645",0);
+	//setData("cntAmmo_645",0);
+	//setData("cntType91AP_Shell_645",0);
+	//setData("cntDrumCanisters_645",0);
 }
 
 /**
@@ -1018,6 +1073,12 @@ function initializeMaxCount(){
 	setData("maxScrapType0FighterModel21_626",2);
 	//機種転換
 	setData("max628",2);
+	//「洋上補給」物資の調達
+	setData("maxScrapType3Shell_645",1);
+	setData("maxFuel645",750);
+	setData("maxAmmo645",750);
+	setData("maxType91AP_Shell_645",2);
+	setData("maxDrumCanisters_645",2);
 	/* クォータリー */
 	//沖ノ島海域迎撃戦
 	setData("max822",2);
@@ -1116,6 +1177,12 @@ function updateCount(){
 	//精鋭「艦戦」隊の新編成
 	if(getData("cntScrapType96Fighter_626") == null       || getData("cntScrapType96Fighter_626") < 0)       setData("cntScrapType96Fighter_626",0);
 	if(getData("cntScrapType0FighterModel21_626") == null || getData("cntScrapType0FighterModel21_626") < 0) setData("cntScrapType0FighterModel21_626",0);
+	//「洋上補給」物資の調達
+	if(getData("cntScrapType3Shell_645") == null || getData("cntScrapType3Shell_645") < 0) setData("cntScrapType3Shell_645",0);
+	if(getData("cntFuel_645")            == null || getData("cntFuel_645") < 0)            setData("cntFuel_645",0);
+	if(getData("cntAmmo_645")            == null || getData("cntAmmo_645") < 0)            setData("cntAmmo_645",0);
+	if(getData("cntType91AP_Shell_645")  == null || getData("cntType91AP_Shell_645") < 0)  setData("cntType91AP_Shell_645",0);
+	if(getData("cntDrumCanisters_645")   == null || getData("cntDrumCanisters_645") < 0)   setData("cntDrumCanisters_645",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }
