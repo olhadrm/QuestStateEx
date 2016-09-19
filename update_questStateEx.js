@@ -4,7 +4,7 @@ VERSION = 1.60;
 /**
  * 任務進捗詳細Ver1.6.0β
  * Author:Nishisonic
- * LastUpdate:2016/09/19
+ * LastUpdate:2016/09/20
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
