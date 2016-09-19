@@ -1,8 +1,8 @@
 /** 現在のバージョン */
-VERSION = 1.58;
+VERSION = 1.59;
 
 /**
- * 任務進捗詳細Ver1.5.8β
+ * 任務進捗詳細Ver1.5.9β
  * Author:Nishisonic
  * LastUpdate:2016/09/19
  * 
@@ -314,7 +314,7 @@ function update(type, data){
 				}
 			}
 			var itemMap = GlobalContext.getItemMap();
-			if(itemMap instanceof ItemDto){
+			if(itemMap instanceof Map){
 				//初期化
 				setData("cntType97TorpedoBomber_643",0);
 				setData("cntType96LandBasedAttackAircraft_643",0);
