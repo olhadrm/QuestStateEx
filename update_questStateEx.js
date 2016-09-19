@@ -1,8 +1,8 @@
 /** 現在のバージョン */
-VERSION = 1.57;
+VERSION = 1.58;
 
 /**
- * 任務進捗詳細Ver1.5.7
+ * 任務進捗詳細Ver1.5.8β
  * Author:Nishisonic
  * LastUpdate:2016/09/19
  * 
