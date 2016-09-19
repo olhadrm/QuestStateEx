@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.56;
+VERSION = 1.57;
 
 /**
- * 任務進捗詳細Ver1.5.5
+ * 任務進捗詳細Ver1.5.7
  * Author:Nishisonic
- * LastUpdate:2016/08/18
+ * LastUpdate:2016/09/19
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -171,6 +171,8 @@ var ITEM_TYPE1 = {
 
 /** 装備ID */
 var ITEM_ID = {
+	/** 九七式艦攻 */
+	TYPE97_TORPEDO_BOMBER:16,
 	/** 九六式艦戦 */
 	TYPE96_FIGHTER:19,
 	/** 零式艦戦21型 */
@@ -185,6 +187,8 @@ var ITEM_ID = {
 	DRUM_CANISTERS:75,
 	/** 零式艦戦21型(熟練) */
 	TYPE0_FIGHTER_MODEL21_SKILLED:96,
+	/** 九六式陸攻 */
+	TYPE96_LAND_BASED_ATTACK_AIRCRAFT:168,
 };
 
 /** 艦娘ID */
@@ -256,7 +260,7 @@ var SHIP_ID = {
 /** 任務ID */
 var QUEST_ID = {
 	/** 調整例外リスト */
-	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,645],
+	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645],
 };
 
 /** 
@@ -311,8 +315,9 @@ function update(type, data){
 			}
 			var itemMap = GlobalContext.getItemMap();
 			if(itemMap instanceof ItemDto){
-				//「洋上補給」物資の調達
 				//初期化
+				setData("cntType97TorpedoBomber_643",0);
+				setData("cntType96LandBasedAttackAircraft_643",0);
 				setData("cntType91AP_Shell_645",0);
 				setData("cntDrumCanisters_645",0);
 				itemMap.entrySet().stream().map(function(item){
@@ -321,6 +326,12 @@ function update(type, data){
 					return itemDto.slotitemId;
 				}).forEach(function(slotitemId){
 					switch(slotitemId){
+						//主力「陸攻」の調達
+						case ITEM_ID.TYPE97_TORPEDO_BOMBER: //九七式艦攻
+							setData("cntType97TorpedoBomber_643", getData("cntType97TorpedoBomber_643") + 1);
+						case ITEM_ID.TYPE96_LAND_BASED_ATTACK_AIRCRAFT: //九六式陸攻
+							setData("cntType96LandBasedAttackAircraft_643", getData("cntType96LandBasedAttackAircraft_643") + 1);
+						//「洋上補給」物資の調達
 						case ITEM_ID.TYPE91_AP_SHELL: //九一式徹甲弾
 							setData("cntType91AP_Shell_645", getData("cntType91AP_Shell_645") + 1);
 							break;
@@ -653,14 +664,18 @@ function update(type, data){
 							break;
 					}
 				});
-				//「洋上補給」物資の調達
 				destroyItemMap.entrySet().stream().map(function(item){
 					return item.getValue();
 				}).map(function(itemDto){
 					return itemDto.slotitemId;
 				}).forEach(function(slotitemId){
 					switch(slotitemId){
-						case ITEM_ID.TYPE3_SHELL:
+						//主力「陸攻」の調達
+						case ITEM_ID.TYPE0_FIGHTER_MODEL21: //零式艦戦21型
+							if(getData("flg643")) setData("cntScrapType0FighterModel21_643", getData("cntScrapType0FighterModel21_643") + 1);
+							break;
+						//「洋上補給」物資の調達
+						case ITEM_ID.TYPE3_SHELL: //三式弾
 							if(getData("flg645")) setData("cntScrapType3Shell_645", getData("cntScrapType3Shell_645") + 1);
 							break;
 						default:
@@ -819,9 +834,9 @@ function updateCheck() {
 var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702];
 /** ウイークリーID (あ号作戦(ID:214)は除外) */
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
-/** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)は除外) */
+/** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628];
-/** クォータリーID */
+/** クォータリーID(主力「陸攻」の調達(ID:643)は除外) */
 var quarterlyIDs = [822,637];
 
 /**
@@ -880,6 +895,10 @@ function initializeQuarterlyCount() {
 		setData("cnt"+ quarterlyID, 0);
 		setData("flg"+ quarterlyID, false);
 	});
+	//主力「陸攻」の調達
+	setData("cntScrapType0FighterModel21_643",0);
+	//setData("cntType97TorpedoBomber_643",0);
+	//setData("cntType96LandBasedAttackAircraft_643",0);
 }
 
 /**
@@ -1075,8 +1094,8 @@ function initializeMaxCount(){
 	setData("max628",2);
 	//「洋上補給」物資の調達
 	setData("maxScrapType3Shell_645",1);
-	setData("maxFuel645",750);
-	setData("maxAmmo645",750);
+	setData("maxFuel_645",750);
+	setData("maxAmmo_645",750);
 	setData("maxType91AP_Shell_645",2);
 	setData("maxDrumCanisters_645",2);
 	/* クォータリー */
@@ -1084,6 +1103,10 @@ function initializeMaxCount(){
 	setData("max822",2);
 	//「熟練搭乗員」養成
 	setData("max637",1);
+	//主力「陸攻」の調達
+	setData("maxScrapType0FighterModel21_643",2);
+	setData("maxType97TorpedoBomber_643",2);
+	setData("maxType96LandBasedAttackAircraft_643",1);
 }
 
 /** 
@@ -1177,6 +1200,10 @@ function updateCount(){
 	//精鋭「艦戦」隊の新編成
 	if(getData("cntScrapType96Fighter_626") == null       || getData("cntScrapType96Fighter_626") < 0)       setData("cntScrapType96Fighter_626",0);
 	if(getData("cntScrapType0FighterModel21_626") == null || getData("cntScrapType0FighterModel21_626") < 0) setData("cntScrapType0FighterModel21_626",0);
+	//主力「陸攻」の調達
+	if(getData("cntScrapType0FighterModel21_643")      == null || getData("cntScrapType0FighterModel21_643") < 0)      setData("cntScrapType0FighterModel21_643",0);
+	if(getData("cntType97TorpedoBomber_643")           == null || getData("cntType97TorpedoBomber_643") < 0)           setData("cntType97TorpedoBomber_643",0);
+	if(getData("cntType96LandBasedAttackAircraft_643") == null || getData("cntType96LandBasedAttackAircraft_643") < 0) setData("cntType96LandBasedAttackAircraft_643",0);
 	//「洋上補給」物資の調達
 	if(getData("cntScrapType3Shell_645") == null || getData("cntScrapType3Shell_645") < 0) setData("cntScrapType3Shell_645",0);
 	if(getData("cntFuel_645")            == null || getData("cntFuel_645") < 0)            setData("cntFuel_645",0);
