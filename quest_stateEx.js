@@ -1,4 +1,4 @@
-//ver1.6.1β
+//ver1.6.2β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -8,13 +8,13 @@ load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
 function header() {
-	return [ "進捗詳細","+","-" ];
+	return [ "進捗詳細" ];
 }
 
 function begin() {}
 
 function body(quest) {
-	return toComparable([ getProgress(quest.getNo(), quest.getType(),quest.getProgressFlag()),"","" ]);
+	return toComparable([ getProgress(quest.getNo(), quest.getType(),quest.getProgressFlag()) ]);
 }
 
 function end() {}
