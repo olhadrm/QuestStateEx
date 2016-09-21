@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.60;
+VERSION = 1.61;
 
 /**
- * 任務進捗詳細Ver1.6.0β
+ * 任務進捗詳細Ver1.6.1β
  * Author:Nishisonic
- * LastUpdate:2016/09/20
+ * LastUpdate:2016/09/22
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -23,6 +23,7 @@ ApplicationMain = Java.type("logbook.gui.ApplicationMain");
 DataType        = Java.type("logbook.data.DataType");
 GlobalContext   = Java.type("logbook.data.context.GlobalContext");
 ItemDto         = Java.type("logbook.dto.ItemDto");
+MaterialDto     = Java.type("logbook.dto.MaterialDto");
 ShipDto         = Java.type("logbook.dto.ShipDto");
 IntArrayType    = Java.type("int[]");
 Arrays          = Java.type("java.util.Arrays");
@@ -757,10 +758,12 @@ function update(type, data){
 	storeItemMap();
 	//「洋上補給」物資の調達
 	var material = GlobalContext.getMaterial();
-	var fuel = material.getFuel();
-	var ammo = material.getAmmo();
-	setData("cntFuel_645",fuel);
-	setData("cntAmmo_645",ammo);
+	if(material instanceof MaterialDto){
+		var fuel = material.getFuel();
+		var ammo = material.getAmmo();
+		setData("cntFuel_645",fuel);
+		setData("cntAmmo_645",ammo);
+	}
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
 }
