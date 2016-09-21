@@ -1,5 +1,6 @@
-*Daily
-|ID|ID(wiki)|QuestName|
+# Daily
+| ID | ID(wiki) | QuestName |
+|:------:|:------:|:------|
 |201|Bd1|敵艦隊を撃滅せよ！|
 |216|Bd2|敵艦隊主力を撃滅せよ！|
 |210|Bd3|敵艦隊を10回邀撃せよ！|
