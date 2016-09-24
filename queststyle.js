@@ -1,4 +1,6 @@
-//Author:Nekopanda
+//ver1.6.2β-prototype
+//Author: Nishisonic
+//        Nekopanda
 
 load("script/utils.js");
 load("script/ScriptData.js");
@@ -9,13 +11,24 @@ SWT = Java.type("org.eclipse.swt.SWT");
 SWTResourceManager = Java.type("org.eclipse.wb.swt.SWTResourceManager");
 Listener = Java.type("org.eclipse.swt.widgets.Listener");
 RGB = Java.type("org.eclipse.swt.graphics.RGB");
+Button = Java.type("org.eclipse.swt.widgets.Button");
+Composite = Java.type("org.eclipse.swt.widgets.Composite");
+Point = Java.type("org.eclipse.swt.graphics.Point");
+Shell = Java.type("org.eclipse.swt.widgets.Shell");
+FillLayout = Java.type("org.eclipse.swt.layout.FillLayout");
+Label = Java.type("org.eclipse.swt.widgets.Label");
 
 AppConstants = Java.type("logbook.constants.AppConstants");
 ReportUtils = Java.type("logbook.util.ReportUtils");
+QuestTable = Java.type("logbook.gui.QuestTable");
+ApplicationMain = Java.type("logbook.gui.ApplicationMain");
+
 
 var stateIndex = -1;
 var categoryIndex = -1;
 var progressIndex = -1;
+var tip = null;
+var composite = null;
 function begin(header) {
     for (var i = 1; i < header.length; ++i) {
         if (header[i].equals("表示位置")) {
@@ -143,7 +156,66 @@ function create(table, data, index) {
 
 	item.setData(d);
 
+	
+	var TableListener = new Listener({
+    	handleEvent : function(event) {
+    	    var _item = table.getItem(new Point(event.x, event.y));
+   		    switch (event.type) {
+				case SWT.MouseExit:
+					if(_item != null) break;
+        		case SWT.Dispose:
+        		case SWT.KeyDown:
+        			if (tip == null) break;
+         			tip.dispose();
+          			tip = null;
+          			composite = null;
+          			break;
+	        	case SWT.MouseHover: {
+        			if ((_item != null && _item != getData("item")) || tip == null) {
+       	     			if (tip != null && !tip.isDisposed()) tip.dispose();
+        	   			tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
+						tip.setLayout(new FillLayout());
+						composite = new Composite (tip, SWT.NONE);
+						var infoLabel = new Label(composite,SWT.NONE);
+						infoLabel.setText("回数");
+						infoLabel.setLocation(0, 0);
+						infoLabel.pack();
+						var plusButton = new Button(composite,SWT.NULL);
+						plusButton.setText("+");
+						plusButton.setLocation(0, infoLabel.getSize().y);
+						plusButton.pack();
+						var countLabel = new Label(composite,SWT.NONE);
+						countLabel.setText("00");
+						countLabel.setLocation(plusButton.getSize().x + 5, infoLabel.getSize().y);
+						countLabel.pack();
+						var minusButton = new Button(composite,SWT.NULL);
+						minusButton.setText("-");
+						minusButton.setLocation(plusButton.getSize().x + countLabel.getSize().x + 10, infoLabel.getSize().y);
+						minusButton.pack();
+						composite.pack();
+						var size = tip.computeSize (SWT.DEFAULT, SWT.DEFAULT);
+						//var rect = _item.getBounds (remodelItemIndex);
+						var pt = table.toDisplay (event.x, event.y);
+						tip.setBounds (pt.x - 40, pt.y - 70, size.x, size.y);
+						tip.setVisible (true);
+						setTmpData("item",_item);
+       				}
+        		}
+        	}
+		}
+	});
+
+	if(!getData("set")){
+		table.setToolTipText("");
+		table.addListener(SWT.MouseExit, TableListener);
+		table.addListener(SWT.Dispose, TableListener);
+    	table.addListener(SWT.KeyDown, TableListener);
+    	table.addListener(SWT.MouseHover, TableListener);
+		setTmpData("set",true);
+	}
+
     return item;
 }
 
-function end() { }
+function end() {
+}
