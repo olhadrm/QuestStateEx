@@ -131,7 +131,7 @@ function create(table, data, index) {
     item.setText(ReportUtils.toStringArray(data));
 
     var quest = data[0].get();
-	var d = { state: null, back: null, cat: null, prog: null };
+	var d = { state: null, back: null, cat: null, prog: null, quest: quest };
 
     // 偶数行に背景色を付ける
     if ((index % 2) != 0) {
@@ -156,7 +156,6 @@ function create(table, data, index) {
 
 	item.setData(d);
 
-	
 	var TableListener = new Listener({
     	handleEvent : function(event) {
     	    var _item = table.getItem(new Point(event.x, event.y));
@@ -171,13 +170,27 @@ function create(table, data, index) {
           			composite = null;
           			break;
 	        	case SWT.MouseHover: {
-        			if ((_item != null && _item != getData("item")) || tip == null) {
+					//問答無用でdisposeするパターン
+					//->データがnull
+					//->例外任務または定期系任務でない
+					if(_item == null || getData("cnt" + _item.data.quest.no) == null){
+        				if (tip == null) break;
+         				tip.dispose();
+          				tip = null;
+          				composite = null;
+					//表示するパターン
+					//->データが存在する
+					//->定期系任務である
+					//表示するものを入れ替えるパターン(思った処理にならなかったのでこの案はなし)
+					//->データが前と違う
+					//} else if(_item != getData("item")) {
+					} else {
        	     			if (tip != null && !tip.isDisposed()) tip.dispose();
         	   			tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
 						tip.setLayout(new FillLayout());
 						composite = new Composite (tip, SWT.NONE);
 						var infoLabel = new Label(composite,SWT.NONE);
-						infoLabel.setText("回数");
+						infoLabel.setText(_item.data.quest.title);
 						infoLabel.setLocation(0, 0);
 						infoLabel.pack();
 						var plusButton = new Button(composite,SWT.NULL);
@@ -185,7 +198,8 @@ function create(table, data, index) {
 						plusButton.setLocation(0, infoLabel.getSize().y);
 						plusButton.pack();
 						var countLabel = new Label(composite,SWT.NONE);
-						countLabel.setText("00");
+						//countLabel.setText(getData("cnt" + quest.no));
+						countLabel.setText(getData("cnt" + _item.data.quest.no) + "/" + getData("max" + _item.data.quest.no));
 						countLabel.setLocation(plusButton.getSize().x + 5, infoLabel.getSize().y);
 						countLabel.pack();
 						var minusButton = new Button(composite,SWT.NULL);
@@ -196,9 +210,9 @@ function create(table, data, index) {
 						var size = tip.computeSize (SWT.DEFAULT, SWT.DEFAULT);
 						//var rect = _item.getBounds (remodelItemIndex);
 						var pt = table.toDisplay (event.x, event.y);
-						tip.setBounds (pt.x - 40, pt.y - 70, size.x, size.y);
+						tip.setBounds (pt.x, pt.y - 70, size.x, size.y);
 						tip.setVisible (true);
-						setTmpData("item",_item);
+						//setTmpData("item",_item);
        				}
         		}
         	}
