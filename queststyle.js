@@ -17,6 +17,7 @@ Point = Java.type("org.eclipse.swt.graphics.Point");
 Shell = Java.type("org.eclipse.swt.widgets.Shell");
 FillLayout = Java.type("org.eclipse.swt.layout.FillLayout");
 Label = Java.type("org.eclipse.swt.widgets.Label");
+SelectionAdapter = Java.type("org.eclipse.swt.events.SelectionAdapter");
 
 AppConstants = Java.type("logbook.constants.AppConstants");
 ReportUtils = Java.type("logbook.util.ReportUtils");
@@ -162,15 +163,13 @@ function create(table, data, index) {
    		    switch (event.type) {
 				case SWT.MouseExit:
 					if(_item != null) break;
+				case SWT.Deactivate:
         		case SWT.Dispose:
         		case SWT.KeyDown:
-        			if (tip == null) break;
-         			tip.dispose();
-          			tip = null;
-          			composite = null;
-          			break;
+					_item = null;
+					setTmpData("no",-1);
 	        	case SWT.MouseHover: {
-					//問答無用でdisposeするパターン
+					//dispose
 					//->データがnull
 					//->例外任務または定期系任務でない
 					if(_item == null || getData("cnt" + _item.data.quest.no) == null){
@@ -178,13 +177,7 @@ function create(table, data, index) {
          				tip.dispose();
           				tip = null;
           				composite = null;
-					//表示するパターン
-					//->データが存在する
-					//->定期系任務である
-					//表示するものを入れ替えるパターン(思った処理にならなかったのでこの案はなし)
-					//->データが前と違う
-					//} else if(_item != getData("item")) {
-					} else {
+					} else if(_item.data.quest.no != getData("no")){
        	     			if (tip != null && !tip.isDisposed()) tip.dispose();
         	   			tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
 						tip.setLayout(new FillLayout());
@@ -196,23 +189,41 @@ function create(table, data, index) {
 						var plusButton = new Button(composite,SWT.NULL);
 						plusButton.setText("+");
 						plusButton.setLocation(0, infoLabel.getSize().y);
+						plusButton.setData(_item.data.quest.no);
 						plusButton.pack();
 						var countLabel = new Label(composite,SWT.NONE);
-						//countLabel.setText(getData("cnt" + quest.no));
 						countLabel.setText(getData("cnt" + _item.data.quest.no) + "/" + getData("max" + _item.data.quest.no));
 						countLabel.setLocation(plusButton.getSize().x + 5, infoLabel.getSize().y);
 						countLabel.pack();
 						var minusButton = new Button(composite,SWT.NULL);
 						minusButton.setText("-");
 						minusButton.setLocation(plusButton.getSize().x + countLabel.getSize().x + 10, infoLabel.getSize().y);
+						minusButton.setData(_item.data.quest.no);
 						minusButton.pack();
+						var PlusButtonSelectionEvent = Java.extend(SelectionAdapter,{
+    						widgetSelected : function(e){
+   							 	if(getData("cnt" + e.widget.data) < getData("max" + e.widget.data)){
+									setData("cnt" + e.widget.data,getData("cnt" + e.widget.data) + 1);
+									updateCount(countLabel,e.widget.data);
+								}
+							}
+						});
+						var MinusButtonSelectionEvent = Java.extend(SelectionAdapter,{
+   							 widgetSelected : function(e){
+   							 	if(getData("cnt" + e.widget.data) > 0){
+									setData("cnt" + e.widget.data,getData("cnt" + e.widget.data) - 1);
+									updateCount(countLabel,e.widget.data);
+								}
+  							}
+						});
+						plusButton.addSelectionListener(new PlusButtonSelectionEvent());
+						minusButton.addSelectionListener(new MinusButtonSelectionEvent());
 						composite.pack();
 						var size = tip.computeSize (SWT.DEFAULT, SWT.DEFAULT);
-						//var rect = _item.getBounds (remodelItemIndex);
 						var pt = table.toDisplay (event.x, event.y);
 						tip.setBounds (pt.x, pt.y - 70, size.x, size.y);
 						tip.setVisible (true);
-						//setTmpData("item",_item);
+						setTmpData("no",_item.data.quest.no);
        				}
         		}
         	}
@@ -222,14 +233,18 @@ function create(table, data, index) {
 	if(!getData("set")){
 		table.setToolTipText("");
 		table.addListener(SWT.MouseExit, TableListener);
+		table.addListener(SWT.Deactivate, TableListener);
 		table.addListener(SWT.Dispose, TableListener);
     	table.addListener(SWT.KeyDown, TableListener);
     	table.addListener(SWT.MouseHover, TableListener);
-		setTmpData("set",true);
 	}
 
     return item;
 }
 
-function end() {
+function end() { }
+
+function updateCount(label,no){
+	if(!label.isDisposed()) label.setText(getData("cnt" + no) + "/" + getData("max" + no));
+	ApplicationMain.main.getQuestTable().update();
 }
