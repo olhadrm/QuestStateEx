@@ -167,12 +167,12 @@ function create(table, data, index) {
         		case SWT.Dispose:
         		case SWT.KeyDown:
 					_item = null;
-					setTmpData("no",-1);
 	        	case SWT.MouseHover: {
 					//dispose
 					//->データがnull
 					//->例外任務または定期系任務でない
 					if(_item == null || getData("cnt" + _item.data.quest.no) == null){
+						setTmpData("no",-1);
         				if (tip == null) break;
          				tip.dispose();
           				tip = null;
