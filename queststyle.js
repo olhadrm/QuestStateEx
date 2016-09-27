@@ -1,4 +1,4 @@
-//ver1.6.2β-prototype
+//ver1.6.3α
 //Author: Nishisonic
 //        Nekopanda
 
@@ -179,26 +179,32 @@ function create(table, data, index) {
           				composite = null;
 					} else if(_item.data.quest.no != getData("no")){
        	     			if (tip != null && !tip.isDisposed()) tip.dispose();
-        	   			tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
+        	   			tip = new Shell(table.getShell(), SWT.TOOL);
 						tip.setLayout(new FillLayout());
 						composite = new Composite (tip, SWT.NONE);
+						composite.setBackground(_item.data.cat);
+						composite.pack();
 						var infoLabel = new Label(composite,SWT.NONE);
-						infoLabel.setText(_item.data.quest.title);
+						infoLabel.setText(_item.data.quest.title + " ");
 						infoLabel.setLocation(0, 0);
+						infoLabel.setBackground(_item.data.cat);
 						infoLabel.pack();
 						var plusButton = new Button(composite,SWT.NULL);
-						plusButton.setText("+");
+						plusButton.setText("＋");
 						plusButton.setLocation(0, infoLabel.getSize().y);
 						plusButton.setData(_item.data.quest.no);
+						plusButton.setBackground(_item.data.cat);
 						plusButton.pack();
 						var countLabel = new Label(composite,SWT.NONE);
 						countLabel.setText(getData("cnt" + _item.data.quest.no) + "/" + getData("max" + _item.data.quest.no));
 						countLabel.setLocation(plusButton.getSize().x + 5, infoLabel.getSize().y);
+						countLabel.setBackground(_item.data.cat);
 						countLabel.pack();
 						var minusButton = new Button(composite,SWT.NULL);
-						minusButton.setText("-");
+						minusButton.setText("－");
 						minusButton.setLocation(plusButton.getSize().x + countLabel.getSize().x + 10, infoLabel.getSize().y);
 						minusButton.setData(_item.data.quest.no);
+						minusButton.setBackground(_item.data.cat);
 						minusButton.pack();
 						var PlusButtonSelectionEvent = Java.extend(SelectionAdapter,{
     						widgetSelected : function(e){
@@ -218,7 +224,6 @@ function create(table, data, index) {
 						});
 						plusButton.addSelectionListener(new PlusButtonSelectionEvent());
 						minusButton.addSelectionListener(new MinusButtonSelectionEvent());
-						composite.pack();
 						var size = tip.computeSize (SWT.DEFAULT, SWT.DEFAULT);
 						var pt = table.toDisplay (event.x, event.y);
 						tip.setBounds (pt.x, pt.y - 70, size.x, size.y);
