@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.64;
+VERSION = 1.65;
 
 /**
- * 任務進捗詳細Ver1.6.4β
+ * 任務進捗詳細Ver1.6.5β
  * Author:Nishisonic
- * LastUpdate:2016/10/02
+ * LastUpdate:2016/10/03
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 

@@ -1,4 +1,4 @@
-//ver1.6.4β
+//ver1.6.5β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -6,6 +6,9 @@ load("script/utils.js");
 load("script/ScriptData.js");
 data_prefix = "questStateEx_";
 
+IntStream          = Java.type("java.util.stream.IntStream");
+
+Composite          = Java.type("org.eclipse.swt.widgets.Composite");
 GridLayout         = Java.type("org.eclipse.swt.layout.GridLayout");
 Group              = Java.type("org.eclipse.swt.widgets.Group");
 Label              = Java.type("org.eclipse.swt.widgets.Label");
@@ -18,9 +21,9 @@ SWT                = Java.type("org.eclipse.swt.SWT");
 SWTResourceManager = Java.type("org.eclipse.wb.swt.SWTResourceManager");
 TableItem          = Java.type("org.eclipse.swt.widgets.TableItem");
 
-AppConstants    = Java.type("logbook.constants.AppConstants");
-ApplicationMain = Java.type("logbook.gui.ApplicationMain");
-ReportUtils     = Java.type("logbook.util.ReportUtils");
+AppConstants       = Java.type("logbook.constants.AppConstants");
+ApplicationMain    = Java.type("logbook.gui.ApplicationMain");
+ReportUtils        = Java.type("logbook.util.ReportUtils");
 
 var stateIndex = -1;
 var categoryIndex = -1;
@@ -155,57 +158,421 @@ function create(table, data, index) {
 	if(!getData("set")){
 		table.addSelectionListener(new SelectionAdapter({
 			widgetDefaultSelected : function(event){
-				if(getData("cnt" + event.item.data.quest.no) != null){
+				var questNo = event.item.data.quest.no;
+				if(getData("flg" + questNo) != null){
 					var tip = new Shell(table.getShell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+					tip.setLayout(new GridLayout(1,false));
 					tip.setText("進捗回数変更");
+					tip.setBackground(event.item.data.cat);
 
-					var group = new Group (tip, SWT.NONE);
-					group.setLayout(new GridLayout(6,false));
-					group.setText(event.item.data.quest.title);
-					group.setBackground(event.item.data.cat);
+					switch(questNo){
+						case 214: //あ号作戦
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
 
-					var infoLabel = new Label(group,SWT.NONE);
-					infoLabel.setText("回数:");
-					infoLabel.setLocation(0, 0);
-					infoLabel.setBackground(event.item.data.cat);
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("出撃:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
 
-					var slider = new Slider(group,SWT.NONE);
-					slider.setMinimum(0);
-					slider.setSelection(getData("cnt" + event.item.data.quest.no));
-					slider.setMaximum(getData("max" + event.item.data.quest.no) + 10); //こうしないと正しい最大値にならない
-					slider.setIncrement(1);
-					slider.setBackground(event.item.data.cat);
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cntSally214"));
+							slider.setMaximum(getData("maxSally214") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
 
-					var space = new Label(group,SWT.NONE);
-					space.setText(" ");
-					space.setBackground(event.item.data.cat);
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
 
-					var cntLabel = new Label(group,SWT.SINGLE | SWT.BORDER);
-					cntLabel.setAlignment(SWT.RIGHT);
-					cntLabel.setText(getData("cnt" + event.item.data.quest.no));
-					cntLabel.setBackground(event.item.data.cat);
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
 
-					var sepLabel = new Label(group,SWT.NONE);
-					sepLabel.setText(" / ");
-					sepLabel.setBackground(event.item.data.cat);
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cntSally214"),2));
+							cntLabel.setBackground(event.item.data.cat);
 
-					var maxLabel = new Label(group,SWT.SINGLE | SWT.BORDER);
-					maxLabel.setAlignment(SWT.RIGHT);
-					maxLabel.setText(getData("max" + event.item.data.quest.no));
-					maxLabel.setBackground(event.item.data.cat);
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
 
-					slider.addSelectionListener(new SelectionAdapter({
-						widgetSelected:function(e){
-							cntLabel.setText(slider.getSelection().toString());
-						}
-					}));
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("maxSally214"),2));
+							maxLabel.setBackground(event.item.data.cat);
 
-					tip.addDisposeListener(function(e){
-						setData("cnt" + event.item.data.quest.no,cntLabel.getText());
-						ApplicationMain.main.getQuestTable().update();
-					});
-					
-					group.pack();
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("S勝利:");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cntSWin214"));
+							slider2.setMaximum(getData("maxSWin214") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cntSWin214"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("maxSWin214"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel3 = new Label(group,SWT.NONE);
+							infoLabel3.setText("ボス戦:");
+							infoLabel3.setLocation(0, 0);
+							infoLabel3.setBackground(event.item.data.cat);
+
+							var slider3 = new Slider(group,SWT.NONE);
+							slider3.setMinimum(0);
+							slider3.setSelection(getData("cntBoss214"));
+							slider3.setMaximum(getData("maxBoss214") + 10); //こうしないと正しい最大値にならない
+							slider3.setIncrement(1);
+
+							var space3 = new Label(group,SWT.NONE);
+							space3.setText(" ");
+							space3.setBackground(event.item.data.cat);
+
+							var composite3 = new Composite (group, SWT.BORDER);
+							composite3.setLayout(new GridLayout(3,false));
+							composite3.setBackground(event.item.data.cat);
+
+							var cntLabel3 = new Label(composite3,SWT.NONE);
+							cntLabel3.setAlignment(SWT.RIGHT);
+							cntLabel3.setText(prefix(getData("cntBoss214"),2));
+							cntLabel3.setBackground(event.item.data.cat);
+
+							var sepLabel3 = new Label(composite3,SWT.NONE);
+							sepLabel3.setText(" / ");
+							sepLabel3.setBackground(event.item.data.cat);
+
+							var maxLabel3 = new Label(composite3,SWT.NONE);
+							maxLabel3.setAlignment(SWT.RIGHT);
+							maxLabel3.setText(prefix(getData("maxBoss214"),2));
+							maxLabel3.setBackground(event.item.data.cat);
+
+							slider3.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel3.setText(prefix(slider3.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel4 = new Label(group,SWT.NONE);
+							infoLabel4.setText("ボス勝利:");
+							infoLabel4.setLocation(0, 0);
+							infoLabel4.setBackground(event.item.data.cat);
+
+							var slider4 = new Slider(group,SWT.NONE);
+							slider4.setMinimum(0);
+							slider4.setSelection(getData("cntBossWin214"));
+							slider4.setMaximum(getData("maxBossWin214") + 10); //こうしないと正しい最大値にならない
+							slider4.setIncrement(1);
+
+							var space4 = new Label(group,SWT.NONE);
+							space4.setText(" ");
+							space4.setBackground(event.item.data.cat);
+
+							var composite4 = new Composite (group, SWT.BORDER);
+							composite4.setLayout(new GridLayout(3,false));
+							composite4.setBackground(event.item.data.cat);
+
+							var cntLabel4 = new Label(composite4,SWT.NONE);
+							cntLabel4.setAlignment(SWT.RIGHT);
+							cntLabel4.setText(prefix(getData("cntBossWin214"),2));
+							cntLabel4.setBackground(event.item.data.cat);
+
+							var sepLabel4 = new Label(composite4,SWT.NONE);
+							sepLabel4.setText(" / ");
+							sepLabel4.setBackground(event.item.data.cat);
+
+							var maxLabel4 = new Label(composite4,SWT.NONE);
+							maxLabel4.setAlignment(SWT.RIGHT);
+							maxLabel4.setText(prefix(getData("maxBossWin214"),2));
+							maxLabel4.setBackground(event.item.data.cat);
+
+							slider4.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel4.setText(prefix(slider4.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cntSally214",cntLabel.getText()|0);
+								setData("cntSWin214",cntLabel2.getText()|0);
+								setData("cntBoss214",cntLabel3.getText()|0);
+								setData("cntBossWin214",cntLabel4.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 626: //精鋭「艦戦」隊の新編成
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+							
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("96式:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cntScrapType96Fighter_626"));
+							slider.setMaximum(getData("maxScrapType96Fighter_626") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cntScrapType96Fighter_626"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("maxScrapType96Fighter_626"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("21型:");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cntScrapType0FighterModel21_626"));
+							slider2.setMaximum(getData("maxScrapType0FighterModel21_626") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cntScrapType0FighterModel21_626"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("maxScrapType0FighterModel21_626"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cntScrapType96Fighter_626",cntLabel.getText()|0);
+								setData("cntScrapType0FighterModel21_626",cntLabel2.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 643: //主力「陸攻」の調達
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(6,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+							
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("21型:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cntScrapType0FighterModel21_643"));
+							slider.setMaximum(getData("maxScrapType0FighterModel21_643") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(group,SWT.SINGLE | SWT.BORDER);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cntScrapType0FighterModel21_643"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(group,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(group,SWT.SINGLE | SWT.BORDER);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("maxScrapType0FighterModel21_643"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cntScrapType0FighterModel21_643",cntLabel.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 645: //「洋上補給」物資の調達
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout( new GridLayout(6,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+							
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("三式:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt" + questNo));
+							slider.setMaximum(getData("max" + questNo) + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cntScrapType3Shell_645"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("maxScrapType3Shell_645"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cntScrapType3Shell_645",cntLabel.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						default: //それ以外
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+							
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("回数:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt" + questNo));
+							slider.setMaximum(getData("max" + questNo) + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cnt" + questNo),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("max" + questNo),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cnt" + questNo,cntLabel.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+					}
 					tip.pack();
 
 					var size = tip.size;
@@ -222,3 +589,19 @@ function create(table, data, index) {
 }
 
 function end() { }
+
+function prefix(num,digits){
+	var s = String(num);
+	if(digits - s.length() > 0){
+		s = rept("0",digits - s.length()) + s;
+	}
+	return s;
+}
+
+function rept(str,cnt){
+	var result = "";
+	IntStream.range(0,cnt).forEach(function(i){
+		result += str;
+	});
+	return result;
+}

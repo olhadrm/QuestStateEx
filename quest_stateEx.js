@@ -1,4 +1,4 @@
-//ver1.6.4β
+//ver1.6.5β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -79,7 +79,7 @@ function getProgress(questNo, questType, questProgressFlag) {
 				setData("rate" + questNo, sum626 / 100);
 				return String(sum626 + "%" +
 					" 96式:" + Math.min(cntScrapType96Fighter_626,maxScrapType96Fighter_626) + "/" + maxScrapType96Fighter_626 +
-					" 21式:" + Math.min(cntScrapType0FighterModel21_626,maxScrapType0FighterModel21_626) + "/" + maxScrapType0FighterModel21_626);
+					" 21型:" + Math.min(cntScrapType0FighterModel21_626,maxScrapType0FighterModel21_626) + "/" + maxScrapType0FighterModel21_626);
 			case 643: //主力「陸攻」の調達
 				//零式艦戦21型
 				var cntScrapType0FighterModel21_643 = getData("cntScrapType0FighterModel21_643");
