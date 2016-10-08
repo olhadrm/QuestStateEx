@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.65;
+VERSION = 1.66;
 
 /**
- * 任務進捗詳細Ver1.6.5β
+ * 任務進捗詳細Ver1.6.6β
  * Author:Nishisonic
- * LastUpdate:2016/10/03
+ * LastUpdate:2016/10/08
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -1099,7 +1099,7 @@ function initializeMaxCount(){
 	setData("maxScrapType3Shell_645",1);
 	setData("maxFuel_645",750);
 	setData("maxAmmo_645",750);
-	setData("maxType91AP_Shell_645",2);
+	setData("maxType91AP_Shell_645",1);
 	setData("maxDrumCanisters_645",2);
 	/* クォータリー */
 	//沖ノ島海域迎撃戦
