@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.66;
+VERSION = 1.67;
 
 /**
- * 任務進捗詳細Ver1.6.6β
+ * 任務進捗詳細Ver1.6.7
  * Author:Nishisonic
- * LastUpdate:2016/10/08
+ * LastUpdate:2017/03/06
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -330,8 +330,10 @@ function update(type, data){
 						//主力「陸攻」の調達
 						case ITEM_ID.TYPE97_TORPEDO_BOMBER: //九七式艦攻
 							setData("cntType97TorpedoBomber_643", getData("cntType97TorpedoBomber_643") + 1);
+							break;
 						case ITEM_ID.TYPE96_LAND_BASED_ATTACK_AIRCRAFT: //九六式陸攻
 							setData("cntType96LandBasedAttackAircraft_643", getData("cntType96LandBasedAttackAircraft_643") + 1);
+							break;
 						//「洋上補給」物資の調達
 						case ITEM_ID.TYPE91_AP_SHELL: //九一式徹甲弾
 							setData("cntType91AP_Shell_645", getData("cntType91AP_Shell_645") + 1);
@@ -812,6 +814,8 @@ function updateCheck() {
  	var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
  	nowTime.setFirstDayOfWeek(Calendar.MONDAY);
 	
+	// 頻繁に更新するよう変更
+	initializeMaxCount();
 	if (questLastUpdateTime instanceof Calendar) {
 		//バージョンを確認(バージョンが低い場合は値を色々更新)
 		versionCheck();
@@ -824,7 +828,6 @@ function updateCheck() {
 		//クォータリー
 		updateCheckQuarterly(questLastUpdateTime, nowTime);
 	} else {
-		initializeMaxCount();
 		initializeDailyCount();
 		initializeWeeklyCount();
 		initializeMonthlyCount();
