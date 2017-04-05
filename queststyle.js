@@ -1,4 +1,4 @@
-//ver1.6.7
+//ver1.6.8
 //Author: Nishisonic
 //        Nekopanda
 
@@ -58,7 +58,8 @@ function categoryColor(category) {
 			return new RGB( 0xDD, 0xCC, 0xBB );
 		case 7:		//改装
 			return new RGB( 0xDD, 0xCC, 0xFF );
-		case 8:		//その他
+		case 8:		//出撃
+			return new RGB( 0xFF, 0xCC, 0xCC );
 		default:
 			return new RGB( 0xFF, 0xFF, 0xFF );
 	}
@@ -485,8 +486,8 @@ function create(table, data, index) {
 
 							var slider = new Slider(group,SWT.NONE);
 							slider.setMinimum(0);
-							slider.setSelection(getData("cnt" + questNo));
-							slider.setMaximum(getData("max" + questNo) + 10); //こうしないと正しい最大値にならない
+							slider.setSelection(getData("cntScrapType3Shell_645"));
+							slider.setMaximum(getData("maxScrapType3Shell_645") + 10); //こうしないと正しい最大値にならない
 							slider.setIncrement(1);
 
 							var space = new Label(group,SWT.NONE);
@@ -519,6 +520,176 @@ function create(table, data, index) {
 
 							tip.addDisposeListener(function(e){
 								setData("cntScrapType3Shell_645",cntLabel.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 854: //戦果拡張任務！「Z作戦」前段作戦
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+							
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("2-4:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt854_2-4"));
+							slider.setMaximum(getData("max854_2-4") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cnt854_2-4"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("max854_2-4"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("6-1:");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cnt854_6-1"));
+							slider2.setMaximum(getData("max854_6-1") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cnt854_6-1"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("max854_6-1"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel3 = new Label(group,SWT.NONE);
+							infoLabel3.setText("6-3:");
+							infoLabel3.setLocation(0, 0);
+							infoLabel3.setBackground(event.item.data.cat);
+
+							var slider3 = new Slider(group,SWT.NONE);
+							slider3.setMinimum(0);
+							slider3.setSelection(getData("cnt854_6-3"));
+							slider3.setMaximum(getData("max854_6-3") + 10); //こうしないと正しい最大値にならない
+							slider3.setIncrement(1);
+
+							var space3 = new Label(group,SWT.NONE);
+							space3.setText(" ");
+							space3.setBackground(event.item.data.cat);
+
+							var composite3 = new Composite (group, SWT.BORDER);
+							composite3.setLayout(new GridLayout(3,false));
+							composite3.setBackground(event.item.data.cat);
+
+							var cntLabel3 = new Label(composite3,SWT.NONE);
+							cntLabel3.setAlignment(SWT.RIGHT);
+							cntLabel3.setText(prefix(getData("cnt854_6-3"),2));
+							cntLabel3.setBackground(event.item.data.cat);
+
+							var sepLabel3 = new Label(composite3,SWT.NONE);
+							sepLabel3.setText(" / ");
+							sepLabel3.setBackground(event.item.data.cat);
+
+							var maxLabel3 = new Label(composite3,SWT.NONE);
+							maxLabel3.setAlignment(SWT.RIGHT);
+							maxLabel3.setText(prefix(getData("max854_6-3"),2));
+							maxLabel3.setBackground(event.item.data.cat);
+
+							slider3.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel3.setText(prefix(slider3.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel4 = new Label(group,SWT.NONE);
+							infoLabel4.setText("6-4:");
+							infoLabel4.setLocation(0, 0);
+							infoLabel4.setBackground(event.item.data.cat);
+
+							var slider4 = new Slider(group,SWT.NONE);
+							slider4.setMinimum(0);
+							slider4.setSelection(getData("cnt854_6-4"));
+							slider4.setMaximum(getData("max854_6-4") + 10); //こうしないと正しい最大値にならない
+							slider4.setIncrement(1);
+
+							var space4 = new Label(group,SWT.NONE);
+							space4.setText(" ");
+							space4.setBackground(event.item.data.cat);
+
+							var composite4 = new Composite (group, SWT.BORDER);
+							composite4.setLayout(new GridLayout(3,false));
+							composite4.setBackground(event.item.data.cat);
+
+							var cntLabel4 = new Label(composite4,SWT.NONE);
+							cntLabel4.setAlignment(SWT.RIGHT);
+							cntLabel4.setText(prefix(getData("cnt854_6-4"),2));
+							cntLabel4.setBackground(event.item.data.cat);
+
+							var sepLabel4 = new Label(composite4,SWT.NONE);
+							sepLabel4.setText(" / ");
+							sepLabel4.setBackground(event.item.data.cat);
+
+							var maxLabel4 = new Label(composite4,SWT.NONE);
+							maxLabel4.setAlignment(SWT.RIGHT);
+							maxLabel4.setText(prefix(getData("max854_6-4"),2));
+							maxLabel4.setBackground(event.item.data.cat);
+
+							slider4.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel4.setText(prefix(slider4.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cnt854_2-4",cntLabel.getText()|0);
+								setData("cnt854_6-1",cntLabel2.getText()|0);
+								setData("cnt854_6-3",cntLabel3.getText()|0);
+								setData("cnt854_6-4",cntLabel4.getText()|0);
 								ApplicationMain.main.getQuestTable().update();
 							});
 							break;

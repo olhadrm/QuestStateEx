@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.67;
+VERSION = 1.68;
 
 /**
- * 任務進捗詳細Ver1.6.7
+ * 任務進捗詳細Ver1.6.8
  * Author:Nishisonic
- * LastUpdate:2017/03/06
+ * LastUpdate:2017/04/06
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -261,7 +261,7 @@ var SHIP_ID = {
 /** 任務ID */
 var QUEST_ID = {
 	/** 調整例外リスト */
-	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645],
+	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645,854],
 };
 
 /** 
@@ -450,6 +450,10 @@ function update(type, data){
 						case 2:
 							//南西諸島海域の制海権を握れ！
 							if(getData("flg226")) setData("cnt226",getData("cnt226") + 1);
+							if(getData("mapInfoNo") == 4 && (winRank == "A" || winRank == "S")){
+								//戦果拡張任務！「Z作戦」前段作戦
+								if(getData("flg854")) setData("cnt854_2-4",getData("cnt854_2-4") + 1);
+							}
 							if(getData("mapInfoNo") == 4 && winRank == "S"){
 								//沖ノ島海域迎撃戦
 								if(getData("flg822")) setData("cnt822",getData("cnt822") + 1);
@@ -581,6 +585,18 @@ function update(type, data){
 							//「潜水艦隊」出撃せよ！
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
 								if(getData("flg256")) setData("cnt256",getData("cnt256") + 1);
+							}
+							if(getData("mapInfoNo") == 1 && (winRank == "A" || winRank == "S")){
+								//戦果拡張任務！「Z作戦」前段作戦
+								if(getData("flg854")) setData("cnt854_6-1",getData("cnt854_6-1") + 1);
+							}
+							if(getData("mapInfoNo") == 3 && (winRank == "A" || winRank == "S")){
+								//戦果拡張任務！「Z作戦」前段作戦
+								if(getData("flg854")) setData("cnt854_6-3",getData("cnt854_6-3") + 1);
+							}
+							if(getData("mapInfoNo") == 4 && (winRank == "A" || winRank == "S")){
+								//戦果拡張任務！「Z作戦」前段作戦
+								if(getData("flg854")) setData("cnt854_6-4",getData("cnt854_6-4") + 1);
 							}
 							break;
 						default:
@@ -842,7 +858,7 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628];
-/** クォータリーID(主力「陸攻」の調達(ID:643)は除外) */
+/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)は除外) */
 var quarterlyIDs = [822,637];
 
 /**
@@ -905,6 +921,11 @@ function initializeQuarterlyCount() {
 	setData("cntScrapType0FighterModel21_643",0);
 	//setData("cntType97TorpedoBomber_643",0);
 	//setData("cntType96LandBasedAttackAircraft_643",0);
+	//戦果拡張任務！「Z作戦」前段作戦
+	setData("cnt854_2-4",0);
+	setData("cnt854_6-1",0);
+	setData("cnt854_6-3",0);
+	setData("cnt854_6-4",0);
 }
 
 /**
@@ -1113,6 +1134,11 @@ function initializeMaxCount(){
 	setData("maxScrapType0FighterModel21_643",2);
 	setData("maxType97TorpedoBomber_643",2);
 	setData("maxType96LandBasedAttackAircraft_643",1);
+	//戦果拡張任務！「Z作戦」前段作戦
+	setData("max854_2-4",1);
+	setData("max854_6-1",1);
+	setData("max854_6-3",1);
+	setData("max854_6-4",1);
 }
 
 /** 
@@ -1216,6 +1242,11 @@ function updateCount(){
 	if(getData("cntAmmo_645")            == null || getData("cntAmmo_645") < 0)            setData("cntAmmo_645",0);
 	if(getData("cntType91AP_Shell_645")  == null || getData("cntType91AP_Shell_645") < 0)  setData("cntType91AP_Shell_645",0);
 	if(getData("cntDrumCanisters_645")   == null || getData("cntDrumCanisters_645") < 0)   setData("cntDrumCanisters_645",0);
+	//戦果拡張任務！「Z作戦」前段作戦
+	if(getData("cnt854_2-4") == null || getData("cnt854_2-4") < 0) setData("cnt854_2-4",0);
+	if(getData("cnt854_6-1") == null || getData("cnt854_6-1") < 0) setData("cnt854_6-1",0);
+	if(getData("cnt854_6-3") == null || getData("cnt854_6-3") < 0) setData("cnt854_6-3",0);
+	if(getData("cnt854_6-4") == null || getData("cnt854_6-4") < 0) setData("cnt854_6-4",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }

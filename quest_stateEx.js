@@ -1,4 +1,4 @@
-//ver1.6.7
+//ver1.6.8
 //Author: Nishisonic
 //        Nekopanda
 
@@ -156,6 +156,44 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" ﾄﾞﾗﾑ缶:" + Math.min(cntDrumCanisters_645, maxDrumCanisters_645)     + "/" + maxDrumCanisters_645 +
 					" 燃料:"   + Math.min(cntFuel_645, maxFuel_645)                       + "/" + maxFuel_645 +
 					" 弾薬:"   + Math.min(cntAmmo_645, maxAmmo_645)                       + "/" + maxAmmo_645);
+			case 854: // 戦果拡張任務！「Z作戦」前段作戦
+				//2-4
+				var cnt2_4 = getData("cnt854_2-4");
+				var max2_4 = getData("max854_2-4");
+				var rate2_4 = Math.min(cnt2_4, max2_4) / max2_4 * 100;
+
+				//九一式徹甲弾
+				var cnt6_1 = getData("cnt854_6-1");
+				var max6_1 = getData("max854_6-1");
+				var rate6_1 = Math.min(cnt6_1, max6_1) / max6_1 * 100;
+
+				//ドラム缶(輸送用)
+				var cnt6_3 = getData("cnt854_6-3");
+				var max6_3 = getData("max854_6-3");
+				var rate6_3 = Math.min(cnt6_3, max6_3) / max6_3 * 100;
+
+				//燃料
+				var cnt6_4 = getData("cnt854_6-4");
+				var max6_4 = getData("max854_6-4");
+				var rate6_4 = Math.min(cnt6_4, max6_4) / max6_4 * 100;
+
+				var sum854 = Math.floor((rate2_4 + rate6_1 + rate6_3 + rate6_4) / 4);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum854 < 50) sum854 = 50;
+						break;
+					case 2:
+						if(sum854 < 80) sum854 = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum854 / 100);
+				return String(sum854 + "%" +
+					" 2-4:" + Math.min(cnt2_4, max2_4) + "/" + max2_4 +
+					" 6-1:" + Math.min(cnt6_1, max6_1) + "/" + max6_1 +
+					" 6-3:" + Math.min(cnt6_3, max6_3) + "/" + max6_3 +
+					" 6-4:" + Math.min(cnt6_4, max6_4) + "/" + max6_4);
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);

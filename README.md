@@ -2,7 +2,7 @@
 進捗詳細 (QuestStateEx)
 --
 
-[![Release](https://img.shields.io/badge/gem-v1.6.7-brightgreen.svg)](https://github.com/Nishisonic/QuestStateEx/releases/latest)
+[![Release](https://img.shields.io/badge/gem-v1.6.8-brightgreen.svg)](https://github.com/Nishisonic/QuestStateEx/releases/latest)
 [![License](https://img.shields.io/npm/l/express.svg)](https://docs.google.com/spreadsheets/d/1gSYgCPTMV7_bDerWTs_KCgVnhdaJQnFVFXcw5cFCqos/edit#gid=761755938)
 
 
