@@ -1,4 +1,4 @@
-//ver1.6.8
+//ver1.6.9
 //Author: Nishisonic
 //        Nekopanda
 

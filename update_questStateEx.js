@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.68;
+VERSION = 1.69;
 
 /**
- * 任務進捗詳細Ver1.6.8
+ * 任務進捗詳細Ver1.6.9
  * Author:Nishisonic
- * LastUpdate:2017/04/06
+ * LastUpdate:2017/05/25
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -728,6 +728,10 @@ function update(type, data){
 					if(getData("flg403")) setData("cnt403",getData("cnt403") + 1);
 					//大規模遠征作戦、発令！
 					if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
+					if(quest_name.equals("海上護衛任務")){
+						//輸送船団護衛を強化せよ！
+						if(getData("flg424")) setData("cnt424",getData("cnt424") + 1);
+					}
 					//api_no渡してこないので仕方なく
 					if(quest_name.indexOf("東京急行") > - 1){
 						//南方への輸送作戦を成功させよ！
@@ -857,7 +861,7 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 /** ウイークリーID (あ号作戦(ID:214)は除外) */
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
-var monthlyIDs = [249,256,257,259,264,265,266,311,628];
+var monthlyIDs = [249,256,257,259,264,265,266,311,628,424];
 /** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)は除外) */
 var quarterlyIDs = [822,637];
 
@@ -1125,6 +1129,8 @@ function initializeMaxCount(){
 	setData("maxAmmo_645",750);
 	setData("maxType91AP_Shell_645",1);
 	setData("maxDrumCanisters_645",2);
+	//輸送船団護衛を強化せよ！
+	setData("max424",4);
 	/* クォータリー */
 	//沖ノ島海域迎撃戦
 	setData("max822",2);
