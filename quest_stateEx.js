@@ -1,4 +1,4 @@
-//ver1.6.9
+//ver1.7.0
 //Author: Nishisonic
 //        Nekopanda
 
@@ -156,6 +156,31 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" ﾄﾞﾗﾑ缶:" + Math.min(cntDrumCanisters_645, maxDrumCanisters_645)     + "/" + maxDrumCanisters_645 +
 					" 燃料:"   + Math.min(cntFuel_645, maxFuel_645)                       + "/" + maxFuel_645 +
 					" 弾薬:"   + Math.min(cntAmmo_645, maxAmmo_645)                       + "/" + maxAmmo_645);
+			case 663: //新型艤装の継続研究
+				//廃棄
+				var cnt663 = getData("cnt663");
+				var max663 = getData("max663");
+				var rate663 = Math.min(cnt663, max663) / max663 * 100;
+				//鋼材
+				var cntSteel_663 = getData("cntSteel_663");
+				var maxSteel_663 = getData("maxSteel_663");
+				var rateSteel_663 = Math.min(cntSteel_663, maxSteel_663) / maxSteel_663 * 100;
+
+				var sum663 = Math.floor((rate663 + rateSteel_663) / 2);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum663 < 50) sum663 = 50;
+						break;
+					case 2:
+						if(sum663 < 80) sum663 = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum663 / 100);
+				return String(sum663 + "%" +
+					" 廃棄:" + Math.min(cnt663, max663) + "/" + max663 +
+					" 鋼材:" + Math.min(cntSteel_663, maxSteel_663) + "/" + maxSteel_663);
 			case 854: // 戦果拡張任務！「Z作戦」前段作戦
 				//2-4
 				var cnt2_4 = getData("cnt854_2-4");

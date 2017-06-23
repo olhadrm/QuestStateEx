@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.69;
+VERSION = 1.70;
 
 /**
- * 任務進捗詳細Ver1.6.9
+ * 任務進捗詳細Ver1.7.0
  * Author:Nishisonic
- * LastUpdate:2017/05/25
+ * LastUpdate:2017/06/23
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -168,6 +168,12 @@ var CLEAR_RESULT = {
 var ITEM_TYPE1 = {
 	/** 機銃 */
 	AA_GUN:6,
+};
+
+/** カテゴリ */
+var ITEM_TYPE2 = {
+	/** 大口径主砲 */
+	L_MAIN_GUN:3,
 };
 
 /** 装備ID */
@@ -594,7 +600,7 @@ function update(type, data){
 								//戦果拡張任務！「Z作戦」前段作戦
 								if(getData("flg854")) setData("cnt854_6-3",getData("cnt854_6-3") + 1);
 							}
-							if(getData("mapInfoNo") == 4 && (winRank == "A" || winRank == "S")){
+							if(getData("mapInfoNo") == 4 && winRank == "S"){ // S勝利のみ(他の海域は不明)
 								//戦果拡張任務！「Z作戦」前段作戦
 								if(getData("flg854")) setData("cnt854_6-4",getData("cnt854_6-4") + 1);
 							}
@@ -678,6 +684,20 @@ function update(type, data){
 					switch(type1){
 						case ITEM_TYPE1.AA_GUN:
 							if(getData("flg638")) setData("cnt638", getData("cnt638") + 1);
+							break;
+						default:
+							break;
+					}
+				});
+				//新型艤装の継続研究
+				destroyItemMap.entrySet().stream().map(function(item){
+					return item.getValue();
+				}).map(function(itemDto){
+					return itemDto.type2;
+				}).forEach(function(type2){
+					switch(type2){
+						case ITEM_TYPE2.L_MAIN_GUN:
+							if(getData("flg663")) setData("cnt663", getData("cnt663") + 1);
 							break;
 						default:
 							break;
@@ -783,8 +803,10 @@ function update(type, data){
 	if(material instanceof MaterialDto){
 		var fuel = material.getFuel();
 		var ammo = material.getAmmo();
+		var steel = material.getMetal();
 		setData("cntFuel_645",fuel);
 		setData("cntAmmo_645",ammo);
+		setData("cntSteel_663",steel);
 	}
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
@@ -863,7 +885,7 @@ var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628,424];
 /** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)は除外) */
-var quarterlyIDs = [822,637];
+var quarterlyIDs = [822,637,663];
 
 /**
  * 任務の回数を初期化します(デイリー)
@@ -1145,6 +1167,9 @@ function initializeMaxCount(){
 	setData("max854_6-1",1);
 	setData("max854_6-3",1);
 	setData("max854_6-4",1);
+	//新型艤装の継続研究
+	setData("max663",10);
+	setData("maxSteel_663",18000);
 }
 
 /** 
