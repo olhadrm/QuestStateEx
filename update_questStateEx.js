@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.70;
+VERSION = 1.71;
 
 /**
- * 任務進捗詳細Ver1.7.0
+ * 任務進捗詳細Ver1.7.1β
  * Author:Nishisonic
- * LastUpdate:2017/06/23
+ * LastUpdate:2017/07/15
  * 
  * ローカルで値を保持し、今○○回というのを表示します。
  * 
@@ -234,6 +234,8 @@ var SHIP_ID = {
 	NAGATO:80,
 	/** 長門改 */
 	NAGATO_R:275,
+	/** 長門改二 */
+	NAGATO_R2:541,
 	/** 陸奥 */
 	MUTSU:81,
 	/** 陸奥改 */
@@ -258,16 +260,12 @@ var SHIP_ID = {
 	HYUGA:87,
 	/** 日向改 */
 	HYUGA_R:88,
-	/** Warspite */
-	WARSPITE:439,
-	/** Warspite改 */
-	WARSPITE_R:364,
 };
 
 /** 任務ID */
 var QUEST_ID = {
 	/** 調整例外リスト */
-	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645,854],
+	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645,854,426],
 };
 
 /** 
@@ -360,6 +358,36 @@ function update(type, data){
 			setData("mapAreaId",json.api_data.api_maparea_id.intValue());
 			setData("mapInfoNo",json.api_data.api_mapinfo_no.intValue());
 			setData("eventId",json.api_data.api_event_id.intValue());
+			if(getData("mapAreaId") == 1 && getData("mapInfoNo") == 6 && getData("eventId") == EVENT_ID.ESCORT_SUCCESS){
+				var isSortie = GlobalContext.getIsSortie();
+				var idx;
+				for(idx in isSortie){
+					if(isSortie[idx]) break;
+				}
+				// 例外対策
+				if(!isSortie[idx]) break;
+				var ship = GlobalContext.getDock(idx + 1).getShips();
+				var cntCVB = 0;
+				var cntAO = 0;
+				ships.stream().map(function(ship){
+					return ship.stype;
+				}).forEach(function(stype){
+					switch(stype){
+						case SHIP_TYPE.CVB:
+							cntCVB++;
+							break;
+						case SHIP_TYPE.AO:
+							cntAO++;
+							break;
+						default:
+							break;
+					}
+				});
+				//航戦2 or 補給2
+				if(cntCVB ==2 || cntAO == 2){
+					if(getData("flg861")) setData("cnt861",getData("cnt861") + 1);
+				}
+			}
 			break;
 		case DataType.BATTLE_RESULT:
 		case DataType.COMBINED_BATTLE_RESULT:
@@ -367,7 +395,6 @@ function update(type, data){
 			var enemys = lastBattleDto.getEnemy();
 			var nowEnemyHp = lastBattleDto.getNowEnemyHp();
 			var ships = lastBattleDto.getDock().getShips();
-
 			for(var i=0;i<enemys.size();i++){
 				if(nowEnemyHp[i] == 0){
 					switch(enemys[i].stype){
@@ -558,27 +585,42 @@ function update(type, data){
 						case 5:
 							//「水上打撃部隊」南方へ！
 							if(getData("mapInfoNo") == 1 && winRank == "S"){
-								var cnt259 = 0;
-								var cntCL = 0;
-
-								ships.stream().filter(function(ship){
-									return !(ship.shipId == SHIP_ID.WARSPITE || ship.shipId == SHIP_ID.WARSPITE_R); //運営式その場凌ぎ対応
-								}).map(function(ship){
-									return ship.stype;
-								}).forEach(function(stype){
-									switch(stype){
-										case SHIP_TYPE.BB:  //戦艦
-										case SHIP_TYPE.BSD: //超弩級戦艦
-											cnt259++;
-											break;
-										case SHIP_TYPE.CL:  //軽巡洋艦
-											cntCL++;
-											break;
-										default:
-											break;
+								var cntBB = ships.stream().filter(function(ship){
+									if(ship == null) return false;
+									switch(ship.shipId){
+										case SHIP_ID.FUSO:
+										case SHIP_ID.FUSO_R:
+										case SHIP_ID.FUSO_R2:
+										case SHIP_ID.YAMASHIRO:
+										case SHIP_ID.YAMASHIRO_R:
+										case SHIP_ID.YAMASHIRO_R2:
+										case SHIP_ID.ISE:
+										case SHIP_ID.ISE_R:
+										case SHIP_ID.HYUGA:
+										case SHIP_ID.HYUGA_R:
+										case SHIP_ID.NAGATO:
+										case SHIP_ID.NAGATO_R:
+										case SHIP_ID.NAGATO_R2:
+										case SHIP_ID.MUTSU:
+										case SHIP_ID.MUTSU_R:
+										case SHIP_ID.YAMATO:
+										case SHIP_ID.YAMATO_R:
+										case SHIP_ID.MUSASHI:
+										case SHIP_ID.MUSASHI_R:
+											return true;
 									}
-								});
-								if(cnt259 == 3 && cntCL == 1){
+									return false;
+								}).count();
+
+								var cntCL = ships.stream().filter(function(ship){
+									if(ship == null) return false;
+									switch(ship.stype){
+										case SHIP_TYPE.CL:  //軽巡洋艦
+											return true;
+									}
+									return false;
+								}).count();
+								if(cntBB == 3 && cntCL == 1){
 									if(getData("flg259")) setData("cnt259",getData("cnt259") + 1);
 								}
 							}
@@ -599,6 +641,24 @@ function update(type, data){
 							if(getData("mapInfoNo") == 3 && (winRank == "A" || winRank == "S")){
 								//戦果拡張任務！「Z作戦」前段作戦
 								if(getData("flg854")) setData("cnt854_6-3",getData("cnt854_6-3") + 1);
+								//前線の航空偵察を実施せよ！
+								var cntAV = 0;
+								var cntCL = 0;
+								ships.stream().map(function(ship){
+									return ship.stype;
+								}).forEach(function(stype){
+									switch(stype){
+										case SHIP_TYPE.AV: //水上機母艦
+											cntAV++;
+											break;
+										case SHIP_TYPE.CL:  //軽巡洋艦
+											cntCL++;
+											break;
+									}
+								});
+								if(cntAV == 1 && cntCL == 2){
+									if(getData("flg862")) setData("cnt862",getData("cnt862") + 1);
+								}
 							}
 							if(getData("mapInfoNo") == 4 && winRank == "S"){ // S勝利のみ(他の海域は不明)
 								//戦果拡張任務！「Z作戦」前段作戦
@@ -749,8 +809,30 @@ function update(type, data){
 					//大規模遠征作戦、発令！
 					if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
 					if(quest_name.equals("海上護衛任務")){
-						//輸送船団護衛を強化せよ！
-						if(getData("flg424")) setData("cnt424",getData("cnt424") + 1);
+					}
+					switch(quest_name){
+						case "海上護衛任務":
+							//輸送船団護衛を強化せよ！
+							if(getData("flg424")) setData("cnt424",getData("cnt424") + 1);
+							break;
+						case "警備任務":
+							//海上通商航路の警戒を厳とせよ！
+							if(getData("flg426")) setData("cnt426_keibi",getData("cnt426_keibi") + 1);
+							break;
+						case "対潜警戒任務":
+							//海上通商航路の警戒を厳とせよ！
+							if(getData("flg426")) setData("cnt426_taisen",getData("cnt426_taisen") + 1);
+							break;
+						case "海上護衛任務":
+							//海上通商航路の警戒を厳とせよ！
+							if(getData("flg426")) setData("cnt426_kaijo",getData("cnt426_kaijo") + 1);
+							break;
+						case "強行偵察任務":
+							//海上通商航路の警戒を厳とせよ！
+							if(getData("flg426")) setData("cnt426_teisatsu",getData("cnt426_teisatsu") + 1);
+							break;
+						default:
+							break;
 					}
 					//api_no渡してこないので仕方なく
 					if(quest_name.indexOf("東京急行") > - 1){
@@ -884,8 +966,8 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628,424];
-/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)は除外) */
-var quarterlyIDs = [822,637,663];
+/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)と大規模遠征作戦、発令！(ID:426)は除外) */
+var quarterlyIDs = [822,637,663,861,862];
 
 /**
  * 任務の回数を初期化します(デイリー)
@@ -952,6 +1034,11 @@ function initializeQuarterlyCount() {
 	setData("cnt854_6-1",0);
 	setData("cnt854_6-3",0);
 	setData("cnt854_6-4",0);
+	//大規模遠征作戦、発令！
+	setData("cnt426_keibi",0);
+	setData("cnt426_taisen",0);
+	setData("cnt426_kaijo",0);
+	setData("cnt426_teisatsu",0);
 }
 
 /**
@@ -1170,6 +1257,15 @@ function initializeMaxCount(){
 	//新型艤装の継続研究
 	setData("max663",10);
 	setData("maxSteel_663",18000);
+	//大規模遠征作戦、発令！
+	setData("max426_keibi",1);
+	setData("max426_taisen",1);
+	setData("max426_kaijo",1);
+	setData("max426_teisatsu",1);
+	//強行輸送艦隊、抜錨！
+	setData("max861",2);
+	//前線の航空偵察を実施せよ！
+	setData("max862",2);
 }
 
 /** 
@@ -1189,8 +1285,9 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 				if(getData("cnt" + questNo) < Math.ceil(getData("max" + questNo) * 0.5)){
 					//maxの値を半分にして切り上げ
 					setData("cnt" + questNo,Math.ceil(getData("max" + questNo) * 0.5));
+				}
 				//カウンタが80%を超えているのに、「50%以上」表示になっていたら
-				} else if(getData("cnt" + questNo) > Math.ceil(getData("max" + questNo) * 0.8)){
+				if(getData("cnt" + questNo) > Math.ceil(getData("max" + questNo) * 0.8)){
 					//maxの値を80%したやつを-1する
 					setData("cnt" + questNo,Math.ceil(getData("max" + questNo) * 0.8) - 1);
 				}
@@ -1200,8 +1297,9 @@ function questCountAdjustment(questNo, questProgressFlag, questType, questState)
 				if(getData("cnt" + questNo) < Math.ceil(getData("max" + questNo) * 0.8)){
 					//maxの値を80%にして切り上げ
 					setData("cnt" + questNo,Math.ceil(getData("max" + questNo) * 0.8));
+				}
 				//カウンタが100%を超えたのに、「80%以上」表示になっていたら
-				} else if(getData("cnt" + questNo) >= getData("max" + questNo)){
+				if(getData("cnt" + questNo) >= getData("max" + questNo)){
 					//maxの値を-1
 					setData("cnt" + questNo,getData("max" + questNo) - 1);
 				}
@@ -1278,6 +1376,11 @@ function updateCount(){
 	if(getData("cnt854_6-1") == null || getData("cnt854_6-1") < 0) setData("cnt854_6-1",0);
 	if(getData("cnt854_6-3") == null || getData("cnt854_6-3") < 0) setData("cnt854_6-3",0);
 	if(getData("cnt854_6-4") == null || getData("cnt854_6-4") < 0) setData("cnt854_6-4",0);
+	//海上通商航路の警戒を厳とせよ！
+	if(getData("cnt426_keibi") == null    || getData("cnt854_keibi") < 0)    setData("cnt854_keibi",0);
+	if(getData("cnt426_taisen") == null   || getData("cnt854_taisen") < 0)   setData("cnt854_taisen",0);
+	if(getData("cnt426_kaijo") == null    || getData("cnt854_kaijo") < 0)    setData("cnt854_kaijo",0);
+	if(getData("cnt426_teisatsu") == null || getData("cnt854_teisatsu") < 0) setData("cnt854_teisatsu",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }

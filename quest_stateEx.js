@@ -1,4 +1,4 @@
-//ver1.7.0
+//ver1.7.1β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -219,6 +219,33 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" 6-1:" + Math.min(cnt6_1, max6_1) + "/" + max6_1 +
 					" 6-3:" + Math.min(cnt6_3, max6_3) + "/" + max6_3 +
 					" 6-4:" + Math.min(cnt6_4, max6_4) + "/" + max6_4);
+			case 426: // 大規模遠征作戦、発令！
+				// かなり省略
+				var cntKeibi = getData("cnt426_keibi");
+				var maxKeibi = getData("max426_keibi");
+				var cntTaisen = getData("cnt426_taisen");
+				var maxTaisen = getData("max426_taisen");
+				var cntKaijo = getData("cnt426_kaijo");
+				var maxKaijo = getData("max426_kaijo");
+				var cntTeisatsu = getData("cnt426_teisatsu");
+				var maxTeisatsu = getData("max426_teisatsu");
+				var sum426 = Math.floor((cntKeibi + cntTaisen + cntKaijo + cntTeisatsu) / 4);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum426 < 50) sum426 = 50;
+						break;
+					case 2:
+						if(sum426 < 80) sum426 = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum426 / 100);
+				return String(sum426 + "%" +
+					" 警備:" + Math.min(cntKeibi, 1) + "/" + maxKeibi +
+					" 対潜:" + Math.min(cntTaisen, 1) + "/" + maxTaisen +
+					" 海上:" + Math.min(cntKaijo, 1) + "/" + maxKaijo + 
+					" 偵察:" + Math.min(cntTeisatsu, 1) + "/" + maxTeisatsu);
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);
