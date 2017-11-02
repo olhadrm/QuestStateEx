@@ -1,4 +1,4 @@
-//ver1.7.1β
+//ver1.7.2β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -75,7 +75,7 @@ function getProgress(questNo, questType, questProgressFlag) {
 						if(sum626 < 80) sum626 = 80;
 						break;
 				}
-				
+
 				setData("rate" + questNo, sum626 / 100);
 				return String(sum626 + "%" +
 					" 96式:" + Math.min(cntScrapType96Fighter_626,maxScrapType96Fighter_626) + "/" + maxScrapType96Fighter_626 +
@@ -90,7 +90,7 @@ function getProgress(questNo, questType, questProgressFlag) {
 				var cntType97TorpedoBomber_643 = getData("cntType97TorpedoBomber_643");
 				var maxType97TorpedoBomber_643 = getData("maxType97TorpedoBomber_643");
 				var rateType97TorpedoBomber_643 = Math.min(cntType97TorpedoBomber_643, maxType97TorpedoBomber_643) / maxType97TorpedoBomber_643 * 100;
-				
+
 				//九六式陸攻
 				var cntType96LandBasedAttackAircraft_643 = getData("cntType96LandBasedAttackAircraft_643");
 				var maxType96LandBasedAttackAircraft_643 = getData("maxType96LandBasedAttackAircraft_643");
@@ -219,17 +219,21 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" 6-1:" + Math.min(cnt6_1, max6_1) + "/" + max6_1 +
 					" 6-3:" + Math.min(cnt6_3, max6_3) + "/" + max6_3 +
 					" 6-4:" + Math.min(cnt6_4, max6_4) + "/" + max6_4);
-			case 426: // 大規模遠征作戦、発令！
+			case 426: // 海上通商航路の警戒を厳とせよ！
 				// かなり省略
 				var cntKeibi = getData("cnt426_keibi");
 				var maxKeibi = getData("max426_keibi");
+				var rateKeibi = Math.min(cntKeibi, maxKeibi) / maxKeibi * 100;
 				var cntTaisen = getData("cnt426_taisen");
 				var maxTaisen = getData("max426_taisen");
+				var rateTaisen = Math.min(cntTaisen, maxTaisen) / maxTaisen * 100;
 				var cntKaijo = getData("cnt426_kaijo");
 				var maxKaijo = getData("max426_kaijo");
+				var rateKaijo = Math.min(cntKaijo, maxKaijo) / maxKaijo * 100;
 				var cntTeisatsu = getData("cnt426_teisatsu");
 				var maxTeisatsu = getData("max426_teisatsu");
-				var sum426 = Math.floor((cntKeibi + cntTaisen + cntKaijo + cntTeisatsu) / 4);
+				var rateTeisatsu = Math.min(cntTeisatsu, maxTeisatsu) / maxTeisatsu * 100;
+				var sum426 = Math.floor((rateKeibi + rateTaisen + rateKaijo + rateTeisatsu) / 4);
 
 				switch(parseInt(questProgressFlag)){
 					case 1:
@@ -242,10 +246,36 @@ function getProgress(questNo, questType, questProgressFlag) {
 
 				setData("rate" + questNo, sum426 / 100);
 				return String(sum426 + "%" +
-					" 警備:" + Math.min(cntKeibi, 1) + "/" + maxKeibi +
-					" 対潜:" + Math.min(cntTaisen, 1) + "/" + maxTaisen +
-					" 海上:" + Math.min(cntKaijo, 1) + "/" + maxKaijo + 
-					" 偵察:" + Math.min(cntTeisatsu, 1) + "/" + maxTeisatsu);
+					" 警備:" + Math.min(cntKeibi, maxKeibi) + "/" + maxKeibi +
+					" 対潜:" + Math.min(cntTaisen, maxTaisen) + "/" + maxTaisen +
+					" 海上:" + Math.min(cntKaijo, maxKaijo) + "/" + maxKaijo +
+					" 偵察:" + Math.min(cntTeisatsu, maxTeisatsu) + "/" + maxTeisatsu);
+			case 428: // 近海に侵入する敵潜を制圧せよ！
+				var cntTaisen = getData("cnt428_taisen");
+				var maxTaisen = getData("max428_taisen");
+				var rateTaisen = Math.min(cntTaisen, maxTaisen) / maxTaisen * 100;
+				var cntKaikyo = getData("cnt428_kaikyo");
+				var maxKaikyo = getData("max428_kaikyo");
+				var rateKaikyo = Math.min(cntKaikyo, maxKaikyo) / maxKaikyo * 100;
+				var cntKeikai = getData("cnt428_keikai");
+				var maxKeikai = getData("max428_keikai");
+				var rateKeikai = Math.min(cntKeikai, maxKeikai) / maxKeikai * 100;
+				var sum428 = Math.floor((rateTaisen + rateKaikyo + rateKeikai) / 3);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum428 < 50) sum428 = 50;
+						break;
+					case 2:
+						if(sum428 < 80) sum428 = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum428 / 100);
+				return String(sum428 + "%" +
+					" 対潜:" + Math.min(cntTaisen, maxTaisen) + "/" + maxTaisen +
+					" 海峡:" + Math.min(cntKaikyo, maxKaikyo) + "/" + maxKaikyo +
+					" 長距離:" + Math.min(cntKeikai, maxKeikai) + "/" + maxKeikai);
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);

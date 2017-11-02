@@ -1,13 +1,13 @@
 /** 現在のバージョン */
-VERSION = 1.71;
+VERSION = 1.72;
 
 /**
- * 任務進捗詳細Ver1.7.1β
+ * 任務進捗詳細Ver1.7.2β
  * Author:Nishisonic
- * LastUpdate:2017/07/15
- * 
+ * LastUpdate:2017/11/03
+ *
  * ローカルで値を保持し、今○○回というのを表示します。
- * 
+ *
  * ScriptData.jsでよく使うものについて
  * flg + questNo：任務遂行中かどうか
  * cnt + questNo：カウントに使用
@@ -268,10 +268,10 @@ var QUEST_ID = {
 	ADJUSTMENT_EXCEPTION_LIST:[214,605,606,607,608,626,643,645,854,426],
 };
 
-/** 
+/**
  * @Override
  * 通信データを処理します
- * 
+ *
  * @param type データの種類
  * @param data データ
  */
@@ -699,7 +699,7 @@ function update(type, data){
 			if(storedItemMap instanceof Map){
 				var destroyItemMap = getDestroyItemMap(storedItemMap,GlobalContext.itemMap);
 				var secretary = GlobalContext.secretary;
-				
+
 				//精鋭「艦戦」隊の新編成
 				if(isMatchSecretary626(secretary)){
 					destroyItemMap.entrySet().stream().map(function(item){
@@ -808,8 +808,6 @@ function update(type, data){
 					if(getData("flg403")) setData("cnt403",getData("cnt403") + 1);
 					//大規模遠征作戦、発令！
 					if(getData("flg404")) setData("cnt404",getData("cnt404") + 1);
-					if(quest_name.equals("海上護衛任務")){
-					}
 					switch(quest_name){
 						case "海上護衛任務":
 							//輸送船団護衛を強化せよ！
@@ -822,6 +820,8 @@ function update(type, data){
 						case "対潜警戒任務":
 							//海上通商航路の警戒を厳とせよ！
 							if(getData("flg426")) setData("cnt426_taisen",getData("cnt426_taisen") + 1);
+							//近海に侵入する敵潜を制圧せよ！
+							if(getData("flg428")) setData("cnt428_taisen",getData("cnt428_taisen") + 1);
 							break;
 						case "海上護衛任務":
 							//海上通商航路の警戒を厳とせよ！
@@ -830,6 +830,14 @@ function update(type, data){
 						case "強行偵察任務":
 							//海上通商航路の警戒を厳とせよ！
 							if(getData("flg426")) setData("cnt426_teisatsu",getData("cnt426_teisatsu") + 1);
+							break;
+						case "海峡警備行動":
+							//近海に侵入する敵潜を制圧せよ！
+							if(getData("flg428")) setData("cnt428_kaikyo",getData("cnt428_kaikyo") + 1);
+							break;
+						case "長時間対潜警戒":
+							//近海に侵入する敵潜を制圧せよ！
+							if(getData("flg428")) setData("cnt428_keikai",getData("cnt428_keikai") + 1);
 							break;
 						default:
 							break;
@@ -896,7 +904,7 @@ function update(type, data){
 
 /**
  * 廃棄した装備を取得する
- * 
+ *
  * @param oldItemMap 古いItemMap
  * @param newItemMap 新しいItemMap
  * @return {TreeMap} 廃棄した装備のItemMap
@@ -920,7 +928,7 @@ function storeItemMap(){
 
 /**
  * 保存されたitemMapを取り出します
- * 
+ *
  * @return {ItemMap} 装備一覧
  */
 function getStoredItemMap(){
@@ -937,7 +945,7 @@ function updateCheck() {
     /** タイムゾーン(任務が更新される05:00JSTに0:00になるタイムゾーン) */
  	var nowTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+04:00"));
  	nowTime.setFirstDayOfWeek(Calendar.MONDAY);
-	
+
 	// 頻繁に更新するよう変更
 	initializeMaxCount();
 	if (questLastUpdateTime instanceof Calendar) {
@@ -966,7 +974,7 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628,424];
-/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)と大規模遠征作戦、発令！(ID:426)は除外) */
+/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)と海上護衛総隊、遠征開始！(ID:426)と近海に侵入する敵潜を制圧せよ！(ID:428)は除外) */
 var quarterlyIDs = [822,637,663,861,862];
 
 /**
@@ -1034,16 +1042,20 @@ function initializeQuarterlyCount() {
 	setData("cnt854_6-1",0);
 	setData("cnt854_6-3",0);
 	setData("cnt854_6-4",0);
-	//大規模遠征作戦、発令！
+	//海上護衛総隊、遠征開始！
 	setData("cnt426_keibi",0);
 	setData("cnt426_taisen",0);
 	setData("cnt426_kaijo",0);
 	setData("cnt426_teisatsu",0);
+	//近海に侵入する敵潜を制圧せよ！
+	setData("cnt428_taisen",0);
+	setData("cnt428_kaikyo",0);
+	setData("cnt428_keikai",0);
 }
 
 /**
  * 任務更新判定(デイリー)
- * 
+ *
  * @param questLastUpdateTime 最後に任務が更新された時間
  * @param nowTime 現在の時間
  */
@@ -1055,7 +1067,7 @@ function updateCheckDaily(questLastUpdateTime, nowTime) {
 
 /**
  * 任務更新判定(ウイークリー)
- * 
+ *
  * @param questLastUpdateTime 最後に任務が更新された時間
  * @param nowTime 現在の時間
  */
@@ -1067,7 +1079,7 @@ function updateCheckWeekly(questLastUpdateTime, nowTime) {
 
 /**
  * 任務更新判定(マンスリー)
- * 
+ *
  * @param questLastUpdateTime 最後に任務が更新された時間
  * @param nowTime 現在の時間
  */
@@ -1079,7 +1091,7 @@ function updateCheckMonthly(questLastUpdateTime, nowTime) {
 
 /**
  * 任務更新判定(クォータリー)
- * 
+ *
  * @param questLastUpdateTime 最後に任務が更新された時間
  * @param nowTime 現在の時間
  */
@@ -1111,9 +1123,9 @@ function updateCheckQuarterly(questLastUpdateTime, nowTime) {
 	}
 }
 
-/** 
+/**
  * 任務の遂行状態を変更します
- * 
+ *
  * @param questNo 任務ID
  * @param questState 遂行状態
  * @param questType 任務の種類
@@ -1257,7 +1269,7 @@ function initializeMaxCount(){
 	//新型艤装の継続研究
 	setData("max663",10);
 	setData("maxSteel_663",18000);
-	//大規模遠征作戦、発令！
+	//海上護衛総隊、遠征開始！
 	setData("max426_keibi",1);
 	setData("max426_taisen",1);
 	setData("max426_kaijo",1);
@@ -1266,11 +1278,15 @@ function initializeMaxCount(){
 	setData("max861",2);
 	//前線の航空偵察を実施せよ！
 	setData("max862",2);
+	//近海に侵入する敵潜を制圧せよ！
+	setData("max428_taisen",2);
+	setData("max428_kaikyo",2);
+	setData("max428_keikai",2);
 }
 
-/** 
+/**
  * 回数のズレを調整します
- * 
+ *
  * @param questNo 任務ID
  * @param questProgressFlag 進捗フラグ
  * @param questType 任務の種類
@@ -1377,15 +1393,19 @@ function updateCount(){
 	if(getData("cnt854_6-3") == null || getData("cnt854_6-3") < 0) setData("cnt854_6-3",0);
 	if(getData("cnt854_6-4") == null || getData("cnt854_6-4") < 0) setData("cnt854_6-4",0);
 	//海上通商航路の警戒を厳とせよ！
-	if(getData("cnt426_keibi") == null    || getData("cnt854_keibi") < 0)    setData("cnt854_keibi",0);
-	if(getData("cnt426_taisen") == null   || getData("cnt854_taisen") < 0)   setData("cnt854_taisen",0);
-	if(getData("cnt426_kaijo") == null    || getData("cnt854_kaijo") < 0)    setData("cnt854_kaijo",0);
-	if(getData("cnt426_teisatsu") == null || getData("cnt854_teisatsu") < 0) setData("cnt854_teisatsu",0);
+	if(getData("cnt426_keibi") == null    || getData("cnt426_keibi") < 0)    setData("cnt426_keibi",0);
+	if(getData("cnt426_taisen") == null   || getData("cnt426_taisen") < 0)   setData("cnt426_taisen",0);
+	if(getData("cnt426_kaijo") == null    || getData("cnt426_kaijo") < 0)    setData("cnt426_kaijo",0);
+	if(getData("cnt426_teisatsu") == null || getData("cnt426_teisatsu") < 0) setData("cnt426_teisatsu",0);
+	//近海に侵入する敵潜を制圧せよ！
+	if(getData("cnt428_taisen") == null || getData("cnt428_taisen") < 0) setData("cnt428_taisen",0);
+	if(getData("cnt428_kaikyo") == null || getData("cnt428_kaikyo") < 0) setData("cnt428_kaikyo",0);
+	if(getData("cnt428_keikai") == null || getData("cnt428_keikai") < 0) setData("cnt428_keikai",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }
 
-/** 
+/**
  * バージョンをチェックします
  * もしバージョンを下回っていた場合は、任務の回数をアップデートします
  */
@@ -1414,7 +1434,7 @@ function canClear628(){
 
 /**
  * 秘書艦が任務(ID:626)の条件と一致しているか
- * 
+ *
  * @param secretary 秘書艦
  * @return {boolean} 一致しているならtrue
  */
@@ -1434,7 +1454,7 @@ function isMatchSecretary626(secretary){
 
 /**
  * 秘書艦が任務(ID:628)の条件と一致しているか
- * 
+ *
  * @param secretary 秘書艦
  * @return {boolean} 一致しているならtrue
  */
@@ -1455,7 +1475,7 @@ function isMatchSecretary628(secretary){
 
 /**
  * 秘書艦が任務(ID:637)の条件と一致しているか
- * 
+ *
  * @param secretary 秘書艦
  * @return {boolean} 一致しているならtrue
  */
@@ -1475,7 +1495,7 @@ function isMatchSecretary637(secretary){
 
 /**
  * 任務回数の調整例外IDに入っているか
- * 
+ *
  * @param questID 任務ID
  * @return {boolean} 例外IDならtrue
  */

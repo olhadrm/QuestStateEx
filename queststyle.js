@@ -1,4 +1,4 @@
-//ver1.7.1β
+//ver1.7.2β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -155,7 +155,7 @@ function create(table, data, index) {
 	}
 
 	item.setData(d);
-    
+
 	if(!getData("set")){
 		table.addSelectionListener(new SelectionAdapter({
 			widgetDefaultSelected : function(event){
@@ -342,7 +342,7 @@ function create(table, data, index) {
 							group.setLayout(new GridLayout(4,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("96式:");
 							infoLabel.setLocation(0, 0);
@@ -432,7 +432,7 @@ function create(table, data, index) {
 							group.setLayout(new GridLayout(6,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("21型:");
 							infoLabel.setLocation(0, 0);
@@ -478,7 +478,7 @@ function create(table, data, index) {
 							group.setLayout( new GridLayout(6,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("三式:");
 							infoLabel.setLocation(0, 0);
@@ -528,7 +528,7 @@ function create(table, data, index) {
 							group.setLayout(new GridLayout(4,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("2-4:");
 							infoLabel.setLocation(0, 0);
@@ -693,12 +693,12 @@ function create(table, data, index) {
 								ApplicationMain.main.getQuestTable().update();
 							});
 							break;
-						case 426: //大規模遠征作戦、発令！
+						case 426: // 海上通商航路の警戒を厳とせよ！
 							var group = new Group (tip, SWT.NONE);
 							group.setLayout(new GridLayout(4,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("警備任務:");
 							infoLabel.setLocation(0, 0);
@@ -863,12 +863,142 @@ function create(table, data, index) {
 								ApplicationMain.main.getQuestTable().update();
 							});
 							break;
+						case 428: // 近海に侵入する敵潜を制圧せよ！
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("対潜警戒任務:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt428_taisen"));
+							slider.setMaximum(getData("max428_taisen") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cnt428_taisen"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("max428_taisen"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("海峡警備行動:");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cnt428_kaikyo"));
+							slider2.setMaximum(getData("max428_kaikyo") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cnt428_kaikyo"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("max428_kaikyo"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel3 = new Label(group,SWT.NONE);
+							infoLabel3.setText("長距離対潜警戒:");
+							infoLabel3.setLocation(0, 0);
+							infoLabel3.setBackground(event.item.data.cat);
+
+							var slider3 = new Slider(group,SWT.NONE);
+							slider3.setMinimum(0);
+							slider3.setSelection(getData("cnt428_keikai"));
+							slider3.setMaximum(getData("max428_keikai") + 10); //こうしないと正しい最大値にならない
+							slider3.setIncrement(1);
+
+							var space3 = new Label(group,SWT.NONE);
+							space3.setText(" ");
+							space3.setBackground(event.item.data.cat);
+
+							var composite3 = new Composite (group, SWT.BORDER);
+							composite3.setLayout(new GridLayout(3,false));
+							composite3.setBackground(event.item.data.cat);
+
+							var cntLabel3 = new Label(composite3,SWT.NONE);
+							cntLabel3.setAlignment(SWT.RIGHT);
+							cntLabel3.setText(prefix(getData("cnt428_keikai"),2));
+							cntLabel3.setBackground(event.item.data.cat);
+
+							var sepLabel3 = new Label(composite3,SWT.NONE);
+							sepLabel3.setText(" / ");
+							sepLabel3.setBackground(event.item.data.cat);
+
+							var maxLabel3 = new Label(composite3,SWT.NONE);
+							maxLabel3.setAlignment(SWT.RIGHT);
+							maxLabel3.setText(prefix(getData("max428_keikai"),2));
+							maxLabel3.setBackground(event.item.data.cat);
+
+							slider3.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel3.setText(prefix(slider3.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cnt428_taisen",cntLabel.getText()|0);
+								setData("cnt428_kaikyo",cntLabel2.getText()|0);
+								setData("cnt428_keikai",cntLabel3.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
 						default: //それ以外
 							var group = new Group (tip, SWT.NONE);
 							group.setLayout(new GridLayout(4,false));
 							group.setText(event.item.data.quest.title);
 							group.setBackground(event.item.data.cat);
-							
+
 							var infoLabel = new Label(group,SWT.NONE);
 							infoLabel.setText("回数:");
 							infoLabel.setLocation(0, 0);
