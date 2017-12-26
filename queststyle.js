@@ -1,4 +1,4 @@
-//ver1.7.2β
+//ver1.7.3β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -990,6 +990,226 @@ function create(table, data, index) {
 								setData("cnt428_taisen",cntLabel.getText()|0);
 								setData("cnt428_kaikyo",cntLabel2.getText()|0);
 								setData("cnt428_keikai",cntLabel3.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 873: // 北方海域警備を実施せよ！
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("モーレイ海(3-1):");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt873_31"));
+							slider.setMaximum(getData("max873_31") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cnt873_31"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("max873_31"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("キス島沖(3-2):");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cnt873_32"));
+							slider2.setMaximum(getData("max873_32") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cnt873_32"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("max873_32"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel3 = new Label(group,SWT.NONE);
+							infoLabel3.setText("アルフォンシーノ方面(3-3):");
+							infoLabel3.setLocation(0, 0);
+							infoLabel3.setBackground(event.item.data.cat);
+
+							var slider3 = new Slider(group,SWT.NONE);
+							slider3.setMinimum(0);
+							slider3.setSelection(getData("cnt873_33"));
+							slider3.setMaximum(getData("max873_33") + 10); //こうしないと正しい最大値にならない
+							slider3.setIncrement(1);
+
+							var space3 = new Label(group,SWT.NONE);
+							space3.setText(" ");
+							space3.setBackground(event.item.data.cat);
+
+							var composite3 = new Composite (group, SWT.BORDER);
+							composite3.setLayout(new GridLayout(3,false));
+							composite3.setBackground(event.item.data.cat);
+
+							var cntLabel3 = new Label(composite3,SWT.NONE);
+							cntLabel3.setAlignment(SWT.RIGHT);
+							cntLabel3.setText(prefix(getData("cnt873_33"),2));
+							cntLabel3.setBackground(event.item.data.cat);
+
+							var sepLabel3 = new Label(composite3,SWT.NONE);
+							sepLabel3.setText(" / ");
+							sepLabel3.setBackground(event.item.data.cat);
+
+							var maxLabel3 = new Label(composite3,SWT.NONE);
+							maxLabel3.setAlignment(SWT.RIGHT);
+							maxLabel3.setText(prefix(getData("max873_33"),2));
+							maxLabel3.setBackground(event.item.data.cat);
+
+							slider3.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel3.setText(prefix(slider3.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cnt873_31",cntLabel.getText()|0);
+								setData("cnt873_32",cntLabel2.getText()|0);
+								setData("cnt873_33",cntLabel3.getText()|0);
+								ApplicationMain.main.getQuestTable().update();
+							});
+							break;
+						case 675: // 北方海域警備を実施せよ！
+							var group = new Group (tip, SWT.NONE);
+							group.setLayout(new GridLayout(4,false));
+							group.setText(event.item.data.quest.title);
+							group.setBackground(event.item.data.cat);
+
+							var infoLabel = new Label(group,SWT.NONE);
+							infoLabel.setText("艦上戦闘機:");
+							infoLabel.setLocation(0, 0);
+							infoLabel.setBackground(event.item.data.cat);
+
+							var slider = new Slider(group,SWT.NONE);
+							slider.setMinimum(0);
+							slider.setSelection(getData("cnt675_1"));
+							slider.setMaximum(getData("max675_1") + 10); //こうしないと正しい最大値にならない
+							slider.setIncrement(1);
+
+							var space = new Label(group,SWT.NONE);
+							space.setText(" ");
+							space.setBackground(event.item.data.cat);
+
+							var composite = new Composite (group, SWT.BORDER);
+							composite.setLayout(new GridLayout(3,false));
+							composite.setBackground(event.item.data.cat);
+
+							var cntLabel = new Label(composite,SWT.NONE);
+							cntLabel.setAlignment(SWT.RIGHT);
+							cntLabel.setText(prefix(getData("cnt675_1"),2));
+							cntLabel.setBackground(event.item.data.cat);
+
+							var sepLabel = new Label(composite,SWT.NONE);
+							sepLabel.setText(" / ");
+							sepLabel.setBackground(event.item.data.cat);
+
+							var maxLabel = new Label(composite,SWT.NONE);
+							maxLabel.setAlignment(SWT.RIGHT);
+							maxLabel.setText(prefix(getData("max675_1"),2));
+							maxLabel.setBackground(event.item.data.cat);
+
+							slider.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel.setText(prefix(slider.getSelection().toString(),2));
+								}
+							}));
+
+							var infoLabel2 = new Label(group,SWT.NONE);
+							infoLabel2.setText("機銃:");
+							infoLabel2.setLocation(0, 0);
+							infoLabel2.setBackground(event.item.data.cat);
+
+							var slider2 = new Slider(group,SWT.NONE);
+							slider2.setMinimum(0);
+							slider2.setSelection(getData("cnt675_2"));
+							slider2.setMaximum(getData("max675_2") + 10); //こうしないと正しい最大値にならない
+							slider2.setIncrement(1);
+
+							var space2 = new Label(group,SWT.NONE);
+							space2.setText(" ");
+							space2.setBackground(event.item.data.cat);
+
+							var composite2 = new Composite (group, SWT.BORDER);
+							composite2.setLayout(new GridLayout(3,false));
+							composite2.setBackground(event.item.data.cat);
+
+							var cntLabel2 = new Label(composite2,SWT.NONE);
+							cntLabel2.setAlignment(SWT.RIGHT);
+							cntLabel2.setText(prefix(getData("cnt675_2"),2));
+							cntLabel2.setBackground(event.item.data.cat);
+
+							var sepLabel2 = new Label(composite2,SWT.NONE);
+							sepLabel2.setText(" / ");
+							sepLabel2.setBackground(event.item.data.cat);
+
+							var maxLabel2 = new Label(composite2,SWT.NONE);
+							maxLabel2.setAlignment(SWT.RIGHT);
+							maxLabel2.setText(prefix(getData("max675_2"),2));
+							maxLabel2.setBackground(event.item.data.cat);
+
+							slider2.addSelectionListener(new SelectionAdapter({
+								widgetSelected:function(e){
+									cntLabel2.setText(prefix(slider2.getSelection().toString(),2));
+								}
+							}));
+
+							tip.addDisposeListener(function(e){
+								setData("cnt675_1",cntLabel.getText()|0);
+								setData("cnt675_2",cntLabel2.getText()|0);
 								ApplicationMain.main.getQuestTable().update();
 							});
 							break;

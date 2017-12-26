@@ -1,4 +1,4 @@
-//ver1.7.2β
+//ver1.7.3β
 //Author: Nishisonic
 //        Nekopanda
 
@@ -276,6 +276,80 @@ function getProgress(questNo, questType, questProgressFlag) {
 					" 対潜:" + Math.min(cntTaisen, maxTaisen) + "/" + maxTaisen +
 					" 海峡:" + Math.min(cntKaikyo, maxKaikyo) + "/" + maxKaikyo +
 					" 長距離:" + Math.min(cntKeikai, maxKeikai) + "/" + maxKeikai);
+			case 674: // 工廠環境の整備
+				var cnt = getData("cnt674");
+				var max = getData("max674");
+				var rate = Math.min(cnt,max) / max * 100;
+				var steel = getData("cntSteel_674");
+				var maxSteel = getData("maxSteel_674");
+				var rateSteel = Math.min(steel,maxSteel) / maxSteel * 100;
+				var sum = Math.floor((rate + rateSteel) / 2);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum < 50) sum = 50;
+						break;
+					case 2:
+						if(sum < 80) sum = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum / 100);
+				return String(sum + "%" +
+					" 機銃:" + Math.min(cnt, max) + "/" + max +
+					" 鋼材:" + Math.min(steel, maxSteel) + "/" + maxSteel);
+			case 873: // 北方海域警備を実施せよ！
+				var cnt31 = getData("cnt873_31");
+				var max31 = getData("max873_31");
+				var rate31 = Math.min(cnt31,max31) / max31 * 100;
+				var cnt32 = getData("cnt873_32");
+				var max32 = getData("max873_32");
+				var rate32 = Math.min(cnt32,max32) / max32 * 100;
+				var cnt33 = getData("cnt873_33");
+				var max33 = getData("max873_33");
+				var rate33 = Math.min(cnt33,max33) / max33 * 100;
+				var sum = Math.floor((rate31 + rate32 + rate33) / 3);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum < 50) sum = 50;
+						break;
+					case 2:
+						if(sum < 80) sum = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum / 100);
+				return String(sum + "%" +
+					" 3-1:" + Math.min(cnt31, max31) + "/" + max31 +
+					" 3-2:" + Math.min(cnt32, max32) + "/" + max32 +
+					" 3-3:" + Math.min(cnt33, max33) + "/" + max33);
+			case 675: // 運用装備の統合整備
+				var cnt1 = getData("cnt675_1");
+				var max1 = getData("max675_1");
+				var rate1 = Math.min(cnt1,max1) / max1 * 100;
+				var cnt2 = getData("cnt675_2");
+				var max2 = getData("max675_2");
+				var rate2 = Math.min(cnt2,max2) / max2 * 100;
+				var cnt3 = getData("cnt675_3");
+				var max3 = getData("max675_3");
+				var rate3 = Math.min(cnt3,max3) / max3 * 100;
+				var sum = Math.floor((rate1 + rate2 + rate3) / 3);
+
+				switch(parseInt(questProgressFlag)){
+					case 1:
+						if(sum < 50) sum = 50;
+						break;
+					case 2:
+						if(sum < 80) sum = 80;
+						break;
+				}
+
+				setData("rate" + questNo, sum / 100);
+				return String(sum + "%" +
+					" 艦戦:" + Math.min(cnt1, max1) + "/" + max1 +
+					" 機銃:" + Math.min(cnt2, max2) + "/" + max2 +
+					" ﾎﾞｰｷ:" + Math.min(cnt3, max3) + "/" + max3);
 			default:
 				//新任務が追加されたらupdate_questStateExの方に書き込む
 				var cnt = getData("cnt"+ questNo);

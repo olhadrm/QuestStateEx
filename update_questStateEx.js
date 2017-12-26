@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.72;
+VERSION = 1.73;
 
 /**
- * 任務進捗詳細Ver1.7.2β
+ * 任務進捗詳細Ver1.7.3β
  * Author:Nishisonic
- * LastUpdate:2017/11/03
+ * LastUpdate:2017/12/26
  *
  * ローカルで値を保持し、今○○回というのを表示します。
  *
@@ -172,8 +172,12 @@ var ITEM_TYPE1 = {
 
 /** カテゴリ */
 var ITEM_TYPE2 = {
+	/** 小口径主砲 */
+	S_MAIN_GUN:1,
 	/** 大口径主砲 */
 	L_MAIN_GUN:3,
+	/** 艦上戦闘機 */
+	FIGHTER:6,
 };
 
 /** 装備ID */
@@ -547,6 +551,27 @@ function update(type, data){
 							}
 							break;
 						case 3:
+							var hasCL = ships.stream().anyMatch(function(ship){ return ship.stype == SHIP_TYPE.CL });
+							var hasCVL = ships.stream().anyMatch(function(ship){ return ship.stype == SHIP_TYPE.CVL });
+							var hasAV = ships.stream().anyMatch(function(ship){ return ship.stype == SHIP_TYPE.AV });
+							// 北方海域警備を実施せよ！
+							if(hasCL && winRank != "B"){
+								switch(getData("mapInfoNo")){
+									case 1:
+										if(getData("flg873")) setData("cnt873_31",getData("cnt873_31") + 1);
+										break
+									case 2:
+										if(getData("flg873")) setData("cnt873_32",getData("cnt873_32") + 1);
+										break
+									case 3:
+										if(getData("flg873")) setData("cnt873_33",getData("cnt873_33") + 1);
+										break
+								}
+							}
+							//北方海域戦闘哨戒を実施せよ！
+							if(hasCL && hasCVL && hasAV && getData("mapInfoNo") == 5 && winRank != "B"){
+								if(getData("flg874")) setData("cnt874",getData("cnt874") + 1);
+							}
 							//敵北方艦隊主力を撃滅せよ！
 							if(getData("mapInfoNo") >= 3){
 								if(getData("flg241")) setData("cnt241",getData("cnt241") + 1);
@@ -735,7 +760,6 @@ function update(type, data){
 						}
 					});
 				}
-				//対空機銃量産
 				destroyItemMap.entrySet().stream().map(function(item){
 					return item.getValue();
 				}).map(function(itemDto){
@@ -743,21 +767,34 @@ function update(type, data){
 				}).forEach(function(type1){
 					switch(type1){
 						case ITEM_TYPE1.AA_GUN:
+							//対空機銃量産
 							if(getData("flg638")) setData("cnt638", getData("cnt638") + 1);
+							//工廠環境の整備
+							if(getData("flg674")) setData("cnt674", getData("cnt674") + 1);
+							//運用装備の統合整備
+							if(getData("flg675")) setData("cnt675_2", getData("cnt675_2") + 1);
 							break;
 						default:
 							break;
 					}
 				});
-				//新型艤装の継続研究
+
 				destroyItemMap.entrySet().stream().map(function(item){
 					return item.getValue();
 				}).map(function(itemDto){
 					return itemDto.type2;
 				}).forEach(function(type2){
 					switch(type2){
+						case ITEM_TYPE2.S_MAIN_GUN:
+							// 装備開発力の整備
+							if(getData("flg673")) setData("cnt673", getData("cnt673") + 1);
 						case ITEM_TYPE2.L_MAIN_GUN:
+							//新型艤装の継続研究
 							if(getData("flg663")) setData("cnt663", getData("cnt663") + 1);
+							break;
+						case ITEM_TYPE2.FIGHTER:
+							//運用装備の統合整備
+							if(getData("flg675")) setData("cnt675_1", getData("cnt675_1") + 1);
 							break;
 						default:
 							break;
@@ -894,9 +931,12 @@ function update(type, data){
 		var fuel = material.getFuel();
 		var ammo = material.getAmmo();
 		var steel = material.getMetal();
+		var bauxite = material.getBauxite();
 		setData("cntFuel_645",fuel);
 		setData("cntAmmo_645",ammo);
 		setData("cntSteel_663",steel);
+		setData("cntSteel_674",steel);
+		setData("cnt675_3",bauxite);
 	}
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
@@ -969,12 +1009,21 @@ function updateCheck() {
 }
 
 /** デイリーID */
-var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702];
+var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702,673,674];
 /** ウイークリーID (あ号作戦(ID:214)は除外) */
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
-var monthlyIDs = [249,256,257,259,264,265,266,311,628,424];
-/** クォータリーID(主力「陸攻」の調達(ID:643)と戦果拡張任務！「Z作戦」前段作戦(ID:854)と海上護衛総隊、遠征開始！(ID:426)と近海に侵入する敵潜を制圧せよ！(ID:428)は除外) */
+var monthlyIDs = [249,256,257,259,264,265,266,311,628,424,874];
+/**
+ * クォータリーID
+ * ・除外
+ * 主力「陸攻」の調達(ID:643)
+ * 戦果拡張任務！「Z作戦」前段作戦(ID:854)
+ * 海上護衛総隊、遠征開始！(ID:426)
+ * 近海に侵入する敵潜を制圧せよ！(ID:428)
+ * 北方海域警備を実施せよ！(ID:873)
+ * 運用装備の統合整備(ID:675)
+ **/
 var quarterlyIDs = [822,637,663,861,862];
 
 /**
@@ -1051,6 +1100,14 @@ function initializeQuarterlyCount() {
 	setData("cnt428_taisen",0);
 	setData("cnt428_kaikyo",0);
 	setData("cnt428_keikai",0);
+	//北方海域警備を実施せよ！
+	setData("cnt873_31",0);
+	setData("cnt873_32",0);
+	setData("cnt873_33",0);
+	//運用装備の統合整備
+	setData("cnt675_1",0);
+	setData("cnt675_2",0);
+	setData("cnt675_3",0);
 }
 
 /**
@@ -1182,6 +1239,11 @@ function initializeMaxCount(){
 	setData("max609",2);
 	//装備の改修強化
 	setData("max619",1);
+	//装備開発力の整備
+	setData("max673",4);
+	//工廠環境の整備
+	setData("max674",3);
+	setData("maxSteel_674",300);
 	//艦の「近代化改修」を実施せよ！
 	setData("max702",2);
 	/* ウィークリー */
@@ -1282,6 +1344,16 @@ function initializeMaxCount(){
 	setData("max428_taisen",2);
 	setData("max428_kaikyo",2);
 	setData("max428_keikai",2);
+	//北方海域警備を実施せよ！
+	setData("max873_31",1);
+	setData("max873_32",1);
+	setData("max873_33",1);
+	//運用装備の統合整備
+	setData("cnt675_1",6);
+	setData("cnt675_2",4);
+	setData("cnt675_3",800);
+	//北方海域戦闘哨戒を実施せよ！
+	setData("cnt874",2);
 }
 
 /**
@@ -1401,6 +1473,14 @@ function updateCount(){
 	if(getData("cnt428_taisen") == null || getData("cnt428_taisen") < 0) setData("cnt428_taisen",0);
 	if(getData("cnt428_kaikyo") == null || getData("cnt428_kaikyo") < 0) setData("cnt428_kaikyo",0);
 	if(getData("cnt428_keikai") == null || getData("cnt428_keikai") < 0) setData("cnt428_keikai",0);
+	//北方海域警備を実施せよ！
+	if(getData("cnt873_31") == null || getData("cnt873_31") < 0) setData("cnt873_31",0);
+	if(getData("cnt873_32") == null || getData("cnt873_32") < 0) setData("cnt873_32",0);
+	if(getData("cnt873_33") == null || getData("cnt873_33") < 0) setData("cnt873_33",0);
+	//運用装備の統合整備
+	if(getData("cnt675_1") == null || getData("cnt675_1") < 0) setData("cnt675_1",0);
+	if(getData("cnt675_2") == null || getData("cnt675_2") < 0) setData("cnt675_2",0);
+	if(getData("cnt675_3") == null || getData("cnt675_3") < 0) setData("cnt675_3",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }
