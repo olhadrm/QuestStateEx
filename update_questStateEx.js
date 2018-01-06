@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.73;
+VERSION = 1.74;
 
 /**
- * 任務進捗詳細Ver1.7.3β
+ * 任務進捗詳細Ver1.7.4β
  * Author:Nishisonic
- * LastUpdate:2017/12/26
+ * LastUpdate:2018/01/06
  *
  * ローカルで値を保持し、今○○回というのを表示します。
  *
@@ -264,6 +264,14 @@ var SHIP_ID = {
 	HYUGA:87,
 	/** 日向改 */
 	HYUGA_R:88,
+	/** 長波改二 */
+	NAGANAMI_R2:543,
+	/** 朝霜改 */
+	ASASHIMO_R:344,
+	/** 高波改 */
+	TAKANAMI_R:345,
+	/** 沖波改 */
+	OKINAMI_R:359,
 };
 
 /** 任務ID */
@@ -568,10 +576,6 @@ function update(type, data){
 										break
 								}
 							}
-							//北方海域戦闘哨戒を実施せよ！
-							if(hasCL && hasCVL && hasAV && getData("mapInfoNo") == 5 && winRank != "B"){
-								if(getData("flg874")) setData("cnt874",getData("cnt874") + 1);
-							}
 							//敵北方艦隊主力を撃滅せよ！
 							if(getData("mapInfoNo") >= 3){
 								if(getData("flg241")) setData("cnt241",getData("cnt241") + 1);
@@ -652,6 +656,14 @@ function update(type, data){
 							//南方海域珊瑚諸島沖の制空権を握れ！
 							if(getData("mapInfoNo") == 2 && winRank == "S"){
 								if(getData("flg243")) setData("cnt243",getData("cnt243") + 1);
+							}
+							//精鋭「三一駆」、鉄底海域に突入せよ！
+							if(getData("mapInfoNo") == 4 && winRank == "S"){
+								var naganami = ships.stream().anyMatch(function(ship){ return ship.shipId == SHIP_ID.NAGANAMI_R2 });
+								var no31 = ships.stream().anyMatch(function(ship){ return ship.shipId == SHIP_ID.TAKANAMI_R || ship.shipId == SHIP_ID.OKINAMI_R || ship.shipId == SHIP_ID.ASASHIMO_R });
+								if(naganami && no31){
+									if(getData("flg243")) setData("cnt243",getData("cnt243") + 1);
+								}
 							}
 							break;
 						case 6:
@@ -1013,7 +1025,7 @@ var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,
 /** ウイークリーID (あ号作戦(ID:214)は除外) */
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
-var monthlyIDs = [249,256,257,259,264,265,266,311,628,424,874];
+var monthlyIDs = [249,256,257,259,264,265,266,311,628,424,875];
 /**
  * クォータリーID
  * ・除外
@@ -1315,45 +1327,45 @@ function initializeMaxCount(){
 	//輸送船団護衛を強化せよ！
 	setData("max424",4);
 	/* クォータリー */
-	//沖ノ島海域迎撃戦
-	setData("max822",2);
+	//海上護衛総隊、遠征開始！
+	setData("max426_keibi",1);
+	setData("max426_taisen",1);
+	setData("max426_kaijo",1);
+	setData("max426_teisatsu",1);
+	//近海に侵入する敵潜を制圧せよ！
+	setData("max428_taisen",2);
+	setData("max428_kaikyo",2);
+	setData("max428_keikai",2);
 	//「熟練搭乗員」養成
 	setData("max637",1);
 	//主力「陸攻」の調達
 	setData("maxScrapType0FighterModel21_643",2);
 	setData("maxType97TorpedoBomber_643",2);
 	setData("maxType96LandBasedAttackAircraft_643",1);
+	//新型艤装の継続研究
+	setData("max663",10);
+	setData("maxSteel_663",18000);
+	//運用装備の統合整備
+	setData("cnt675_1",6);
+	setData("cnt675_2",4);
+	setData("cnt675_3",800);
+	//沖ノ島海域迎撃戦
+	setData("max822",2);
 	//戦果拡張任務！「Z作戦」前段作戦
 	setData("max854_2-4",1);
 	setData("max854_6-1",1);
 	setData("max854_6-3",1);
 	setData("max854_6-4",1);
-	//新型艤装の継続研究
-	setData("max663",10);
-	setData("maxSteel_663",18000);
-	//海上護衛総隊、遠征開始！
-	setData("max426_keibi",1);
-	setData("max426_taisen",1);
-	setData("max426_kaijo",1);
-	setData("max426_teisatsu",1);
 	//強行輸送艦隊、抜錨！
 	setData("max861",2);
 	//前線の航空偵察を実施せよ！
 	setData("max862",2);
-	//近海に侵入する敵潜を制圧せよ！
-	setData("max428_taisen",2);
-	setData("max428_kaikyo",2);
-	setData("max428_keikai",2);
 	//北方海域警備を実施せよ！
 	setData("max873_31",1);
 	setData("max873_32",1);
 	setData("max873_33",1);
-	//運用装備の統合整備
-	setData("cnt675_1",6);
-	setData("cnt675_2",4);
-	setData("cnt675_3",800);
-	//北方海域戦闘哨戒を実施せよ！
-	setData("cnt874",2);
+	//精鋭「三一駆」、鉄底海域に突入せよ！
+	setData("max875",2);
 }
 
 /**
