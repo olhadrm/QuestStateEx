@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.74;
+VERSION = 1.75;
 
 /**
- * 任務進捗詳細Ver1.7.4β
+ * 任務進捗詳細Ver1.7.5
  * Author:Nishisonic
- * LastUpdate:2018/01/06
+ * LastUpdate:2018/02/16
  *
  * ローカルで値を保持し、今○○回というのを表示します。
  *
@@ -41,7 +41,7 @@ var MAX_LV = 10;
 /** 艦種 */
 var SHIP_TYPE = {
 	/** 海防艦(造語) */
-	EE:1,
+	DE:1,
 	/** 駆逐艦 */
 	DD:2,
 	/** 軽巡洋艦 */
@@ -174,8 +174,12 @@ var ITEM_TYPE1 = {
 var ITEM_TYPE2 = {
 	/** 小口径主砲 */
 	S_MAIN_GUN:1,
+	/** 中口径主砲 */
+	M_MAIN_GUN:2,
 	/** 大口径主砲 */
 	L_MAIN_GUN:3,
+	/** 副砲 */
+	SUB_GUN:4,
 	/** 艦上戦闘機 */
 	FIGHTER:6,
 };
@@ -800,9 +804,18 @@ function update(type, data){
 						case ITEM_TYPE2.S_MAIN_GUN:
 							// 装備開発力の整備
 							if(getData("flg673")) setData("cnt673", getData("cnt673") + 1);
+							break;
+						case ITEM_TYPE2.M_MAIN_GUN:
+							// 装備開発力の集中整備
+							if(getData("flg676")) setData("cntMgun676", getData("cntMgun676") + 1);
+							break;
 						case ITEM_TYPE2.L_MAIN_GUN:
 							//新型艤装の継続研究
 							if(getData("flg663")) setData("cnt663", getData("cnt663") + 1);
+							break;
+						case ITEM_TYPE2.SUB_GUN:
+							// 装備開発力の集中整備
+							if(getData("flg676")) setData("cntSub676", getData("cntSub676") + 1);
 							break;
 						case ITEM_TYPE2.FIGHTER:
 							//運用装備の統合整備
@@ -818,13 +831,22 @@ function update(type, data){
 					return itemDto.slotitemId;
 				}).forEach(function(slotitemId){
 					switch(slotitemId){
-						//主力「陸攻」の調達
 						case ITEM_ID.TYPE0_FIGHTER_MODEL21: //零式艦戦21型
+							//主力「陸攻」の調達
 							if(getData("flg643")) setData("cntScrapType0FighterModel21_643", getData("cntScrapType0FighterModel21_643") + 1);
+							//主力艦上戦闘機の更新
+							if(getData("flg678")) setData("cntScrap21_678", getData("cntScrap21_678") + 1);
 							break;
 						//「洋上補給」物資の調達
 						case ITEM_ID.TYPE3_SHELL: //三式弾
 							if(getData("flg645")) setData("cntScrapType3Shell_645", getData("cntScrapType3Shell_645") + 1);
+							break;
+						//主力艦上戦闘機の更新
+						case ITEM_ID.TYPE96_FIGHTER: //九六式艦戦
+							if(getData("flg678")) setData("cntScrap96_678", getData("cntScrap96_678") + 1);
+							break;
+						case ITEM_ID.DRUM_CANISTERS: // ドラム缶
+							if(getData("flg676")) setData("cntDrum676", getData("cntDrum676") + 1);
 							break;
 						default:
 							break;
@@ -948,7 +970,24 @@ function update(type, data){
 		setData("cntAmmo_645",ammo);
 		setData("cntSteel_663",steel);
 		setData("cntSteel_674",steel);
+		setData("cntSteel677",steel);
 		setData("cnt675_3",bauxite);
+		setData("cntBauxite678",bauxite);
+		setData("cntSteel676",steel);
+	}
+	//主力艦上戦闘機の更新
+	setData("cntSecretary678",0);
+	var secretary = GlobalContext.secretary;
+	if(secretary instanceof ShipDto){
+		var item2 = secretary.item2;
+		if(item2.size() > 2 && item2.get(0) instanceof ItemDto && item2.get(1) instanceof ItemDto){
+			if(item2.get(0).slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL52){
+				if(getData("flg678")) setData("cntSecretary678",getData("cntSecretary678") + 1);
+			}
+			if(item2.get(1).slotitemId == ITEM_ID.TYPE0_FIGHTER_MODEL52){
+				if(getData("flg678")) setData("cntSecretary678",getData("cntSecretary678") + 1);
+			}
+		}
 	}
 	//任務一覧の更新
 	ApplicationMain.main.getQuestTable().update();
@@ -1022,7 +1061,7 @@ function updateCheck() {
 
 /** デイリーID */
 var dailyIDs = [201,216,210,211,218,212,226,230,303,304,402,403,503,504,605,606,607,608,609,619,702,673,674];
-/** ウイークリーID (あ号作戦(ID:214)は除外) */
+/** ウイークリーID (あ号作戦(ID:214)と装備開発力の集中整備(ID:676)と継戦支援能力の整備(ID:677)は除外) */
 var weeklyIDs = [220,213,221,228,229,241,242,243,261,302,404,410,411,703,613,638];
 /** マンスリーID (精鋭「艦戦」隊の新編成(ID:626)と「洋上補給」物資の調達(ID:645)は除外) */
 var monthlyIDs = [249,256,257,259,264,265,266,311,628,424,875];
@@ -1035,6 +1074,7 @@ var monthlyIDs = [249,256,257,259,264,265,266,311,628,424,875];
  * 近海に侵入する敵潜を制圧せよ！(ID:428)
  * 北方海域警備を実施せよ！(ID:873)
  * 運用装備の統合整備(ID:675)
+ * 主力艦上戦闘機の更新(ID:678)
  **/
 var quarterlyIDs = [822,637,663,861,862];
 
@@ -1063,6 +1103,16 @@ function initializeWeeklyCount() {
 	setData("cntSWin214", 0);
 	setData("cntBoss214", 0);
 	setData("cntBossWin214", 0);
+	//継戦支援能力の整備
+	setData("flg677",false);
+	setData("cntLgun677", 0); // 大口径主砲
+	setData("cntPlane677", 0); // 水上偵察機
+	setData("cntTorepdo677", 0); // 魚雷
+	//装備開発力の集中整備
+	setData("flg676",false);
+	setData("cntMgun676",0);
+	setData("cntSub676",0);
+	setData("cntDrum676",0);
 }
 
 /**
@@ -1120,6 +1170,10 @@ function initializeQuarterlyCount() {
 	setData("cnt675_1",0);
 	setData("cnt675_2",0);
 	setData("cnt675_3",0);
+	//主力艦上戦闘機の更新
+	setData("cntScrap96_678",0);
+	setData("cntScrap21_678",0);
+	setData("cntSecretary678",0);
 }
 
 /**
@@ -1296,6 +1350,16 @@ function initializeMaxCount(){
 	setData("max613",24);
 	//対空機銃量産
 	setData("max638",6);
+	//装備開発力の集中整備
+	setData("maxMgun676",3);
+	setData("maxSub676",3);
+	setData("maxDrum676",1);
+	setData("maxSteel676",2400);
+	//継戦支援能力の整備
+	setData("maxLgun677", 4);
+	setData("maxPlane677", 2);
+	setData("maxTorepdo677", 3);
+	setData("maxSteel677",3600);
 	/* マンスリー */
 	//「第五戦隊」出撃せよ！
 	setData("max249",1);
@@ -1346,9 +1410,9 @@ function initializeMaxCount(){
 	setData("max663",10);
 	setData("maxSteel_663",18000);
 	//運用装備の統合整備
-	setData("cnt675_1",6);
-	setData("cnt675_2",4);
-	setData("cnt675_3",800);
+	setData("max675_1",6);
+	setData("max675_2",4);
+	setData("max675_3",800);
 	//沖ノ島海域迎撃戦
 	setData("max822",2);
 	//戦果拡張任務！「Z作戦」前段作戦
@@ -1366,6 +1430,11 @@ function initializeMaxCount(){
 	setData("max873_33",1);
 	//精鋭「三一駆」、鉄底海域に突入せよ！
 	setData("max875",2);
+	//主力艦上戦闘機の更新
+	setData("maxScrap96_678",3);
+	setData("maxScrap21_678",5);
+	setData("maxBauxite678",4000);
+	setData("maxSecretary678",2);
 }
 
 /**
@@ -1493,6 +1562,19 @@ function updateCount(){
 	if(getData("cnt675_1") == null || getData("cnt675_1") < 0) setData("cnt675_1",0);
 	if(getData("cnt675_2") == null || getData("cnt675_2") < 0) setData("cnt675_2",0);
 	if(getData("cnt675_3") == null || getData("cnt675_3") < 0) setData("cnt675_3",0);
+	//継戦支援能力の整備
+	if(getData("cntPlane677") == null || getData("cntPlane677") < 0) setData("cntPlane677",0);
+	if(getData("cntPlane677") == null || getData("cntPlane677") < 0) setData("cntPlane677",0);
+	if(getData("cntPlane677") == null || getData("cntPlane677") < 0) setData("cntPlane677",0);
+	//主力艦上戦闘機の更新
+	if(getData("cntScrap96_678") == null || getData("cntScrap96_678") < 0) setData("cntScrap96_678",0);
+	if(getData("cntScrap21_678") == null || getData("cntScrap21_678") < 0) setData("cntScrap21_678",0);
+	if(getData("cntBauxite678") == null || getData("cntBauxite678") < 0) setData("cntBauxite678",0);
+	if(getData("cntSecretary678") == null || getData("cntSecretary678") < 0) setData("cntSecretary678",0);
+	//装備開発力の集中整備
+	if(getData("cntMgun676") == null || getData("cntMgun676") < 0) setData("cntMgun676",0);
+	if(getData("cntSub676") == null  || getData("cntSub676") < 0) setData("cntSub676",0);
+	if(getData("cntDrum676") == null || getData("cntDrum676") < 0) setData("cntDrum676",0);
 	//任務クリアに必要な値を更新
 	initializeMaxCount();
 }
