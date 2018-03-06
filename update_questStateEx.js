@@ -1,10 +1,10 @@
 /** 現在のバージョン */
-VERSION = 1.75;
+VERSION = 1.76;
 
 /**
- * 任務進捗詳細Ver1.7.5
+ * 任務進捗詳細Ver1.7.6
  * Author:Nishisonic
- * LastUpdate:2018/02/16
+ * LastUpdate:2018/03/06
  *
  * ローカルで値を保持し、今○○回というのを表示します。
  *
@@ -883,6 +883,8 @@ function update(type, data){
 						case "海上護衛任務":
 							//輸送船団護衛を強化せよ！
 							if(getData("flg424")) setData("cnt424",getData("cnt424") + 1);
+							//海上通商航路の警戒を厳とせよ！
+							if(getData("flg426")) setData("cnt426_kaijo",getData("cnt426_kaijo") + 1);
 							break;
 						case "警備任務":
 							//海上通商航路の警戒を厳とせよ！
@@ -893,10 +895,6 @@ function update(type, data){
 							if(getData("flg426")) setData("cnt426_taisen",getData("cnt426_taisen") + 1);
 							//近海に侵入する敵潜を制圧せよ！
 							if(getData("flg428")) setData("cnt428_taisen",getData("cnt428_taisen") + 1);
-							break;
-						case "海上護衛任務":
-							//海上通商航路の警戒を厳とせよ！
-							if(getData("flg426")) setData("cnt426_kaijo",getData("cnt426_kaijo") + 1);
 							break;
 						case "強行偵察任務":
 							//海上通商航路の警戒を厳とせよ！
