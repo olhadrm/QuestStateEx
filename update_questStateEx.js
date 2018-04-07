@@ -13,6 +13,7 @@ Item = Java.type("logbook.internal.Item")
 ZonedDateTime = Java.type("java.time.ZonedDateTime")
 ZoneId = Java.type("java.time.ZoneId")
 Arrays = Java.type("java.util.Arrays")
+List = Java.type("java.util.List")
 Map = Java.type("java.util.Map")
 Optional = Java.type("java.util.Optional")
 TreeMap = Java.type("java.util.TreeMap")
@@ -134,11 +135,13 @@ function saveLastUpdateQuestTime(time) {
  */
 function saveQuestState(data) {
     var json = data.jsonObject.api_data
-    Java.from(json.api_list).filter(function (quest) {
-        return (quest.api_type | 0) !== QUEST_TYPE.ONCE
-    }).forEach(function (quest) {
-        setData("IsActive" + quest.api_no, (quest.api_state | 0) === QUEST_STATE.ACTIVE || (quest.api_state | 0) === QUEST_STATE.COMPLETE)
-    })
+    if (json.api_list instanceof List) {
+        Java.from(json.api_list).filter(function (quest) {
+            return (quest.api_type | 0) !== QUEST_TYPE.ONCE
+        }).forEach(function (quest) {
+            setData("IsActive" + quest.api_no, (quest.api_state | 0) === QUEST_STATE.ACTIVE || (quest.api_state | 0) === QUEST_STATE.COMPLETE)
+        })
+    }
 }
 
 /**
@@ -308,7 +311,7 @@ function addCountForBattleResultPart(data) {
     // #endregion
     var rank = lastBattleDto.rank
     // #region 全般
-    addQuestCount(210, 1) // 敵艦隊を10回邀撃せよ！
+    addQuestCount(210) // 敵艦隊を10回邀撃せよ！
     if (isEqualEvent(EVENT_ID.NORMAL_BATTLE) || isEqualEvent(EVENT_ID.BOSS_BATTLE) && isWin(lastBattleDto.rank)) {
         addQuestCount(216, 1) // 敵艦隊主力を撃滅せよ！
     }
@@ -748,57 +751,59 @@ function updateQuestCount() {
  */
 function adjustQuestCount(data) {
     var json = data.jsonObject.api_data
-    Java.from(json.api_list).filter(function (quest) {
-        return quest.api_type !== QUEST_TYPE.ONCE
-    }).filter(function (quest) {
-        return quest.api_no in QUEST_DATA
-    }).forEach(function (quest) {
-        var conditions = QUEST_DATA[quest.api_no]
-        conditions.forEach(function (condition, i) {
-            switch (quest.api_progress_flag.intValue()) {
-                case QUEST_PROGRESS_FLAG.NONE:
-                    switch (quest.api_state.intValue()) {
-                        case QUEST_STATE.NOT_ORDER:
-                        case QUEST_STATE.ACTIVE:
-                            if (condition.isAdjust) {
-                                // 50%↑
-                                if (getQuestCount(quest.api_no, i + 1) >= Math.ceil(condition.max * 0.5)) {
-                                    saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.5) - 1, i + 1, true)
+    if (json.api_list instanceof List) {
+        Java.from(json.api_list).filter(function (quest) {
+            return quest.api_type !== QUEST_TYPE.ONCE
+        }).filter(function (quest) {
+            return quest.api_no in QUEST_DATA
+        }).forEach(function (quest) {
+            var conditions = QUEST_DATA[quest.api_no]
+            conditions.forEach(function (condition, i) {
+                switch (quest.api_progress_flag.intValue()) {
+                    case QUEST_PROGRESS_FLAG.NONE:
+                        switch (quest.api_state.intValue()) {
+                            case QUEST_STATE.NOT_ORDER:
+                            case QUEST_STATE.ACTIVE:
+                                if (condition.isAdjust) {
+                                    // 50%↑
+                                    if (getQuestCount(quest.api_no, i + 1) >= Math.ceil(condition.max * 0.5)) {
+                                        saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.5) - 1, i + 1, true)
+                                    }
                                 }
+                                break
+                            case QUEST_STATE.COMPLETE:
+                                saveQuestCount(quest.api_no, condition.max, i + 1, true)
+                                break
+                        }
+                        break
+                    case QUEST_PROGRESS_FLAG.HALF:
+                        if (condition.isAdjust) {
+                            // 50%↓
+                            if (getQuestCount(quest.api_no, i + 1) < Math.ceil(condition.max * 0.5)) {
+                                saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.5), i + 1, true)
                             }
-                            break
-                        case QUEST_STATE.COMPLETE:
-                            saveQuestCount(quest.api_no, condition.max, i + 1, true)
-                            break
-                    }
-                    break
-                case QUEST_PROGRESS_FLAG.HALF:
-                    if (condition.isAdjust) {
-                        // 50%↓
-                        if (getQuestCount(quest.api_no, i + 1) < Math.ceil(condition.max * 0.5)) {
-                            saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.5), i + 1, true)
+                            // 80%↑
+                            if (getQuestCount(quest.api_no, i + 1) > Math.ceil(condition.max * 0.8)) {
+                                saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.8) - 1, i + 1, true)
+                            }
                         }
-                        // 80%↑
-                        if (getQuestCount(quest.api_no, i + 1) > Math.ceil(condition.max * 0.8)) {
-                            saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.8) - 1, i + 1, true)
+                        break
+                    case QUEST_PROGRESS_FLAG.EIGHTY:
+                        if (condition.isAdjust) {
+                            // 80%↓
+                            if (getQuestCount(quest.api_no, i + 1) < Math.ceil(condition.max * 0.8)) {
+                                saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.8), i + 1, true)
+                            }
+                            // 100%↑
+                            if (getQuestCount(quest.api_no, i + 1) >= condition.max) {
+                                saveQuestCount(quest.api_no, condition.max - 1, i + 1, true)
+                            }
                         }
-                    }
-                    break
-                case QUEST_PROGRESS_FLAG.EIGHTY:
-                    if (condition.isAdjust) {
-                        // 80%↓
-                        if (getQuestCount(quest.api_no, i + 1) < Math.ceil(condition.max * 0.8)) {
-                            saveQuestCount(quest.api_no, Math.ceil(condition.max * 0.8), i + 1, true)
-                        }
-                        // 100%↑
-                        if (getQuestCount(quest.api_no, i + 1) >= condition.max) {
-                            saveQuestCount(quest.api_no, condition.max - 1, i + 1, true)
-                        }
-                    }
-                    break
-            }
+                        break
+                }
+            })
         })
-    })
+    }
 }
 
 /**

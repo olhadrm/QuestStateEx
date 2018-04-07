@@ -1,11 +1,11 @@
 /**
- * 任務進捗詳細 Ver.2.0.1
+ * 任務進捗詳細 Ver.2.0.2
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/04/07
+ * LastUpdate:2018/04/08
  */
 
 /** 現在のバージョン */
-VERSION = 2.01
+VERSION = 2.02
 
 data_prefix = "QSE.Ver2."
 
@@ -268,15 +268,15 @@ var QUEST_DATA = {
         /** 敵通商破壊主力艦隊(1-5ボス)A勝利 */
         new QuestData(3, true, true, RESET.WEEKLY),
     ],
-    /** [264]海上護衛強化月間 */
+    /** [264]「空母機動部隊」西へ！ */
     264: [
-        /** 敵通商破壊主力艦隊(1-5ボス)A勝利 */
-        new QuestData(10, true, true, RESET.MONTHLY),
-    ],
-    /** [265]「空母機動部隊」西へ！ */
-    265: [
         /** 東方主力艦隊(4-2ボス)S勝利 */
         new QuestData(1, true, true, RESET.MONTHLY),
+    ],
+    /** [265]海上護衛強化月間 */
+    265: [
+        /** 敵通商破壊主力艦隊(1-5ボス)A勝利 */
+        new QuestData(10, true, true, RESET.MONTHLY),
     ],
     /** [266]「水上反撃部隊」突入せよ！ */
     266: [
