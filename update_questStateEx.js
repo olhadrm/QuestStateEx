@@ -725,11 +725,7 @@ function updateQuestCount() {
         }
         // ウィークリー
         if (!lastUpdateQuestTime.minusDays((lastUpdateQuestTime.dayOfWeek.value - 1) % 7).equals(nowTime.minusDays((nowTime.dayOfWeek.value - 1) % 7))) {
-            resetQuestCountOfDaily()
-        }
-        // マンスリー
-        if (!lastUpdateQuestTime.withDayOfYear(1).equals(nowTime.withDayOfYear(1))) {
-            resetQuestCountOfMonthly()
+            resetQuestCountOfWeekly()
         }
         // マンスリー
         if (!lastUpdateQuestTime.withDayOfYear(1).equals(nowTime.withDayOfYear(1))) {
@@ -737,7 +733,7 @@ function updateQuestCount() {
         }
         // クォータリー
         if (!lastUpdateQuestTime.withDayOfYear(1).withMonth(lastUpdateQuestTime.month.value % 3).equals(nowTime.withDayOfYear(1).withMonth(nowTime.month.value % 3))) {
-            resetQuestCountOfMonthly()
+            resetQuestCountOfQuarterly()
         }
     } else {
         initQuestCount()
