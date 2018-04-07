@@ -1,11 +1,11 @@
 /**
- * 任務進捗詳細 Ver.2
+ * 任務進捗詳細 Ver.2.0.1
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/04/03
+ * LastUpdate:2018/04/07
  */
 
 /** 現在のバージョン */
-VERSION = 2
+VERSION = 2.01
 
 data_prefix = "QSE.Ver2."
 
@@ -440,6 +440,11 @@ var QUEST_DATA = {
     613: [
         /** 廃棄(一括は1回) */
         new QuestData(24, true, true, RESET.WEEKLY),
+    ],
+    /** [619]装備の改修強化 */
+    619: [
+        /** 改修(失敗可) */
+        new QuestData(1, true, true, RESET.DAILY),
     ],
     /** [626]精鋭「艦戦」隊の新編成 */
     626: [
