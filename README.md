@@ -14,7 +14,7 @@
 
 * 動作イメージ
 
-![](http://i.imgur.com/bWsxfhh.png)
+![動作イメージ](http://i.imgur.com/bWsxfhh.png)
 
 ## 動作環境
 
@@ -24,10 +24,8 @@
 
 ## 開発環境・言語
 
-Javascript(Nashorn) で開発しています。開発環境は Windows 10 Pro + Java 8 Update 144 + Visual Studio Code 1.17.2 です。
+Javascript(Nashorn) で開発しています。開発環境は Windows 10 Pro + Java 8 + Visual Studio Code です。
 
 ## ライセンス
 
 * [The MIT License (MIT)](https://docs.google.com/spreadsheets/d/1gSYgCPTMV7_bDerWTs_KCgVnhdaJQnFVFXcw5cFCqos/edit#gid=761755938)
-
-MIT ライセンスの下で公開する、オープンソース / フリーソフトウェアです。
