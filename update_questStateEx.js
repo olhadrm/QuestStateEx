@@ -718,25 +718,21 @@ function updateSecretary() {
 function updateQuestCount() {
     var lastUpdateQuestTime = getLastUpdateQuestTime()
     var nowTime = getNowDateTime()
-    if (lastUpdateQuestTime instanceof ZonedDateTime) {
-        // デイリー
-        if (!lastUpdateQuestTime.equals(nowTime)) {
-            resetQuestCountOfDaily()
-        }
-        // ウィークリー
-        if (!lastUpdateQuestTime.minusDays((lastUpdateQuestTime.dayOfWeek.value - 1) % 7).equals(nowTime.minusDays((nowTime.dayOfWeek.value - 1) % 7))) {
-            resetQuestCountOfWeekly()
-        }
-        // マンスリー
-        if (!lastUpdateQuestTime.withDayOfYear(1).equals(nowTime.withDayOfYear(1))) {
-            resetQuestCountOfMonthly()
-        }
-        // クォータリー
-        if (!lastUpdateQuestTime.withDayOfYear(1).withMonth(lastUpdateQuestTime.month.value % 3).equals(nowTime.withDayOfYear(1).withMonth(nowTime.month.value % 3))) {
-            resetQuestCountOfQuarterly()
-        }
-    } else {
-        initQuestCount()
+    // デイリー
+    if (!lastUpdateQuestTime.equals(nowTime)) {
+        resetQuestCountOfDaily()
+    }
+    // ウィークリー
+    if (!lastUpdateQuestTime.minusDays((lastUpdateQuestTime.dayOfWeek.value - 1) % 7).equals(nowTime.minusDays((nowTime.dayOfWeek.value - 1) % 7))) {
+        resetQuestCountOfWeekly()
+    }
+    // マンスリー
+    if (!lastUpdateQuestTime.withDayOfYear(1).equals(nowTime.withDayOfYear(1))) {
+        resetQuestCountOfMonthly()
+    }
+    // クォータリー
+    if (!lastUpdateQuestTime.withDayOfYear(1).withMonth(lastUpdateQuestTime.month.value % 3).equals(nowTime.withDayOfYear(1).withMonth(nowTime.month.value % 3))) {
+        resetQuestCountOfQuarterly()
     }
     saveLastUpdateQuestTime(nowTime)
 }
@@ -803,21 +799,6 @@ function adjustQuestCount(data) {
 }
 
 /**
- * 全てのカウントを0にする(初期設定)
- */
-function initQuestCount() {
-    Object.keys(QUEST_DATA).map(function (id) {
-        return QUEST_DATA[id].map(function (quest, i) {
-            return [id, i + 1, quest]
-        })
-    }).reduce(function (acc, val) {
-        return acc.concat(val)
-    }, []).forEach(function (data) {
-        saveQuestCount(data[0], 0, data[1])
-    })
-}
-
-/**
  * デイリーのカウントをリセットする
  */
 function resetQuestCountOfDaily() {
@@ -830,7 +811,7 @@ function resetQuestCountOfDaily() {
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
-        saveQuestCount(data[0], 0, data[1])
+        saveQuestCount(data[0], 0, data[1], true)
     })
 }
 
@@ -847,7 +828,7 @@ function resetQuestCountOfWeekly() {
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
-        saveQuestCount(data[0], 0, data[1])
+        saveQuestCount(data[0], 0, data[1], true)
     })
 }
 
@@ -864,7 +845,7 @@ function resetQuestCountOfMonthly() {
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
-        saveQuestCount(data[0], 0, data[1])
+        saveQuestCount(data[0], 0, data[1], true)
     })
 }
 
@@ -881,7 +862,7 @@ function resetQuestCountOfQuarterly() {
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
-        saveQuestCount(data[0], 0, data[1])
+        saveQuestCount(data[0], 0, data[1], true)
     })
 }
 
