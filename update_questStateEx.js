@@ -518,19 +518,35 @@ function addCountForDestroyItem2Part(data) {
         if (isMatchSecretary(628)) {
             addQuestCount(628, getLength(slotitemId[21]))
         }
-        addQuestCount(638, getLength(type2[21])) // 対空機銃量産
-        addQuestCount(674, getLength(type2[21]), 1) // 工廠環境の整備[機銃]
-        addQuestCount(675, getLength(type2[21]), 2) // 運用装備の統合整備[機銃]
-        addQuestCount(673, getLength(type2[1])) // 装備開発力の整備
-        addQuestCount(676, getLength(type2[2]), 1) // 装備開発力の集中整備[中口径主砲]
-        addQuestCount(663, getLength(type2[3]), 1) // 新型艤装の継続研究[大口径主砲]
-        addQuestCount(676, getLength(type2[4]), 2) // 装備開発力の集中整備[副砲]
-        addQuestCount(675, getLength(type2[6]), 1) // 運用装備の統合整備[艦上戦闘機]
-        addQuestCount(643, getLength(slotitemId[20]), 1) // 主力「陸攻」の調達[零式艦戦21型]
-        addQuestCount(678, getLength(slotitemId[20]), 2) // 主力艦上戦闘機の更新[零式艦戦21型]
-        addQuestCount(645, getLength(slotitemId[35]), 1) // 「洋上補給」物資の調達[三式弾]
-        addQuestCount(678, getLength(slotitemId[19]), 1) // 主力艦上戦闘機の更新[九六式艦戦]
-        addQuestCount(676, getLength(slotitemId[75]), 3) // 装備開発力の集中整備[ドラム缶(輸送用)]
+        // 対空機銃量産
+        addQuestCount(638, getLength(type2[21]))
+        // 主力「陸攻」の調達
+        addQuestCount(643, getLength(slotitemId[20]), 1) // 零式艦戦21型
+        // 「洋上補給」物資の調達
+        addQuestCount(645, getLength(slotitemId[35]), 1) // 三式弾
+        // 新型艤装の継続研究
+        addQuestCount(663, getLength(type2[3]), 1) // 大口径主砲
+        // 装備開発力の整備
+        addQuestCount(673, getLength(type2[1])) // 小口径主砲
+        // 工廠環境の整備
+        addQuestCount(674, getLength(type2[21]), 1) // 機銃
+        // 運用装備の統合整備
+        addQuestCount(675, getLength(type2[6]), 1) // 艦上戦闘機
+        addQuestCount(675, getLength(type2[21]), 2) // 機銃
+        // 装備開発力の集中整備
+        addQuestCount(676, getLength(type2[2]), 1) // 中口径主砲
+        addQuestCount(676, getLength(type2[4]), 2) // 副砲
+        addQuestCount(676, getLength(slotitemId[75]), 3) // ドラム缶(輸送用)
+        // 継戦支援能力の整備
+        addQuestCount(677, getLength(type2[3]), 1) // 大口径主砲
+        addQuestCount(677, getLength(type2[10]), 2) // 水上偵察機
+        addQuestCount(677, getLength(type2[5]) + getLength(type2[32]), 3) // 魚雷
+        // 主力艦上戦闘機の更新
+        addQuestCount(678, getLength(slotitemId[19]), 1) // 九六式艦戦
+        addQuestCount(678, getLength(slotitemId[20]), 2) // 零式艦戦21型
+        // 対空兵装の整備拡充
+        addQuestCount(680, getLength(type2[21]), 1) // 機銃
+        addQuestCount(680, getLength(type2[12]) + getLength(type2[13]) + getLength(type2[93]), 2) // 電探
     }
     addQuestCount(613)
 }
@@ -702,6 +718,7 @@ function updateMaterial() {
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
+        saveQuestCount(680, bauxite, 3, true) // 対空兵装の整備拡充[ボーキサイト]
     }
 }
 
