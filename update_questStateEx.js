@@ -29,8 +29,8 @@ Collectors = Java.type("java.util.stream.Collectors")
 function update(type, data) {
     switch (type) {
         case DataType.QUEST_LIST:               // 任務
-            saveQuestState(data)
             updateQuestCount()
+            saveQuestState(data)
             adjustQuestCount(data)
             break
         case DataType.PORT:                     // 母港
@@ -85,7 +85,7 @@ function update(type, data) {
     updateMaterial()
     // 秘書艦更新
     updateSecretary()
-    //任務一覧の更新
+    // 任務一覧更新
     ApplicationMain.main.questTable.update()
 }
 
@@ -829,6 +829,7 @@ function resetQuestCountOfDaily() {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
+        notOrder(data[0])
     })
 }
 
@@ -846,6 +847,7 @@ function resetQuestCountOfWeekly() {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
+        notOrder(data[0])
     })
 }
 
@@ -863,6 +865,7 @@ function resetQuestCountOfMonthly() {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
+        notOrder(data[0])
     })
 }
 
@@ -880,6 +883,7 @@ function resetQuestCountOfQuarterly() {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
+        notOrder(data[0])
     })
 }
 
