@@ -311,9 +311,15 @@ function addCountForBattleResultPart(data) {
     // #endregion
     var rank = lastBattleDto.rank
     // #region 全般
+    if(isWin(lastBattleDto.rank)){
+        addQuestCount(201) // 敵艦隊を撃破せよ！
+    }
     addQuestCount(210) // 敵艦隊を10回邀撃せよ！
     if (isEqualEvent(EVENT_ID.NORMAL_BATTLE) || isEqualEvent(EVENT_ID.BOSS_BATTLE) && isWin(lastBattleDto.rank)) {
-        addQuestCount(216, 1) // 敵艦隊主力を撃滅せよ！
+        addQuestCount(216) // 敵艦隊主力を撃滅せよ！
+    }
+    if(isWinS(lastBattleDto.rank)){
+        addQuestCount(214, 1, 2) // あ号作戦[S勝利]
     }
     if (isEqualEvent(EVENT_ID.BOSS_BATTLE)) {
         addQuestCount(214, 1, 3) // あ号作戦[ボス]
