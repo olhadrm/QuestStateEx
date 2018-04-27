@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.0.7
+ * 任務進捗詳細 Ver.2.0.8
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/04/23
+ * LastUpdate:2018/04/28
  */
 
 data_prefix = "QSE.Ver2."
@@ -144,6 +144,14 @@ var RESET = {
     MONTHLY: 3,
     /** クォータリー */
     QUARTRELY: 4,
+    /** カウント=最大値でないならデイリー */
+    NOT_SATISFY_DAILY: -1,
+    /** カウント=最大値でないならウィークリー */
+    NOT_SATISFY_WEEKLY: -2,
+    /** カウント=最大値でないならマンスリー */
+    NOT_SATISFY_MONTHLY: -3,
+    /** カウント=最大値でないならクォータリー */
+    NOT_SATISFY_QUARTRELY: -4,
 }
 
 /** 任務 */
@@ -341,6 +349,13 @@ var QUEST_DATA = {
     311: [
         /** 勝利 */
         new QuestData(7, true, true, RESET.DAILY),
+    ],
+    /** [318]給糧艦「伊良湖」の支援 */
+    318: [
+        /** 勝利 */
+        new QuestData(3, false, false, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
+        /** 戦闘糧食 */
+        new QuestData(1, false, false, RESET.NONE, "糧食"),
     ],
     // #endregion
     // #region 遠征
@@ -627,7 +642,7 @@ function saveQuestCount(id, count, suffix, isRewrite) {
     var s = suffix === undefined ? 1 : suffix
     var key = "Count" + id + "_" + s
     if (isActive(id) || (isRewrite === undefined ? false : isRewrite)) {
-        setData(key, Math.min(QUEST_DATA[id][s - 1].max,count))
+        setData(key, Math.min(QUEST_DATA[id][s - 1].max, count))
     }
 }
 

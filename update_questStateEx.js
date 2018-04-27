@@ -149,7 +149,9 @@ function saveQuestState(data) {
  * @param {logbook.data.ActionData} data data
  */
 function savePortItem(data) {
-    //精鋭「艦戦」隊の新編成
+    // 給糧艦「伊良湖」の支援[戦闘糧食]
+    saveQuestCount(318, isActive(318) && getQuestCount(318, 1) >= 3 && isMatchSecretary(318) ? 1 : 0, 2, true)
+    // 精鋭「艦戦」隊の新編成
     if (isActive(626) && getQuestCount(626, 1) >= 2 && getQuestCount(626, 2) >= 1) {
         if (!isMatchSecretary(626)) {
             notOrder(626)
@@ -157,7 +159,7 @@ function savePortItem(data) {
             saveQuestCount(626, 0, 2, true)
         }
     }
-    //精鋭「艦戦」隊の新編成
+    // 機種転換
     if (isActive(628) && getQuestCount(628) >= 2) {
         if (!isMatchSecretary(628)) {
             notOrder(628)
@@ -311,14 +313,14 @@ function addCountForBattleResultPart(data) {
     // #endregion
     var rank = lastBattleDto.rank
     // #region 全般
-    if(isWin(lastBattleDto.rank)){
+    if (isWin(lastBattleDto.rank)) {
         addQuestCount(201) // 敵艦隊を撃破せよ！
     }
     addQuestCount(210) // 敵艦隊を10回邀撃せよ！
     if (isEqualEvent(EVENT_ID.NORMAL_BATTLE) || isEqualEvent(EVENT_ID.BOSS_BATTLE) && isWin(lastBattleDto.rank)) {
         addQuestCount(216) // 敵艦隊主力を撃滅せよ！
     }
-    if(isWinS(lastBattleDto.rank)){
+    if (isWinS(lastBattleDto.rank)) {
         addQuestCount(214, 1, 2) // あ号作戦[S勝利]
     }
     if (isEqualEvent(EVENT_ID.BOSS_BATTLE)) {
@@ -566,6 +568,12 @@ function isMatchSecretary(id) {
     var secretary = GlobalContext.secretary
     if (secretary instanceof ShipDto) {
         switch (id) {
+            case 318:
+                var items = Java.from(secretary.item2)
+                items.add(secretary.slotExItem)
+                return items.filter(function (item) {
+                    return item instanceof ItemDto && item.slotitemId === 145
+                }).length >= 2
             case 626:
                 if (secretary.shipInfo.flagship === "ほうしょう") {
                     return secretary.item2.stream().filter(function (item) {
@@ -693,12 +701,21 @@ function addCountForRemodelSlotPart(data) {
  * @param {logbook.data.ActionData} data data
  */
 function addCountForPracticeBattleResultPart(data) {
+    var lastBattleDto = GlobalContext.lastBattleDto
     addQuestCount(303) // 「演習」で練度向上！
-    var rank = GlobalContext.lastBattleDto.rank
+    var rank = lastBattleDto.rank
     if (isWin(rank)) {
         addQuestCount(304) // 「演習」で他提督を圧倒せよ！
         addQuestCount(302) // 大規模演習
         addQuestCount(311) // 精鋭艦隊演習
+        var ships = lastBattleDto.dock.ships
+        var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
+            return ship.stype
+        }))
+        var cl = getLength(stypes[SHIP_TYPE.CL])
+        if (cl >= 2) {
+            addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
+        }
     }
 }
 
@@ -829,13 +846,28 @@ function resetQuestCountOfDaily() {
         return QUEST_DATA[id].map(function (quest, i) {
             return [id, i + 1, quest]
         }).filter(function (data) {
-            return data[2].reset === RESET.DAILY
+            if (Array.isArray(data[2].reset)) {
+                return data[2].reset.some(function (reset) {
+                    return reset === RESET.DAILY || reset === RESET.NOT_SATISFY_DAILY && getQuestCount(data[0], data[1]) >= data[2].max
+                })
+            }
+            return data[2].reset === RESET.DAILY || reset === RESET.NOT_SATISFY_DAILY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
-        notOrder(data[0])
+        var isNotOrder = function (reset) {
+            if (Array.isArray(reset)) {
+                return reset.some(function (reset) {
+                    return reset === RESET.DAILY
+                })
+            }
+            return reset === RESET.DAILY
+        }(QUEST_DATA[id][data[1] - 1].reset)
+        if (isNotOrder) {
+            notOrder(data[0])
+        }
     })
 }
 
@@ -847,13 +879,28 @@ function resetQuestCountOfWeekly() {
         return QUEST_DATA[id].map(function (quest, i) {
             return [id, i + 1, quest]
         }).filter(function (data) {
-            return data[2].reset === RESET.WEEKLY
+            if (Array.isArray(data[2].reset)) {
+                return data[2].reset.some(function (reset) {
+                    return reset === RESET.WEEKLY || reset === RESET.NOT_SATISFY_WEEKLY && getQuestCount(data[0], data[1]) >= data[2].max
+                })
+            }
+            return data[2].reset === RESET.WEEKLY || reset === RESET.NOT_SATISFY_WEEKLY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
-        notOrder(data[0])
+        var isNotOrder = function (reset) {
+            if (Array.isArray(reset)) {
+                return reset.some(function (reset) {
+                    return reset === RESET.WEEKLY
+                })
+            }
+            return reset === RESET.WEEKLY
+        }(QUEST_DATA[id][data[1] - 1].reset)
+        if (isNotOrder) {
+            notOrder(data[0])
+        }
     })
 }
 
@@ -865,13 +912,28 @@ function resetQuestCountOfMonthly() {
         return QUEST_DATA[id].map(function (quest, i) {
             return [id, i + 1, quest]
         }).filter(function (data) {
-            return data[2].reset === RESET.MONTHLY
+            if (Array.isArray(data[2].reset)) {
+                return data[2].reset.some(function (reset) {
+                    return reset === RESET.MONTHLY || reset === RESET.NOT_SATISFY_MONTHLY && getQuestCount(data[0], data[1]) >= data[2].max
+                })
+            }
+            return data[2].reset === RESET.MONTHLY || reset === RESET.NOT_SATISFY_MONTHLY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
-        notOrder(data[0])
+        var isNotOrder = function (reset) {
+            if (Array.isArray(reset)) {
+                return reset.some(function (reset) {
+                    return reset === RESET.MONTHLY
+                })
+            }
+            return reset === RESET.MONTHLY
+        }(QUEST_DATA[id][data[1] - 1].reset)
+        if (isNotOrder) {
+            notOrder(data[0])
+        }
     })
 }
 
@@ -883,13 +945,28 @@ function resetQuestCountOfQuarterly() {
         return QUEST_DATA[id].map(function (quest, i) {
             return [id, i + 1, quest]
         }).filter(function (data) {
-            return data[2].reset === RESET.QUARTRELY
+            if (Array.isArray(data[2].reset)) {
+                return data[2].reset.some(function (reset) {
+                    return reset === RESET.QUARTRELY || reset === RESET.NOT_SATISFY_QUARTRELY && getQuestCount(data[0], data[1]) >= data[2].max
+                })
+            }
+            return data[2].reset === RESET.QUARTRELY || reset === RESET.NOT_SATISFY_QUARTRELY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
-        notOrder(data[0])
+        var isNotOrder = function (reset) {
+            if (Array.isArray(reset)) {
+                return reset.some(function (reset) {
+                    return reset === RESET.QUARTRELY
+                })
+            }
+            return reset === RESET.QUARTRELY
+        }(QUEST_DATA[id][data[1] - 1].reset)
+        if (isNotOrder) {
+            notOrder(data[0])
+        }
     })
 }
 
