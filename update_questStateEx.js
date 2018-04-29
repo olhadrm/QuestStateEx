@@ -149,8 +149,6 @@ function saveQuestState(data) {
  * @param {logbook.data.ActionData} data data
  */
 function savePortItem(data) {
-    // 給糧艦「伊良湖」の支援[戦闘糧食]
-    saveQuestCount(318, isActive(318) && getQuestCount(318, 1) >= 3 && isMatchSecretary(318) ? 1 : 0, 2, true)
     // 精鋭「艦戦」隊の新編成
     if (isActive(626) && getQuestCount(626, 1) >= 2 && getQuestCount(626, 2) >= 1) {
         if (!isMatchSecretary(626)) {
@@ -570,7 +568,7 @@ function isMatchSecretary(id) {
         switch (id) {
             case 318:
                 var items = Java.from(secretary.item2)
-                items.add(secretary.slotExItem)
+                items.push(secretary.slotExItem)
                 return items.filter(function (item) {
                     return item instanceof ItemDto && item.slotitemId === 145
                 }).length >= 2
@@ -749,6 +747,8 @@ function updateMaterial() {
  * 秘書艦更新
  */
 function updateSecretary() {
+    // 給糧艦「伊良湖」の支援[戦闘糧食]
+    saveQuestCount(318, isActive(318) && getQuestCount(318, 1) >= 3 && isMatchSecretary(318) ? 1 : 0, 2, true)
     saveQuestCount(678, isMatchSecretary(678) ? 1 : 0, 4, true) // 主力艦上戦闘機の更新
 }
 
@@ -864,7 +864,7 @@ function resetQuestCountOfDaily() {
                 })
             }
             return reset === RESET.DAILY
-        }(QUEST_DATA[id][data[1] - 1].reset)
+        }(QUEST_DATA[data[0]][data[1] - 1].reset)
         if (isNotOrder) {
             notOrder(data[0])
         }
@@ -897,7 +897,7 @@ function resetQuestCountOfWeekly() {
                 })
             }
             return reset === RESET.WEEKLY
-        }(QUEST_DATA[id][data[1] - 1].reset)
+        }(QUEST_DATA[data[0]][data[1] - 1].reset)
         if (isNotOrder) {
             notOrder(data[0])
         }
@@ -930,7 +930,7 @@ function resetQuestCountOfMonthly() {
                 })
             }
             return reset === RESET.MONTHLY
-        }(QUEST_DATA[id][data[1] - 1].reset)
+        }(QUEST_DATA[data[0]][data[1] - 1].reset)
         if (isNotOrder) {
             notOrder(data[0])
         }
@@ -963,7 +963,7 @@ function resetQuestCountOfQuarterly() {
                 })
             }
             return reset === RESET.QUARTRELY
-        }(QUEST_DATA[id][data[1] - 1].reset)
+        }(QUEST_DATA[data[0]][data[1] - 1].reset)
         if (isNotOrder) {
             notOrder(data[0])
         }

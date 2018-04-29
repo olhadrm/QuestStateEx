@@ -1,7 +1,7 @@
 /**
  * 任務進捗詳細 Ver.2.1.0
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/04/29
+ * LastUpdate:2018/04/30
  */
 
 data_prefix = "QSE.Ver2."
