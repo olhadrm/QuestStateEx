@@ -851,7 +851,7 @@ function resetQuestCountOfDaily() {
                     return reset === RESET.DAILY || reset === RESET.NOT_SATISFY_DAILY && getQuestCount(data[0], data[1]) >= data[2].max
                 })
             }
-            return data[2].reset === RESET.DAILY || reset === RESET.NOT_SATISFY_DAILY && getQuestCount(data[0], data[1]) >= data[2].max
+            return data[2].reset === RESET.DAILY || data[2].reset === RESET.NOT_SATISFY_DAILY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
@@ -884,7 +884,7 @@ function resetQuestCountOfWeekly() {
                     return reset === RESET.WEEKLY || reset === RESET.NOT_SATISFY_WEEKLY && getQuestCount(data[0], data[1]) >= data[2].max
                 })
             }
-            return data[2].reset === RESET.WEEKLY || reset === RESET.NOT_SATISFY_WEEKLY && getQuestCount(data[0], data[1]) >= data[2].max
+            return data[2].reset === RESET.WEEKLY || data[2].reset === RESET.NOT_SATISFY_WEEKLY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
@@ -917,7 +917,7 @@ function resetQuestCountOfMonthly() {
                     return reset === RESET.MONTHLY || reset === RESET.NOT_SATISFY_MONTHLY && getQuestCount(data[0], data[1]) >= data[2].max
                 })
             }
-            return data[2].reset === RESET.MONTHLY || reset === RESET.NOT_SATISFY_MONTHLY && getQuestCount(data[0], data[1]) >= data[2].max
+            return data[2].reset === RESET.MONTHLY || data[2].reset === RESET.NOT_SATISFY_MONTHLY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
@@ -950,7 +950,7 @@ function resetQuestCountOfQuarterly() {
                     return reset === RESET.QUARTRELY || reset === RESET.NOT_SATISFY_QUARTRELY && getQuestCount(data[0], data[1]) >= data[2].max
                 })
             }
-            return data[2].reset === RESET.QUARTRELY || reset === RESET.NOT_SATISFY_QUARTRELY && getQuestCount(data[0], data[1]) >= data[2].max
+            return data[2].reset === RESET.QUARTRELY || data[2].reset === RESET.NOT_SATISFY_QUARTRELY && getQuestCount(data[0], data[1]) >= data[2].max
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
