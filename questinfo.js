@@ -1,5 +1,5 @@
 /**
- * 任務進捗詳細 Ver.2.0.9
+ * 任務進捗詳細 Ver.2.1.0
  * Author:Nishisonic,Nekopanda
  * LastUpdate:2018/04/29
  */
@@ -353,7 +353,7 @@ var QUEST_DATA = {
     /** [318]給糧艦「伊良湖」の支援 */
     318: [
         /** 勝利 */
-        new QuestData(3, false, false, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
+        new QuestData(3, false, true, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
         /** 戦闘糧食 */
         new QuestData(1, false, false, RESET.NONE, "糧食"),
     ],
