@@ -767,11 +767,12 @@ function updateQuestCount() {
         resetQuestCountOfWeekly()
     }
     // マンスリー
-    if (!lastUpdateQuestTime.withDayOfYear(1).equals(nowTime.withDayOfYear(1))) {
+    if (!lastUpdateQuestTime.withDayOfMonth(1).equals(nowTime.withDayOfMonth(1))) {
         resetQuestCountOfMonthly()
     }
     // クォータリー
-    if (!lastUpdateQuestTime.withDayOfYear(1).withMonth(lastUpdateQuestTime.month.value % 3).equals(nowTime.withDayOfYear(1).withMonth(nowTime.month.value % 3))) {
+    if(!(Math.floor((lastUpdateQuestTime.month.value + 2) / 3) === Math.floor((nowTime.month.value + 2) / 3)
+    && (lastUpdateQuestTime.year.value === nowTime.year.value || (lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12)))){
         resetQuestCountOfQuarterly()
     }
     saveLastUpdateQuestTime(nowTime)
