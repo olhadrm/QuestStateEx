@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.1.1
+ * 任務進捗詳細 Ver.2.1.2
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/06/02
+ * LastUpdate:2018/06/10
  */
 
 data_prefix = "QSE.Ver2."
@@ -343,7 +343,7 @@ var QUEST_DATA = {
     /** [304]「演習」で他提督を圧倒せよ！ */
     304: [
         /** 勝利 */
-        new QuestData(5, true, true, RESET.WEEKLY),
+        new QuestData(5, true, true, RESET.DAILY),
     ],
     /** [311]精鋭艦隊演習 */
     311: [

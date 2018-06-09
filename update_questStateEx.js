@@ -368,7 +368,7 @@ function addCountForBattleResultPart(data) {
         var num = ships.stream().map(function (ship) {
             return ship.shipInfo.flagship
         }).filter(function (name) {
-            return name === "みょうこう" || name === "なち" || name === "はぐろ"
+            return name.equals("みょうこう") || name.equals("なち") || name.equals("はぐろ")
         }).length
         if (num === 3) {
             addQuestCount(249) // 「第五戦隊」出撃せよ！
@@ -573,7 +573,7 @@ function isMatchSecretary(id) {
                     return item instanceof ItemDto && item.slotitemId === 145
                 }).length >= 2
             case 626:
-                if (secretary.shipInfo.flagship === "ほうしょう") {
+                if (secretary.shipInfo.flagship.equals("ほうしょう")) {
                     return secretary.item2.stream().filter(function (item) {
                         return item instanceof ItemDto
                     }).anyMatch(function (item) {
@@ -592,7 +592,7 @@ function isMatchSecretary(id) {
                 }
                 break
             case 637:
-                if (secretary.shipInfo.flagship === "ほうしょう") {
+                if (secretary.shipInfo.flagship.equals("ほうしょう")) {
                     return secretary.item2.stream().filter(function (item) {
                         return item instanceof ItemDto
                     }).anyMatch(function (item) {
