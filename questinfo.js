@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.1.2
+ * 任務進捗詳細 Ver.2.1.3
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/06/10
+ * LastUpdate:2018/06/13
  */
 
 data_prefix = "QSE.Ver2."
@@ -323,8 +323,8 @@ var QUEST_DATA = {
         /** 深海棲艦泊地艦隊(3-3ボス)A勝利 */
         new QuestData(1, false, true, RESET.QUARTRELY, "3-3"),
     ],
-    /** [874]精鋭「三一駆」、鉄底海域に突入せよ！ */
-    874: [
+    /** [875]精鋭「三一駆」、鉄底海域に突入せよ！ */
+    875: [
         /** 敵補給部隊本体(5-4ボス)S勝利 */
         new QuestData(2, true, true, RESET.QUARTRELY),
     ],
