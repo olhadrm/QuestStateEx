@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.1.3
+ * 任務進捗詳細 Ver.2.1.4
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/06/13
+ * LastUpdate:2018/08/01
  */
 
 data_prefix = "QSE.Ver2."
@@ -328,6 +328,15 @@ var QUEST_DATA = {
         /** 敵補給部隊本体(5-4ボス)S勝利 */
         new QuestData(2, true, true, RESET.QUARTRELY),
     ],
+    /** [888]新編成「三川艦隊」、鉄底海峡に突入せよ！ */
+    888: [
+        /** 敵前線司令艦隊(5-1ボス戦)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-1"),
+        /** 敵サーモン方面主力艦隊(5-3ボス戦)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-3"),
+        /** 敵補給部隊本体(5-4ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-4"),
+    ],
     // #endregion
     // #region 演習
     /** [302]大規模演習 */
@@ -571,6 +580,15 @@ var QUEST_DATA = {
         new QuestData(4, false, true, RESET.QUARTRELY, "電探"),
         /** 「ボーキサイト」用意 */
         new QuestData(1500, false, false, RESET.NONE, "ボーキ"),
+    ],
+    /** [686]戦時改修A型高角砲の量産 */
+    686: [
+        /** 「10cm連装高角砲」廃棄(一括は別々) */
+        new QuestData(4, false, true, RESET.QUARTRELY, "高角砲"),
+        /** 「94式高射装置」廃棄(一括は別々) */
+        new QuestData(1, false, true, RESET.QUARTRELY, "高射"),
+        /** 「鋼材」用意 */
+        new QuestData(900, false, false, RESET.NONE, "鋼材"),
     ],
     // #endregion
     // #region 近代化改修

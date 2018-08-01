@@ -422,7 +422,17 @@ function addCountForBattleResultPart(data) {
     }
     // #endregion
     // #region 南方海域
+    var newMikawaNum = ships.stream().map(function (ship) {
+        return ship.shipInfo.flagship
+    }).filter(function (name) {
+        return ["ちょうかい","あおば","きぬがさ","かこ","ふるたか","てんりゅう","ゆうばり"].some(function(_name){
+            return name.equals(_name)
+        })
+    }).length
     if (isEqualMap(5, 1) && isWinS(rank)) {
+        if(newMikawaNum >= 4){
+            addQuestCount(888, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
+        }
         var num = ships.stream().map(function (ship) {
             return ship.shipInfo.json.api_ctype
         }).filter(function (ctype) {
@@ -436,7 +446,15 @@ function addCountForBattleResultPart(data) {
     if (isEqualMap(5, 2) && isWinS(rank)) {
         addQuestCount(243) // 南方海域珊瑚諸島沖の制空権を握れ！
     }
+    if (isEqualMap(5, 3) && isWinS(rank)) {
+        if(newMikawaNum >= 4){
+            addQuestCount(888, 2) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-3]
+        }
+    }
     if (isEqualMap(5, 4) && isWinS(rank)) {
+        if(newMikawaNum >= 4){
+            addQuestCount(888, 3) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-4]
+        }
         var naganami = ships.stream().anyMatch(function (ship) {
             return ship.shipId === 543
         })
@@ -444,7 +462,7 @@ function addCountForBattleResultPart(data) {
             // 朝霜改or高波改or沖波改
             return ship.shipId === 344 || ship.shipId === 345 || ship.shipId === 359
         })
-        if (naganami && m31s) {
+        if (naganami && no31s) {
             addQuestCount(875) // 精鋭「三一駆」、鉄底海域に突入せよ！
         }
     }
@@ -553,6 +571,11 @@ function addCountForDestroyItem2Part(data) {
         // 対空兵装の整備拡充
         addQuestCount(680, getLength(type2[21]), 1) // 機銃
         addQuestCount(680, getLength(type2[12]) + getLength(type2[13]) + getLength(type2[93]), 2) // 電探
+        // 戦時改修A型高角砲の量産
+        if (isMatchSecretary(686)) {
+            addQuestCount(686, getLength(slotitemId[3]), 1) // 10cm連装高角砲
+            addQuestCount(686, getLength(slotitemId[121]), 2) // 94式高射装置
+        }
     }
     addQuestCount(613)
 }
@@ -580,7 +603,7 @@ function isMatchSecretary(id) {
                         return item.slotitemId === 20 && item.alv === 7
                     })
                 }
-                break
+                return false
             case 628:
                 var stype = secretary.stype
                 if (stype === SHIP_TYPE.CV || stype === SHIP_TYPE.ACV || stype === SHIP_TYPE.CVL) {
@@ -590,7 +613,7 @@ function isMatchSecretary(id) {
                         return item.slotitemId === 96 && item.alv === 7
                     })
                 }
-                break
+                return false
             case 637:
                 if (secretary.shipInfo.flagship.equals("ほうしょう")) {
                     return secretary.item2.stream().filter(function (item) {
@@ -599,11 +622,11 @@ function isMatchSecretary(id) {
                         return item.slotitemId === 19 && item.alv === 7 && item.level === 10
                     })
                 }
-                break
+                return false
             case 678:
                 var item2 = secretary.item2
                 var count = 0
-                if (item2.size() > 2) {
+                if (item2.size() > 1) {
                     for (var i = 0; i < 2; i++) {
                         if (item2.get(i) instanceof ItemDto && item2.get(i).slotitemId === 21) {
                             count++
@@ -611,6 +634,15 @@ function isMatchSecretary(id) {
                     }
                 }
                 return count === 2
+            case 686:
+                var ctype = secretary.shipInfo.json.api_ctype
+                if ([1,5,12].some(ctype)) { // 綾波型、暁型、吹雪型
+                    if (item2.size() > 0) {
+                        var item = item2.get(0)
+                        return item instanceof ItemDto && item.slotitemId === 294 && item.level === 10
+                    }
+                }
+                return false
         }
     }
     return false
@@ -736,6 +768,7 @@ function updateMaterial() {
         saveQuestCount(674, steel, 2, true) // 工廠環境の整備[鋼材]
         saveQuestCount(676, steel, 4, true) // 装備開発力の集中整備[鋼材]
         saveQuestCount(677, steel, 4, true) // 継戦支援能力の整備[鋼材]
+        saveQuestCount(686, steel, 3, true) // 戦時改修A型高角砲の量産[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
