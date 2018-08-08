@@ -636,7 +636,7 @@ function isMatchSecretary(id) {
                 return count === 2
             case 686:
                 var ctype = secretary.shipInfo.json.api_ctype
-                if ([1,5,12].some(ctype)) { // 綾波型、暁型、吹雪型
+                if ([1,5,12].indexOf(ctype) >= 0) { // 綾波型、暁型、吹雪型
                     if (item2.size() > 0) {
                         var item = item2.get(0)
                         return item instanceof ItemDto && item.slotitemId === 294 && item.level === 10
