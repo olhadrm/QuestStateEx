@@ -1011,7 +1011,5 @@ function resetQuestCountOfQuarterly() {
  * @return {Number} 配列長
  */
 function getLength(arrays) {
-    return Optional.ofNullable(arrays).map(function (array) {
-        return array.length
-    }).orElse(0)
+    return (arrays || []).length
 }
