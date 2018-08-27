@@ -269,7 +269,7 @@ function addCountForNextPart(data) {
     if (isEqualPosition(1, 6, EVENT_ID.ESCORT_SUCCESS)) {
         var sortieFleetIdx = Java.from(GlobalContext.isSortie).map(function (sortie, index) {
             return sortie ? index : -1
-        }).filter(function (value) {
+        }).filter(function (index) {
             return index !== -1
         })[0]
         var stypes = GlobalContext.getDock(sortieFleetIdx + 1).ships.stream().collect(Collectors.groupingBy(function (ship) {
