@@ -804,8 +804,8 @@ function updateQuestCount() {
         resetQuestCountOfMonthly()
     }
     // クォータリー
-    if(!(Math.floor((lastUpdateQuestTime.month.value + 2) / 3) === Math.floor((nowTime.month.value + 2) / 3)
-    && (lastUpdateQuestTime.year.value === nowTime.year.value || (lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12)))){
+    if(!(Math.floor((lastUpdateQuestTime.month.value + 2) % 3) === Math.floor((nowTime.month.value + 2) % 3))
+    && (lastUpdateQuestTime.year.value === nowTime.year.value || !(lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12))){
         resetQuestCountOfQuarterly()
     }
     saveLastUpdateQuestTime(nowTime)
