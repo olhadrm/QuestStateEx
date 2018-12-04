@@ -8,17 +8,17 @@ function header() {
     return ["進捗詳細"]
 }
 
-function begin() { }
+function begin() {}
 
 function body(quest) {
     return toComparable([getProgress(quest.no, quest.type, quest.progressFlag)])
 }
 
-function end() { }
+function end() {}
 
 function getProgress(questNo, questType, questProgressFlag) {
     if (questType !== QUEST_TYPE.ONCE) {
-        if(questNo in QUEST_DATA){
+        if (questNo in QUEST_DATA) {
             var sum = 0
             var result = ""
             var conditions = QUEST_DATA[questNo]

@@ -24,6 +24,7 @@ ReportUtils = Java.type("logbook.util.ReportUtils")
 var stateIndex = -1
 var categoryIndex = -1
 var progressIndex = -1
+
 function begin(header) {
     for (var i = 1; i < header.length; ++i) {
         if (header[i].equals("表示位置")) {
@@ -40,21 +41,21 @@ function begin(header) {
 
 function categoryColor(category) {
     switch (category) {
-        case 1:    //編成
+        case 1: //編成
             return new RGB(0xAA, 0xFF, 0xAA)
-        case 2:    //出撃
+        case 2: //出撃
             return new RGB(0xFF, 0xCC, 0xCC)
-        case 3:    //演習
+        case 3: //演習
             return new RGB(0xDD, 0xFF, 0xAA)
-        case 4:    //遠征
+        case 4: //遠征
             return new RGB(0xCC, 0xFF, 0xFF)
-        case 5:    //補給/入渠
+        case 5: //補給/入渠
             return new RGB(0xFF, 0xFF, 0xCC)
-        case 6:    //工廠
+        case 6: //工廠
             return new RGB(0xDD, 0xCC, 0xBB)
-        case 7:    //改装
+        case 7: //改装
             return new RGB(0xDD, 0xCC, 0xFF)
-        case 8:    //出撃
+        case 8: //出撃
             return new RGB(0xFF, 0xCC, 0xCC)
         default:
             return new RGB(0xFF, 0xFF, 0xFF)
@@ -120,7 +121,13 @@ function create(table, data, index) {
     item.setText(ReportUtils.toStringArray(data))
 
     var quest = data[0].get()
-    var d = { state: null, back: null, cat: null, prog: null, quest: quest }
+    var d = {
+        state: null,
+        back: null,
+        cat: null,
+        prog: null,
+        quest: quest
+    }
 
     // 偶数行に背景色を付ける
     if ((index % 2) !== 0) {
@@ -224,7 +231,7 @@ function create(table, data, index) {
     return item
 }
 
-function end() { }
+function end() {}
 
 function prefix(num, digits) {
     var s = String(num)

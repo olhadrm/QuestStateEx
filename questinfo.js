@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.1.8
+ * 任務進捗詳細 Ver.2.1.9
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/09/08
+ * LastUpdate:2018/12/04
  */
 
 data_prefix = "QSE.Ver2."
@@ -337,6 +337,17 @@ var QUEST_DATA = {
         /** 敵補給部隊本体(5-4ボス)S勝利 */
         new QuestData(1, false, true, RESET.QUARTRELY, "5-4"),
     ],
+    /** [893]泊地周辺海域の安全確保を徹底せよ！ */
+    893: [
+        /** 敵通商破壊主力潜水艦隊(1-5 ボス)S 勝利 */
+        new QuestData(3, false, true, RESET.QUARTRELY, "1-5"),
+        /** 深海潜水艦隊集団 旗艦戦隊(7-1 ボス)S 勝利 */
+        new QuestData(3, false, true, RESET.QUARTRELY, "7-1"),
+        /** セレベス海方面 旗艦哨戒潜水艦(7-2-G ボス)S 勝利 */
+        new QuestData(3, false, true, RESET.QUARTRELY, "7-2-1"),
+        /** 深海任務部隊 主力機動部隊群(7-2-M ボス)S 勝利 */
+        new QuestData(3, false, true, RESET.QUARTRELY, "7-2-2"),
+    ],
     // #endregion
     // #region 演習
     /** [302]大規模演習 */
@@ -589,6 +600,19 @@ var QUEST_DATA = {
         new QuestData(1, false, true, RESET.QUARTRELY, "高射"),
         /** 「鋼材」用意 */
         new QuestData(900, false, false, RESET.NONE, "鋼材"),
+    ],
+    /** [688]航空戦力の強化 */
+    688: [
+        /** 「艦戦」廃棄(一括は別々) */
+        new QuestData(3, false, true, RESET.QUARTRELY, "艦戦"),
+        /** 「艦爆」廃棄(一括は別々) */
+        new QuestData(3, false, true, RESET.QUARTRELY, "艦爆"),
+        /** 「艦攻」廃棄(一括は別々) */
+        new QuestData(3, false, true, RESET.QUARTRELY, "艦攻"),
+        /** 「水偵」廃棄(一括は別々) */
+        new QuestData(3, false, true, RESET.QUARTRELY, "水偵"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(1800, false, false, RESET.NONE, "ﾎﾞｰｷ"),
     ],
     // #endregion
     // #region 近代化改修

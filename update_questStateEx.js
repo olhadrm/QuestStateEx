@@ -28,52 +28,52 @@ Collectors = Java.type("java.util.stream.Collectors")
  */
 function update(type, data) {
     switch (type) {
-        case DataType.QUEST_LIST:               // 任務
+        case DataType.QUEST_LIST: // 任務
             updateQuestCount()
             saveQuestState(data)
             adjustQuestCount(data)
             break
-        case DataType.PORT:                     // 母港
+        case DataType.PORT: // 母港
             savePortItem(data)
             break
-        case DataType.START:                    // 出撃
+        case DataType.START: // 出撃
             addCountForSortiePart(data)
             break
-        case DataType.NEXT:                     // 次のマス
+        case DataType.NEXT: // 次のマス
             addCountForNextPart(data)
             break
-        case DataType.BATTLE_RESULT:            // 通常戦闘結果
-        case DataType.COMBINED_BATTLE_RESULT:   // 連合戦闘結果
+        case DataType.BATTLE_RESULT: // 通常戦闘結果
+        case DataType.COMBINED_BATTLE_RESULT: // 連合戦闘結果
             addCountForBattleResultPart(data)
             break
-        case DataType.CREATE_ITEM:              // 開発
+        case DataType.CREATE_ITEM: // 開発
             addCountForCreateItemPart(data)
             break
-        case DataType.CREATE_SHIP:              // 建造
+        case DataType.CREATE_SHIP: // 建造
             addCountForCreateShipPart(data)
             break
-        case DataType.DESTROY_SHIP:             // 解体
+        case DataType.DESTROY_SHIP: // 解体
             addCountForDestroyShipPart(data)
             break
-        case DataType.DESTROY_ITEM2:            // 廃棄
+        case DataType.DESTROY_ITEM2: // 廃棄
             addCountForDestroyItem2Part(data)
             break
-        case DataType.POWERUP:                  // 近代化改修
+        case DataType.POWERUP: // 近代化改修
             addCountForPowerupPart(data)
             break
-        case DataType.MISSION_RESULT:           // 遠征（帰還）
+        case DataType.MISSION_RESULT: // 遠征（帰還）
             addCountForMissionResultPart(data)
             break
-        case DataType.CHARGE:                   // 補給
+        case DataType.CHARGE: // 補給
             addCountForChargePart(data)
             break
-        case DataType.NYUKYO_START:             // 入渠開始
+        case DataType.NYUKYO_START: // 入渠開始
             addCountForEnteringDockPart(data)
             break
-        case DataType.REMODEL_SLOT:             // 装備改修
+        case DataType.REMODEL_SLOT: // 装備改修
             addCountForRemodelSlotPart(data)
             break
-        case DataType.PRACTICE_BATTLE_RESULT:   // 演習
+        case DataType.PRACTICE_BATTLE_RESULT: // 演習
             addCountForPracticeBattleResultPart(data)
             break
         default:
@@ -202,6 +202,20 @@ function isEqualMap(id, no) {
         return map.map
     }).orElse([0, 0, 0])
     return map[0] === id && map[1] === no
+}
+
+/**
+ * セルが一致しているか
+ * @param {Number} id 「X」-Y
+ * @param {Number} no X-「Y」
+ * @param {Number} cell X-Y-「Z」
+ * @return {Boolean} マップが一致しているか
+ */
+function isEqualCell(id, no, cell) {
+    var map = Optional.ofNullable(GlobalContext.sortieMap).map(function (map) {
+        return map.map
+    }).orElse([0, 0, 0])
+    return map[0] === id && map[1] === no && map[2] === cell
 }
 
 /**
@@ -353,6 +367,9 @@ function addCountForBattleResultPart(data) {
         addQuestCount(261) // 海上輸送路の安全確保に努めよ！
         addQuestCount(265) // 海上護衛強化月間
     }
+    if (isEqualMap(1, 5) && isWinS(rank)) {
+        addQuestCount(893, 1, 1) // 泊地周辺海域の安全確保を徹底せよ！[1-5]
+    }
     // #endregion
     // #region 南西諸島海域
     if (isEqualArea(2) && isWin(rank)) {
@@ -425,12 +442,12 @@ function addCountForBattleResultPart(data) {
     var newMikawaNum = ships.stream().map(function (ship) {
         return ship.shipInfo.flagship
     }).filter(function (name) {
-        return ["ちょうかい","あおば","きぬがさ","かこ","ふるたか","てんりゅう","ゆうばり"].some(function(_name){
+        return ["ちょうかい", "あおば", "きぬがさ", "かこ", "ふるたか", "てんりゅう", "ゆうばり"].some(function (_name) {
             return name.equals(_name)
         })
     }).length
     if (isEqualMap(5, 1) && isWinS(rank)) {
-        if(newMikawaNum >= 4){
+        if (newMikawaNum >= 4) {
             addQuestCount(888, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
         }
         var num = ships.stream().map(function (ship) {
@@ -447,12 +464,12 @@ function addCountForBattleResultPart(data) {
         addQuestCount(243) // 南方海域珊瑚諸島沖の制空権を握れ！
     }
     if (isEqualMap(5, 3) && isWinS(rank)) {
-        if(newMikawaNum >= 4){
+        if (newMikawaNum >= 4) {
             addQuestCount(888, 2) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-3]
         }
     }
     if (isEqualMap(5, 4) && isWinS(rank)) {
-        if(newMikawaNum >= 4){
+        if (newMikawaNum >= 4) {
             addQuestCount(888, 3) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-4]
         }
         var naganami = ships.stream().anyMatch(function (ship) {
@@ -485,6 +502,17 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(6, 4) && isWinS(rank)) {
         addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+    }
+    // #endregion
+    // #region 南西海域
+    if (isEqualCell(7, 1) && isWinS(rank)) {
+        addQuestCount(893, 1, 2) // 泊地周辺海域の安全確保を徹底せよ！[7-1]
+    }
+    if (isEqualMap(7, 2, 7) && isWinS(rank)) {
+        addQuestCount(893, 1, 3) // 泊地周辺海域の安全確保を徹底せよ！[7-2-1]
+    }
+    if (isEqualMap(7, 2, 15) && isWinS(rank)) {
+        addQuestCount(893, 1, 4) // 泊地周辺海域の安全確保を徹底せよ！[7-2-2]
     }
     // #endregion
     // #endregion
@@ -576,6 +604,11 @@ function addCountForDestroyItem2Part(data) {
             addQuestCount(686, getLength(slotitemId[3]), 1) // 10cm連装高角砲
             addQuestCount(686, getLength(slotitemId[121]), 2) // 94式高射装置
         }
+        // 航空戦力の強化
+        addQuestCount(688, getLength(type2[6]), 1) // 艦上戦闘機
+        addQuestCount(688, getLength(type2[7]), 2) // 艦上爆撃機
+        addQuestCount(688, getLength(type2[8]), 3) // 艦上攻撃機
+        addQuestCount(688, getLength(type2[10]), 4) // 水上偵察機
     }
     addQuestCount(613)
 }
@@ -636,7 +669,7 @@ function isMatchSecretary(id) {
                 return count === 2
             case 686:
                 var ctype = secretary.shipInfo.json.api_ctype
-                if ([1,5,12].indexOf(ctype) >= 0) { // 綾波型、暁型、吹雪型
+                if ([1, 5, 12].indexOf(ctype) >= 0) { // 綾波型、暁型、吹雪型
                     if (item2.size() > 0) {
                         var item = item2.get(0)
                         return item instanceof ItemDto && item.slotitemId === 294 && item.level === 10
@@ -695,7 +728,7 @@ function addCountForMissionResultPart(data) {
                 break
         }
         //api_no渡してこないので仕方なく
-        if (quest_name.indexOf("東京急行") > - 1) {
+        if (quest_name.indexOf("東京急行") > -1) {
             addQuestCount(410) // 南方への輸送作戦を成功させよ！
             addQuestCount(411) // 南方への鼠輸送を継続実施せよ!
         }
@@ -773,6 +806,7 @@ function updateMaterial() {
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
         saveQuestCount(680, bauxite, 3, true) // 対空兵装の整備拡充[ボーキサイト]
+        saveQuestCount(688, bauxite, 5, true) // 航空戦力の強化[ボーキサイト]
     }
 }
 
@@ -804,8 +838,8 @@ function updateQuestCount() {
         resetQuestCountOfMonthly()
     }
     // クォータリー
-    if(!(Math.floor((lastUpdateQuestTime.month.value + 2) % 3) === Math.floor((nowTime.month.value + 2) % 3))
-    && (lastUpdateQuestTime.year.value === nowTime.year.value || !(lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12))){
+    if (!((Math.floor((lastUpdateQuestTime.month.value + 2) % 3) === Math.floor((nowTime.month.value + 2) % 3)) &&
+            (lastUpdateQuestTime.year.value === nowTime.year.value || !(lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12)))) {
         resetQuestCountOfQuarterly()
     }
     saveLastUpdateQuestTime(nowTime)
