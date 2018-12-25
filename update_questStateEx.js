@@ -346,10 +346,16 @@ function addCountForBattleResultPart(data) {
     var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
         return ship.stype
     }))
+    var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
     // #region 鎮守府海域
+    if (isEqualMap(1, 3) && isWinS(rank)) {
+        if (hasCV) {
+            addQuestCount(894, 1, 1) // 空母戦力の投入による兵站線戦闘哨戒[1-3]
+        }
+    }
     if (isEqualMap(1, 4) && isWinS(rank)) {
         // 軽巡旗艦、軽巡1~3隻、駆逐1隻以上、軽巡と駆逐のみ
         if (ships.get(0).stype === SHIP_TYPE.CL) {
@@ -361,6 +367,9 @@ function addCountForBattleResultPart(data) {
                     addQuestCount(257) // 「水雷戦隊」南西へ！
                 }
             }
+        }
+        if (hasCV) {
+            addQuestCount(894, 1, 2) // 空母戦力の投入による兵站線戦闘哨戒[1-4]
         }
     }
     if (isEqualMap(1, 5) && isWinA(rank)) {
@@ -374,6 +383,21 @@ function addCountForBattleResultPart(data) {
     // #region 南西諸島海域
     if (isEqualArea(2) && isWin(rank)) {
         addQuestCount(226) // 南西諸島海域の制海権を握れ！
+    }
+    if (isEqualMap(2, 1) && isWinS(rank)) {
+        if (hasCV) {
+            addQuestCount(894, 1, 3) // 空母戦力の投入による兵站線戦闘哨戒[2-1]
+        }
+    }
+    if (isEqualMap(2, 2) && isWinS(rank)) {
+        if (hasCV) {
+            addQuestCount(894, 1, 4) // 空母戦力の投入による兵站線戦闘哨戒[2-2]
+        }
+    }
+    if (isEqualMap(2, 3) && isWinS(rank)) {
+        if (hasCV) {
+            addQuestCount(894, 1, 5) // 空母戦力の投入による兵站線戦闘哨戒[2-3]
+        }
     }
     if (isEqualMap(2, 4) && isWinA(rank)) {
         addQuestCount(854, 1, 1) // 戦果拡張任務！「Z作戦」前段作戦[2-4]

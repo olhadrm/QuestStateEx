@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.1.9
+ * 任務進捗詳細 Ver.2.2.0
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2018/12/04
+ * LastUpdate:2018/12/26
  */
 
 data_prefix = "QSE.Ver2."
@@ -347,6 +347,19 @@ var QUEST_DATA = {
         new QuestData(3, false, true, RESET.QUARTRELY, "7-2-1"),
         /** 深海任務部隊 主力機動部隊群(7-2-M ボス)S 勝利 */
         new QuestData(3, false, true, RESET.QUARTRELY, "7-2-2"),
+    ],
+    /** [894]空母戦力の投入による兵站線戦闘哨戒 */
+    894: [
+        /** 敵主力艦隊(1-3 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-3"),
+        /** 敵機動部隊(1-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-4"),
+        /** 敵主力艦隊(2-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-1"),
+        /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-2"),
+        /** 敵主力打撃群(2-3 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-3"),
     ],
     // #endregion
     // #region 演習
