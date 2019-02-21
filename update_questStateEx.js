@@ -529,7 +529,7 @@ function addCountForBattleResultPart(data) {
     }
     // #endregion
     // #region 南西海域
-    if (isEqualCell(7, 1) && isWinS(rank)) {
+    if (isEqualMap(7, 1) && isWinS(rank)) {
         addQuestCount(893, 1, 2) // 泊地周辺海域の安全確保を徹底せよ！[7-1]
     }
     if (isEqualMap(7, 2, 7) && isWinS(rank)) {
