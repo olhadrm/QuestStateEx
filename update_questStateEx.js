@@ -347,11 +347,21 @@ function addCountForBattleResultPart(data) {
         return ship.stype
     }))
     var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
+    var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.TV])) > 0
+        && (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
     // #region 鎮守府海域
+    if (isEqualMap(1, 2) && isWinS(rank)) {
+        if (has280Org) {
+            addQuestCount(280, 1, 1) // 兵站線確保！海上警備を強化実施せよ！[1-2]
+        }
+    }
     if (isEqualMap(1, 3) && isWinS(rank)) {
+        if (has280Org) {
+            addQuestCount(280, 1, 2) // 兵站線確保！海上警備を強化実施せよ！[1-3]
+        }
         if (hasCV) {
             addQuestCount(894, 1, 1) // 空母戦力の投入による兵站線戦闘哨戒[1-3]
         }
@@ -367,6 +377,9 @@ function addCountForBattleResultPart(data) {
                     addQuestCount(257) // 「水雷戦隊」南西へ！
                 }
             }
+        }
+        if (has280Org) {
+            addQuestCount(280, 1, 3) // 兵站線確保！海上警備を強化実施せよ！[1-4]
         }
         if (hasCV) {
             addQuestCount(894, 1, 2) // 空母戦力の投入による兵站線戦闘哨戒[1-4]
@@ -385,6 +398,9 @@ function addCountForBattleResultPart(data) {
         addQuestCount(226) // 南西諸島海域の制海権を握れ！
     }
     if (isEqualMap(2, 1) && isWinS(rank)) {
+        if (has280Org) {
+            addQuestCount(280, 1, 4) // 兵站線確保！海上警備を強化実施せよ！[2-1]
+        }
         if (hasCV) {
             addQuestCount(894, 1, 3) // 空母戦力の投入による兵站線戦闘哨戒[2-1]
         }

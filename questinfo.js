@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.2.1
+ * 任務進捗詳細 Ver.2.2.2
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2019/02/21
+ * LastUpdate:2019/03/04
  */
 
 data_prefix = "QSE.Ver2."
@@ -287,6 +287,17 @@ var QUEST_DATA = {
     266: [
         /** 敵主力艦隊(2-5ボス)S勝利 */
         new QuestData(1, true, true, RESET.MONTHLY),
+    ],
+    /** [280]兵站線確保！海上警備を強化実施せよ！ */
+    280: [
+        /** 敵主力艦隊(1-2 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-2"),
+        /** 敵主力艦隊(1-3 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-3"),
+        /** 敵機動部隊(1-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-4"),
+        /** 敵主力艦隊(2-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-1"),
     ],
     /** [822]沖ノ島海域迎撃戦 */
     822: [
