@@ -548,10 +548,10 @@ function addCountForBattleResultPart(data) {
     if (isEqualMap(7, 1) && isWinS(rank)) {
         addQuestCount(893, 1, 2) // 泊地周辺海域の安全確保を徹底せよ！[7-1]
     }
-    if (isEqualMap(7, 2, 7) && isWinS(rank)) {
+    if (isEqualCell(7, 2, 7) && isWinS(rank)) {
         addQuestCount(893, 1, 3) // 泊地周辺海域の安全確保を徹底せよ！[7-2-1]
     }
-    if (isEqualMap(7, 2, 15) && isWinS(rank)) {
+    if (isEqualCell(7, 2, 15) && isWinS(rank)) {
         addQuestCount(893, 1, 4) // 泊地周辺海域の安全確保を徹底せよ！[7-2-2]
     }
     // #endregion
