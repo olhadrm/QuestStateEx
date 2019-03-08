@@ -1,5 +1,5 @@
 /**
- * 任務進捗詳細 Ver.2.2.3
+ * 任務進捗詳細 Ver.2.2.4
  * Author:Nishisonic,Nekopanda
  * LastUpdate:2019/03/08
  */
@@ -400,6 +400,11 @@ var QUEST_DATA = {
         new QuestData(3, false, true, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
         /** 戦闘糧食 */
         new QuestData(1, false, false, RESET.NONE, "糧食"),
+    ],
+    /** [330]空母機動部隊、演習始め！ */
+    330: [
+        /** 勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.QUARTRELY]),
     ],
     // #endregion
     // #region 遠征

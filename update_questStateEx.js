@@ -819,6 +819,16 @@ function addCountForPracticeBattleResultPart(data) {
         if (cl >= 2) {
             addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
         }
+        // 旗艦に空母が居るか
+        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.ACV].some(function(stype){
+            return ships.get(0).stype === stype
+        })) {
+            var dd = getLength(stypes[SHIP_TYPE.DD])
+            var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
+            if (dd > 1 && cv > 1) {
+                addQuestCount(330) // 空母機動部隊、演習始め！
+            }
+        }
     }
 }
 
