@@ -27,9 +27,11 @@ function getProgress(questNo, questType, questProgressFlag) {
                 var max = condition.max
                 var rate = Math.min(count, max) / max * 100
                 sum += rate
-                result += Optional.ofNullable(condition.title).map(function (title) {
-                    return " " + title + ":"
-                }).orElse(" ") + Math.min(count, max) + "/" + max
+                if (rate < 100) {
+                    result += Optional.ofNullable(condition.title).map(function (title) {
+                        return " " + title + ":"
+                    }).orElse(" ") + Math.min(count, max) + "/" + max
+                }
             })
             sum = Math.floor(sum / conditions.length)
             switch (parseInt(questProgressFlag)) {

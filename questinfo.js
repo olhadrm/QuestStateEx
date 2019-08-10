@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.2.4
+ * 任務進捗詳細 Ver.2.2.5
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2019/03/08
+ * LastUpdate:2019/08/10
  */
 
 data_prefix = "QSE.Ver2."
@@ -299,6 +299,17 @@ var QUEST_DATA = {
         /** 敵主力艦隊(2-1 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.QUARTRELY, "2-1"),
     ],
+    /** [284]南西諸島方面「海上警備行動」発令！ */
+    284: [
+        /** 敵機動部隊(1-4ボス戦)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "1-4"),
+        /** 敵主力部隊(2-1ボス戦)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-1"),
+        /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-2"),
+        /** 敵主力打撃群(2-3ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "2-3"),
+    ],
     /** [822]沖ノ島海域迎撃戦 */
     822: [
         /** 敵侵攻中核艦隊(2-4ボス)S勝利 */
@@ -324,6 +335,17 @@ var QUEST_DATA = {
     862: [
         /** 留守泊地旗艦艦隊(6-3ボス)A勝利 */
         new QuestData(2, true, true, RESET.QUARTRELY),
+    ],
+    /** [872]戦果拡張任務！「Z作戦」後段作戦 */
+    872: [
+        /** 深海南方任務部隊 本隊(5-5ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-5"),
+        /** 敵攻略部隊本体(6-2ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "6-2"),
+        /** 任務部隊 主力群(6-5ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "6-5"),
+        /** 深海任務部隊 主力機動部隊群(7-2-2ボス)S勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "7-2-2"),
     ],
     /** [873]北方海域警備を実施せよ！ */
     873: [

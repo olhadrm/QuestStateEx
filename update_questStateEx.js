@@ -349,6 +349,8 @@ function addCountForBattleResultPart(data) {
     var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
     var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.TV])) > 0
         && (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
+    // 上と内容同一
+    var has284Org = has280Org
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -384,6 +386,9 @@ function addCountForBattleResultPart(data) {
         if (hasCV) {
             addQuestCount(894, 1, 2) // 空母戦力の投入による兵站線戦闘哨戒[1-4]
         }
+        if (has284Org) {
+            addQuestCount(284, 1, 1) // 南西諸島方面「海上警備行動」発令！[1-4]
+        }
     }
     if (isEqualMap(1, 5) && isWinA(rank)) {
         addQuestCount(261) // 海上輸送路の安全確保に努めよ！
@@ -404,18 +409,27 @@ function addCountForBattleResultPart(data) {
         if (hasCV) {
             addQuestCount(894, 1, 3) // 空母戦力の投入による兵站線戦闘哨戒[2-1]
         }
+        if (has284Org) {
+            addQuestCount(284, 1, 2) // 南西諸島方面「海上警備行動」発令！[2-1]
+        }
     }
     if (isEqualMap(2, 2) && isWinS(rank)) {
         if (hasCV) {
             addQuestCount(894, 1, 4) // 空母戦力の投入による兵站線戦闘哨戒[2-2]
+        }
+        if (has284Org) {
+            addQuestCount(284, 1, 3) // 南西諸島方面「海上警備行動」発令！[2-2]
         }
     }
     if (isEqualMap(2, 3) && isWinS(rank)) {
         if (hasCV) {
             addQuestCount(894, 1, 5) // 空母戦力の投入による兵站線戦闘哨戒[2-3]
         }
+        if (has284Org) {
+            addQuestCount(284, 1, 4) // 南西諸島方面「海上警備行動」発令！[2-3]
+        }
     }
-    if (isEqualMap(2, 4) && isWinA(rank)) {
+    if (isEqualMap(2, 4) && isWinA(rank) && Number(lastBattleDto.dock.id) === 1) {
         addQuestCount(854, 1, 1) // 戦果拡張任務！「Z作戦」前段作戦[2-4]
     }
     if (isEqualMap(2, 4) && isWinS(rank)) {
@@ -470,7 +484,7 @@ function addCountForBattleResultPart(data) {
     if (isEqualMap(4, 2) && isWinS(rank)) {
         // 空母2隻、駆逐2隻
         var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
-        if (cv === 2 && getLength(stypes[SHIP_TYPE.DD]) === 2) {
+        if (cv >= 2 && getLength(stypes[SHIP_TYPE.DD]) >= 2) {
             addQuestCount(264) // 「空母機動部隊」西へ！
         }
     }
@@ -522,16 +536,22 @@ function addCountForBattleResultPart(data) {
         if (naganami && no31s) {
             addQuestCount(875) // 精鋭「三一駆」、鉄底海域に突入せよ！
         }
+        if (Number(lastBattleDto.dock.id) === 1) {
+            addQuestCount(872, 1, 1) // 戦果拡張任務！「Z作戦」後段作戦[5-5]
+        }
     }
     // #endregion
     // #region 中部海域
-    if (isEqualMap(6, 1) && isWinA(rank)) {
+    if (isEqualMap(6, 1) && isWinA(rank) && Number(lastBattleDto.dock.id) === 1) {
         addQuestCount(854, 1, 2) // 戦果拡張任務！「Z作戦」前段作戦[6-1]
     }
     if (isEqualMap(6, 1) && isWinS(rank)) {
         addQuestCount(256) // 「潜水艦隊」出撃せよ！
     }
-    if (isEqualMap(6, 3) && isWinA(rank)) {
+    if (isEqualMap(6, 2) && isWinS(rank) && Number(lastBattleDto.dock.id) === 1) {
+        addQuestCount(872, 1, 2) // 戦果拡張任務！「Z作戦」後段作戦[6-2]
+    }
+    if (isEqualMap(6, 3) && isWinA(rank) && Number(lastBattleDto.dock.id) === 1) {
         addQuestCount(854, 1, 3) // 戦果拡張任務！「Z作戦」前段作戦[6-3]
     }
     if (isEqualMap(6, 3) && isWinA(rank)) {
@@ -540,8 +560,11 @@ function addCountForBattleResultPart(data) {
             addQuestCount(862) // 前線の航空偵察を実施せよ！
         }
     }
-    if (isEqualMap(6, 4) && isWinS(rank)) {
+    if (isEqualMap(6, 4) && isWinS(rank) && Number(lastBattleDto.dock.id) === 1) {
         addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+    }
+    if (isEqualMap(6, 5) && isWinS(rank) && Number(lastBattleDto.dock.id) === 1) {
+        addQuestCount(872, 1, 3) // 戦果拡張任務！「Z作戦」後段作戦[6-5]
     }
     // #endregion
     // #region 南西海域
@@ -553,6 +576,10 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualCell(7, 2, 15) && isWinS(rank)) {
         addQuestCount(893, 1, 4) // 泊地周辺海域の安全確保を徹底せよ！[7-2-2]
+
+        if (Number(lastBattleDto.dock.id) === 1) {
+            addQuestCount(872, 1, 4) // 戦果拡張任務！「Z作戦」後段作戦[7-2-2]
+        }
     }
     // #endregion
     // #endregion
