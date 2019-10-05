@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.2.5
+ * 任務進捗詳細 Ver.2.2.6
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2019/08/10
+ * LastUpdate:2019/10/05
  */
 
 data_prefix = "QSE.Ver2."
@@ -315,6 +315,19 @@ var QUEST_DATA = {
         /** 敵侵攻中核艦隊(2-4ボス)S勝利 */
         new QuestData(2, true, true, RESET.QUARTRELY),
     ],
+    /** [845]発令！「西方海域作戦」 */
+    845: [
+        /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "4-1"),
+        /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "4-2"),
+        /** 敵東方港湾基地(4-3 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "4-3"),
+        /** 敵東方中枢艦隊 旗艦(4-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "4-4"),
+        /** リランカ島港湾守備隊(4-5 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "4-5"),
+    ],
     /** [854]戦果拡張任務！「Z作戦」前段作戦 */
     854: [
         /** 敵侵攻中核艦隊(2-4ボス)A勝利 */
@@ -427,6 +440,11 @@ var QUEST_DATA = {
     330: [
         /** 勝利 */
         new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.QUARTRELY]),
+    ],
+    /** [337]「十八駆」演習！ */
+    337: [
+        /** S勝利 */
+        new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.QUARTRELY]),
     ],
     // #endregion
     // #region 遠征
@@ -573,6 +591,15 @@ var QUEST_DATA = {
         /** 「九一式徹甲弾」用意 */
         new QuestData(1, false, false, RESET.NONE, "徹甲弾"),
     ],
+    /** [653]工廠稼働！次期作戦準備！ */
+    653: [
+        /** 「14cm単装砲」廃棄(一括は別々) */
+        new QuestData(6, false, true, RESET.QUARTRELY, "14cm単装砲"),
+        /** 「35.6cm連装砲」用意 */
+        new QuestData(3, false, false, RESET.NONE, "35.6cm連装砲"),
+        /** 「九六式艦戦」用意 */
+        new QuestData(3, false, false, RESET.NONE, "九六式艦戦"),
+    ],
     /** [663]新型艤装の継続研究 */
     663: [
         /** 「大口径主砲」廃棄(一括は別々) */
@@ -588,16 +615,16 @@ var QUEST_DATA = {
     /** [674]工廠環境の整備 */
     674: [
         /** 「機銃」廃棄(一括は別々) */
-        new QuestData(3, true, true, RESET.DAILY, "機銃"),
+        new QuestData(3, false, true, RESET.DAILY, "機銃"),
         /** 「鋼材」用意 */
         new QuestData(300, false, false, RESET.NONE, "鋼材"),
     ],
     /** [675]運用装備の統合整備 */
     675: [
         /** 「艦上戦闘機」廃棄(一括は別々) */
-        new QuestData(6, true, true, RESET.QUARTRELY, "艦戦"),
+        new QuestData(6, false, true, RESET.QUARTRELY, "艦戦"),
         /** 「機銃」廃棄(一括は別々) */
-        new QuestData(4, true, true, RESET.QUARTRELY, "機銃"),
+        new QuestData(4, false, true, RESET.QUARTRELY, "機銃"),
         /** 「ボーキサイト」用意 */
         new QuestData(800, false, false, RESET.NONE, "ボーキ"),
     ],

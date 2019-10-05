@@ -176,6 +176,8 @@ function savePortItem(data) {
         saveQuestCount(643, getLength(itemList[16]), 3, true) // 主力「陸攻」の調達[九七式艦攻]
         saveQuestCount(645, getLength(itemList[75]), 4, true) // 「洋上補給」物資の調達[ドラム缶(輸送用)]
         saveQuestCount(645, getLength(itemList[36]), 5, true) // 「洋上補給」物資の調達[九一式徹甲弾]
+        saveQuestCount(653, getLength(itemList[7]), 2, true) // 工廠稼働！次期作戦準備！[35.6cm連装砲]
+        saveQuestCount(653, getLength(itemList[19]), 3, true) // 工廠稼働！次期作戦準備！[九六式艦戦]
     }
 }
 
@@ -481,15 +483,26 @@ function addCountForBattleResultPart(data) {
     if (isEqualArea(4) && isWin(rank)) {
         addQuestCount(229) // 敵東方艦隊を撃滅せよ！
     }
+    if (isEqualMap(4, 1) && isWinS(rank)) {
+        addQuestCount(845, 1, 1) // 発令！「西方海域作戦」[4-1]
+    }
     if (isEqualMap(4, 2) && isWinS(rank)) {
         // 空母2隻、駆逐2隻
         var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
         if (cv >= 2 && getLength(stypes[SHIP_TYPE.DD]) >= 2) {
             addQuestCount(264) // 「空母機動部隊」西へ！
         }
+        addQuestCount(845, 1, 2) // 発令！「西方海域作戦」[4-2]
+    }
+    if (isEqualMap(4, 3) && isWinS(rank)) {
+        addQuestCount(845, 1, 3) // 発令！「西方海域作戦」[4-3]
     }
     if (isEqualMap(4, 4) && isWin(rank)) {
         addQuestCount(242) // 敵東方中枢艦隊を撃破せよ！
+        addQuestCount(845, 1, 4) // 発令！「西方海域作戦」[4-4]
+    }
+    if (isEqualMap(4, 5) && isWinS(rank)) {
+        addQuestCount(845, 1, 5) // 発令！「西方海域作戦」[4-5]
     }
     // #endregion
     // #region 南方海域
@@ -643,6 +656,8 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(643, getLength(slotitemId[20]), 1) // 零式艦戦21型
         // 「洋上補給」物資の調達
         addQuestCount(645, getLength(slotitemId[35]), 1) // 三式弾
+        // 工廠稼働！次期作戦準備！
+        addQuestCount(653, getLength(slotitemId[4]), 1) // 14cm単装砲
         // 新型艤装の継続研究
         addQuestCount(663, getLength(type2[3]), 1) // 大口径主砲
         // 装備開発力の整備
@@ -855,6 +870,18 @@ function addCountForPracticeBattleResultPart(data) {
             if (dd > 1 && cv > 1) {
                 addQuestCount(330) // 空母機動部隊、演習始め！
             }
+        }
+    }
+    if (isWinS(rank)) {
+        var flotilla18 = ships.stream().map(function (ship) {
+            return ship.shipInfo.flagship
+        }).filter(function (name) {
+            return ["かすみ", "あられ", "かげろう", "しらぬい"].some(function (_name) {
+                return name.equals(_name)
+            })
+        }).length
+        if (flotilla18 >= 4) {
+            addQuestCount(337) // 「十八駆」演習！
         }
     }
 }
