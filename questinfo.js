@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.2.6
+ * 任務進捗詳細 Ver.2.2.7
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2019/10/05
+ * LastUpdate:2020/01/17
  */
 
 data_prefix = "QSE.Ver2."
@@ -315,6 +315,33 @@ var QUEST_DATA = {
         /** 敵侵攻中核艦隊(2-4ボス)S勝利 */
         new QuestData(2, true, true, RESET.QUARTRELY),
     ],
+    /** [840]【節分任務】令和二年節分作戦 */
+    840: [
+        /** 敵機動部隊(1-4 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "1-4"),
+        /** 敵主力部隊(2-1 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-1"),
+        /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-2")
+    ],
+    /** [841]【節分任務】令和二年西方海域節分作戦 */
+    841: [
+        /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "4-1"),
+        /** 敵東方港湾基地(4-2 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "4-2"),
+        /** 敵東方中枢艦隊 旗艦(4-3 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "4-3")
+    ],
+    /** [843]【節分拡張任務】令和二年節分作戦、全力出撃！ */
+    843: [
+        /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "5-4"),
+        /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "5-5"),
+        /** 離島守備隊(6-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "6-4")
+    ],
     /** [845]発令！「西方海域作戦」 */
     845: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
@@ -407,6 +434,17 @@ var QUEST_DATA = {
         /** 敵主力打撃群(2-3 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.QUARTRELY, "2-3"),
     ],
+    /** [903]拡張「六水戦」、最前線へ！ */
+    903: [
+        /** 敵南方前線司令艦隊(5-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-1"),
+        /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "5-4"),
+        /** 離島守備隊(6-4 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "6-4"),
+        /** 任務部隊 主力群(6-5 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.QUARTRELY, "6-5")
+    ],
     // #endregion
     // #region 演習
     /** [302]大規模演習 */
@@ -435,6 +473,11 @@ var QUEST_DATA = {
         new QuestData(3, false, true, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
         /** 戦闘糧食 */
         new QuestData(1, false, false, RESET.NONE, "糧食"),
+    ],
+    /** [329]【節分任務】節分演習！ */
+    329: [
+        /** S勝利 */
+        new QuestData(3, true, true, RESET.DAILY),
     ],
     /** [330]空母機動部隊、演習始め！ */
     330: [

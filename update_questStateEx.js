@@ -349,10 +349,14 @@ function addCountForBattleResultPart(data) {
         return ship.stype
     }))
     var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
-    var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.TV])) > 0
-        && (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
+    var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.TV])) > 0 &&
+        (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     // 上と内容同一
     var has284Org = has280Org
+    var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.TV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 &&
+        (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
+    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CVA].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -368,6 +372,11 @@ function addCountForBattleResultPart(data) {
         }
         if (hasCV) {
             addQuestCount(894, 1, 1) // 空母戦力の投入による兵站線戦闘哨戒[1-3]
+        }
+    }
+    if (isEqualMap(1, 4) && isWinA(rank)) {
+        if (setsubun1) {
+            addQuestCount(840, 1, 1) // 【節分任務】令和二年節分作戦[1-4]
         }
     }
     if (isEqualMap(1, 4) && isWinS(rank)) {
@@ -404,6 +413,11 @@ function addCountForBattleResultPart(data) {
     if (isEqualArea(2) && isWin(rank)) {
         addQuestCount(226) // 南西諸島海域の制海権を握れ！
     }
+    if (isEqualMap(2, 1) && isWinA(rank)) {
+        if (setsubun1) {
+            addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
+        }
+    }
     if (isEqualMap(2, 1) && isWinS(rank)) {
         if (has280Org) {
             addQuestCount(280, 1, 4) // 兵站線確保！海上警備を強化実施せよ！[2-1]
@@ -413,6 +427,11 @@ function addCountForBattleResultPart(data) {
         }
         if (has284Org) {
             addQuestCount(284, 1, 2) // 南西諸島方面「海上警備行動」発令！[2-1]
+        }
+    }
+    if (isEqualMap(2, 2) && isWinA(rank)) {
+        if (setsubun1) {
+            addQuestCount(840, 1, 3) // 【節分任務】令和二年節分作戦[2-2]
         }
     }
     if (isEqualMap(2, 2) && isWinS(rank)) {
@@ -485,6 +504,9 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(4, 1) && isWinS(rank)) {
         addQuestCount(845, 1, 1) // 発令！「西方海域作戦」[4-1]
+        if (setsubun2) {
+            addQuestCount(841, 1, 1) // 【節分任務】令和二年西方海域節分作戦[4-1]
+        }
     }
     if (isEqualMap(4, 2) && isWinS(rank)) {
         // 空母2隻、駆逐2隻
@@ -493,9 +515,15 @@ function addCountForBattleResultPart(data) {
             addQuestCount(264) // 「空母機動部隊」西へ！
         }
         addQuestCount(845, 1, 2) // 発令！「西方海域作戦」[4-2]
+        if (setsubun2) {
+            addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
+        }
     }
     if (isEqualMap(4, 3) && isWinS(rank)) {
         addQuestCount(845, 1, 3) // 発令！「西方海域作戦」[4-3]
+        if (setsubun2) {
+            addQuestCount(841, 1, 3) // 【節分任務】令和二年西方海域節分作戦[4-3]
+        }
     }
     if (isEqualMap(4, 4) && isWin(rank)) {
         addQuestCount(242) // 敵東方中枢艦隊を撃破せよ！
@@ -513,9 +541,19 @@ function addCountForBattleResultPart(data) {
             return name.equals(_name)
         })
     }).length
+    // 夕張改二型旗艦
+    var isSixTpSquadron = [622, 623, 624].indexOf(ships.get(0).shipId) >= 0 && (ships.stream().map(function (ship) {
+        return ship.shipInfo.flagship
+    }).filter(function (name) {
+        return ["むつき", "きさらぎ", "やよい", "うづき", "きくづき", "もちづき"].some(function (_name) {
+            return name.equals(_name)
+        })
+    }).length >= 2 || ships.stream().anyMatch(function (ship) {
+        return ship.shipId === 488 // 由良改二
+    }))
     if (isEqualMap(5, 1) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
-            addQuestCount(888, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
+            addQuestCount(888, 1, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
         }
         var num = ships.stream().map(function (ship) {
             return ship.shipInfo.json.api_ctype
@@ -526,31 +564,46 @@ function addCountForBattleResultPart(data) {
         if (num === 3 && getLength(stypes[SHIP_TYPE.CL]) === 1) {
             addQuestCount(259) // 「水上打撃部隊」南方へ！
         }
+        if (isSixTpSquadron) {
+            addQuestCount(903, 1, 1) // 拡張「六水戦」、最前線へ！[5-1]
+        }
     }
     if (isEqualMap(5, 2) && isWinS(rank)) {
         addQuestCount(243) // 南方海域珊瑚諸島沖の制空権を握れ！
     }
     if (isEqualMap(5, 3) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
-            addQuestCount(888, 2) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-3]
+            addQuestCount(888, 1, 2) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-3]
         }
     }
     if (isEqualMap(5, 4) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
-            addQuestCount(888, 3) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-4]
+            addQuestCount(888, 1, 3) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-4]
         }
         var naganami = ships.stream().anyMatch(function (ship) {
             return ship.shipId === 543
         })
         var no31s = ships.stream().anyMatch(function (ship) {
-            // 朝霜改or高波改or沖波改
-            return ship.shipId === 344 || ship.shipId === 345 || ship.shipId === 359
+            return ["たかなみ", "おきなみ", "あさしも"].some(function (name) {
+                return ship.shipInfo.flagship.equals(name) && ship.name.indexOf("改") >= 0
+            })
         })
         if (naganami && no31s) {
             addQuestCount(875) // 精鋭「三一駆」、鉄底海域に突入せよ！
         }
         if (Number(lastBattleDto.dock.id) === 1) {
             addQuestCount(872, 1, 1) // 戦果拡張任務！「Z作戦」後段作戦[5-5]
+        }
+        if (isSixTpSquadron) {
+            addQuestCount(903, 1, 2) // 拡張「六水戦」、最前線へ！[5-4]
+        }
+        if (setsubun3) {
+            addQuestCount(843, 1, 1) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-4]
+        }
+    }
+    if (isEqualMap(5, 5) && isWinS(rank)) {
+        if (setsubun3) {
+            addQuestCount(843, 1, 2) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-5]
         }
     }
     // #endregion
@@ -573,11 +626,24 @@ function addCountForBattleResultPart(data) {
             addQuestCount(862) // 前線の航空偵察を実施せよ！
         }
     }
-    if (isEqualMap(6, 4) && isWinS(rank) && Number(lastBattleDto.dock.id) === 1) {
-        addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+    if (isEqualMap(6, 4) && isWinS(rank)) {
+        if (Number(lastBattleDto.dock.id) === 1) {
+            addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+        }
+        if (isSixTpSquadron) {
+            addQuestCount(903, 1, 3) // 拡張「六水戦」、最前線へ！[6-4]
+        }
+        if (setsubun3) {
+            addQuestCount(843, 1, 3) // 【節分拡張任務】令和二年節分作戦、全力出撃！[6-4]
+        }
     }
-    if (isEqualMap(6, 5) && isWinS(rank) && Number(lastBattleDto.dock.id) === 1) {
-        addQuestCount(872, 1, 3) // 戦果拡張任務！「Z作戦」後段作戦[6-5]
+    if (isEqualMap(6, 5) && isWinS(rank)) {
+        if (Number(lastBattleDto.dock.id) === 1) {
+            addQuestCount(872, 1, 3) // 戦果拡張任務！「Z作戦」後段作戦[6-5]
+        }
+        if (isSixTpSquadron) {
+            addQuestCount(903, 1, 4) // 拡張「六水戦」、最前線へ！[6-5]
+        }
     }
     // #endregion
     // #region 南西海域
@@ -636,10 +702,10 @@ function addCountForDestroyItem2Part(data) {
             return itemList.get(id | 0)
         })
         var type2 = Arrays.stream(Java.to(destroyItems)).collect(Collectors.groupingBy(function (item) {
-            return item.type2
+            return item ? item.type2 : 0
         }))
         var slotitemId = Arrays.stream(Java.to(destroyItems)).collect(Collectors.groupingBy(function (item) {
-            return item.slotitemId
+            return item ? item.slotitemId : 0
         }))
         // 精鋭「艦戦」隊の新編成
         if (isMatchSecretary(626)) {
@@ -862,9 +928,9 @@ function addCountForPracticeBattleResultPart(data) {
             addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
         }
         // 旗艦に空母が居るか
-        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.ACV].some(function(stype){
-            return ships.get(0).stype === stype
-        })) {
+        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.ACV].some(function (stype) {
+                return ships.get(0).stype === stype
+            })) {
             var dd = getLength(stypes[SHIP_TYPE.DD])
             var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
             if (dd > 1 && cv > 1) {
@@ -882,6 +948,13 @@ function addCountForPracticeBattleResultPart(data) {
         }).length
         if (flotilla18 >= 4) {
             addQuestCount(337) // 「十八駆」演習！
+        }
+        var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
+            return ship.stype
+        }))
+        var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
+        if (dedd >= 2) {
+            addQuestCount(329) // 【節分任務】節分演習！
         }
     }
 }
