@@ -356,7 +356,7 @@ function addCountForBattleResultPart(data) {
     var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.TV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 &&
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CVA].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
-    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CVB, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
