@@ -56,6 +56,7 @@ function categoryColor(category) {
         case 7: //改装
             return new RGB(0xDD, 0xCC, 0xFF)
         case 8: //出撃
+        case 9: //出撃
             return new RGB(0xFF, 0xCC, 0xCC)
         default:
             return new RGB(0xFF, 0xFF, 0xFF)

@@ -344,8 +344,8 @@ function addCountForBattleResultPart(data) {
         addQuestCount(214, 1, 4) // あ号作戦[ボス勝利]
     }
     // #endregion
-    var ships = lastBattleDto.dock.ships
-    var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
+    var ships = Java.from(lastBattleDto.dock.ships)
+    var stypes = lastBattleDto.dock.ships.stream().collect(Collectors.groupingBy(function (ship) {
         return ship.stype
     }))
     var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
@@ -353,10 +353,10 @@ function addCountForBattleResultPart(data) {
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     // 上と内容同一
     var has284Org = has280Org
-    var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.TV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 &&
+    var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.TV, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 &&
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
-    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CVA].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
-    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CVB, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships.get(0).stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CVA].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CVB, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -381,12 +381,12 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(1, 4) && isWinS(rank)) {
         // 軽巡旗艦、軽巡1~3隻、駆逐1隻以上、軽巡と駆逐のみ
-        if (ships.get(0).stype === SHIP_TYPE.CL) {
+        if (ships[0].stype === SHIP_TYPE.CL) {
             var cl = getLength(stypes[SHIP_TYPE.CL])
             var dd = getLength(stypes[SHIP_TYPE.DD])
             if (cl < 4 && dd > 0) {
                 var shipNum = cl + dd
-                if (ships.size() === shipNum) {
+                if (ships.length === shipNum) {
                     addQuestCount(257) // 「水雷戦隊」南西へ！
                 }
             }
@@ -457,10 +457,10 @@ function addCountForBattleResultPart(data) {
         addQuestCount(822) // 沖ノ島海域迎撃戦
     }
     if (isEqualMap(2, 5) && isWinS(rank)) {
-        var num = ships.stream().map(function (ship) {
+        var num = ships.map(function (ship) {
             return ship.shipInfo.flagship
         }).filter(function (name) {
-            return name.equals("みょうこう") || name.equals("なち") || name.equals("はぐろ")
+            return ["みょうこう", "なち", "はぐろ"].indexOf(name) >= 0
         }).length
         if (num === 3) {
             addQuestCount(249) // 「第五戦隊」出撃せよ！
@@ -468,7 +468,7 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(2, 5) && isWinS(rank)) {
         // 駆逐旗艦、重巡1隻、軽巡1隻、駆逐4隻
-        if (ships.get(0).stype === SHIP_TYPE.DD) {
+        if (ships[0].stype === SHIP_TYPE.DD) {
             if (getLength(stypes[SHIP_TYPE.CA]) === 1 && getLength(stypes[SHIP_TYPE.CL]) === 1 && getLength(stypes[SHIP_TYPE.DD]) === 4) {
                 addQuestCount(266) // 「水上反撃部隊」突入せよ！
             }
@@ -534,28 +534,24 @@ function addCountForBattleResultPart(data) {
     }
     // #endregion
     // #region 南方海域
-    var newMikawaNum = ships.stream().map(function (ship) {
+    var newMikawaNum = ships.map(function (ship) {
         return ship.shipInfo.flagship
     }).filter(function (name) {
-        return ["ちょうかい", "あおば", "きぬがさ", "かこ", "ふるたか", "てんりゅう", "ゆうばり"].some(function (_name) {
-            return name.equals(_name)
-        })
+        return ["ちょうかい", "あおば", "きぬがさ", "かこ", "ふるたか", "てんりゅう", "ゆうばり"].indexOf(name) >= 0
     }).length
     // 夕張改二型旗艦
-    var isSixTpSquadron = [622, 623, 624].indexOf(ships.get(0).shipId) >= 0 && (ships.stream().map(function (ship) {
+    var isSixTpSquadron = [622, 623, 624].indexOf(ships[0].shipId) >= 0 && (ships.map(function (ship) {
         return ship.shipInfo.flagship
     }).filter(function (name) {
-        return ["むつき", "きさらぎ", "やよい", "うづき", "きくづき", "もちづき"].some(function (_name) {
-            return name.equals(_name)
-        })
-    }).length >= 2 || ships.stream().anyMatch(function (ship) {
+        return ["むつき", "きさらぎ", "やよい", "うづき", "きくづき", "もちづき"].indexOf(name) >= 0
+    }).length >= 2 || ships.some(function (ship) {
         return ship.shipId === 488 // 由良改二
     }))
     if (isEqualMap(5, 1) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
             addQuestCount(888, 1, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
         }
-        var num = ships.stream().map(function (ship) {
+        var num = ships.map(function (ship) {
             return ship.shipInfo.json.api_ctype
         }).filter(function (ctype) {
             // 扶桑型or伊勢型or長門型or大和型
@@ -580,10 +576,10 @@ function addCountForBattleResultPart(data) {
         if (newMikawaNum >= 4) {
             addQuestCount(888, 1, 3) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-4]
         }
-        var naganami = ships.stream().anyMatch(function (ship) {
+        var naganami = ships.some(function (ship) {
             return ship.shipId === 543
         })
-        var no31s = ships.stream().anyMatch(function (ship) {
+        var no31s = ships.some(function (ship) {
             return ["たかなみ", "おきなみ", "あさしも"].some(function (name) {
                 return ship.shipInfo.flagship.equals(name) && ship.name.indexOf("改") >= 0
             })
@@ -915,21 +911,21 @@ function addCountForPracticeBattleResultPart(data) {
     var lastBattleDto = GlobalContext.lastBattleDto
     addQuestCount(303) // 「演習」で練度向上！
     var rank = lastBattleDto.rank
+    var ships = Java.from(lastBattleDto.dock.ships)
+    var stypes = lastBattleDto.dock.ships.stream().collect(Collectors.groupingBy(function (ship) {
+        return ship.stype
+    }))
     if (isWin(rank)) {
         addQuestCount(304) // 「演習」で他提督を圧倒せよ！
         addQuestCount(302) // 大規模演習
         addQuestCount(311) // 精鋭艦隊演習
-        var ships = lastBattleDto.dock.ships
-        var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
-            return ship.stype
-        }))
         var cl = getLength(stypes[SHIP_TYPE.CL])
         if (cl >= 2) {
             addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
         }
         // 旗艦に空母が居るか
         if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.ACV].some(function (stype) {
-                return ships.get(0).stype === stype
+                return ships[0].stype === stype
             })) {
             var dd = getLength(stypes[SHIP_TYPE.DD])
             var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
@@ -939,19 +935,14 @@ function addCountForPracticeBattleResultPart(data) {
         }
     }
     if (isWinS(rank)) {
-        var flotilla18 = ships.stream().map(function (ship) {
+        var flotilla18 = ships.map(function (ship) {
             return ship.shipInfo.flagship
         }).filter(function (name) {
-            return ["かすみ", "あられ", "かげろう", "しらぬい"].some(function (_name) {
-                return name.equals(_name)
-            })
+            return ["かすみ", "あられ", "かげろう", "しらぬい"].indexOf(name) >= 0
         }).length
         if (flotilla18 >= 4) {
             addQuestCount(337) // 「十八駆」演習！
         }
-        var stypes = ships.stream().collect(Collectors.groupingBy(function (ship) {
-            return ship.stype
-        }))
         var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
         if (dedd >= 2) {
             addQuestCount(329) // 【節分任務】節分演習！
