@@ -291,7 +291,7 @@ function addCountForNextPart(data) {
         var stypes = GlobalContext.getDock(sortieFleetIdx + 1).ships.stream().collect(Collectors.groupingBy(function (ship) {
             return ship.stype
         }))
-        if (getLength(stypes[SHIP_TYPE.CVB]) === 2 || getLength(stypes[SHIP_TYPE.AO]) === 2) {
+        if (getLength(stypes[SHIP_TYPE.BBV]) === 2 || getLength(stypes[SHIP_TYPE.AO]) === 2) {
             addQuestCount(861) // 強行輸送艦隊、抜錨！
         }
     }
@@ -348,15 +348,15 @@ function addCountForBattleResultPart(data) {
     var stypes = lastBattleDto.dock.ships.stream().collect(Collectors.groupingBy(function (ship) {
         return ship.stype
     }))
-    var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])) > 0
-    var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.TV])) > 0 &&
+    var hasCV = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])) > 0
+    var has280Org = (getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CLT]) + getLength(stypes[SHIP_TYPE.CT])) > 0 &&
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     // 上と内容同一
     var has284Org = has280Org
-    var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.TV, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 &&
+    var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.CT, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 &&
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
-    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CVA].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
-    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.BC, SHIP_TYPE.CVB, SHIP_TYPE.CV, SHIP_TYPE.ACV, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.FBB, SHIP_TYPE.BBV, SHIP_TYPE.CV, SHIP_TYPE.CVB, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -510,7 +510,7 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(4, 2) && isWinS(rank)) {
         // 空母2隻、駆逐2隻
-        var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
+        var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])
         if (cv >= 2 && getLength(stypes[SHIP_TYPE.DD]) >= 2) {
             addQuestCount(264) // 「空母機動部隊」西へ！
         }
@@ -783,7 +783,7 @@ function isMatchSecretary(id) {
                 return false
             case 628:
                 var stype = secretary.stype
-                if (stype === SHIP_TYPE.CV || stype === SHIP_TYPE.ACV || stype === SHIP_TYPE.CVL) {
+                if (stype === SHIP_TYPE.CV || stype === SHIP_TYPE.CVB || stype === SHIP_TYPE.CVL) {
                     return secretary.item2.stream().filter(function (item) {
                         return item instanceof ItemDto
                     }).anyMatch(function (item) {
@@ -924,11 +924,11 @@ function addCountForPracticeBattleResultPart(data) {
             addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
         }
         // 旗艦に空母が居るか
-        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.ACV].some(function (stype) {
+        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].some(function (stype) {
                 return ships[0].stype === stype
             })) {
             var dd = getLength(stypes[SHIP_TYPE.DD])
-            var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.ACV])
+            var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])
             if (dd > 1 && cv > 1) {
                 addQuestCount(330) // 空母機動部隊、演習始め！
             }
