@@ -9,6 +9,7 @@ ResultRank = Java.type("logbook.dto.ResultRank")
 ShipDto = Java.type("logbook.dto.ShipDto")
 ApplicationMain = Java.type("logbook.gui.ApplicationMain")
 Item = Java.type("logbook.internal.Item")
+Ship = Java.type("logbook.internal.Ship")
 
 ZonedDateTime = Java.type("java.time.ZonedDateTime")
 ZoneId = Java.type("java.time.ZoneId")
@@ -79,6 +80,8 @@ function update(type, data) {
         default:
             break
     }
+    // 艦娘保存
+    storeShipMap()
     // 装備保存
     storeItemMap()
     // 資材更新
@@ -90,10 +93,26 @@ function update(type, data) {
 }
 
 /**
+ * 最新のshipMapをScriptData内に保存します
+ */
+function storeShipMap() {
+    setTmpData("shipMap", new TreeMap(GlobalContext.shipMap))
+}
+
+/**
  * 最新のitemMapをScriptData内に保存します
  */
 function storeItemMap() {
     setTmpData("itemMap", new TreeMap(GlobalContext.itemMap))
+}
+
+/**
+ * 保存されたshipMapを取り出します
+ *
+ * @return {java.util.TreeMap} 艦娘一覧
+ */
+function getStoredShipMap() {
+    return getData("shipMap")
 }
 
 /**
@@ -131,6 +150,21 @@ function saveLastUpdateQuestTime(time) {
 
 /**
  * 任務状態を保存
+ * @param {logbook.data.ActionData} data data
+ */
+function saveQuestState(data) {
+    var json = data.jsonObject.api_data
+    if (json.api_list instanceof List) {
+        Java.from(json.api_list).filter(function (quest) {
+            return (quest.api_type | 0) !== QUEST_TYPE.ONCE
+        }).forEach(function (quest) {
+            setData("IsActive" + quest.api_no, (quest.api_state | 0) === QUEST_STATE.ACTIVE || (quest.api_state | 0) === QUEST_STATE.COMPLETE)
+        })
+    }
+}
+
+/**
+ * 艦娘を保存
  * @param {logbook.data.ActionData} data data
  */
 function saveQuestState(data) {
@@ -365,6 +399,12 @@ function addCountForBattleResultPart(data) {
         return [195, 627].indexOf(ship.shipId) >= 0
     }).length === 2
     var has905Org = getLength(stypes[SHIP_TYPE.DE]) >= 3 && ships.length <= 5
+    var has906Org = (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
+    var has909Org = ships.map(function (ship) {
+        return ship.shipInfo.json.api_ctype
+    }).filter(function (ctype) {
+        return ctype === 38 // 夕雲型
+    }).length >= 3
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -374,60 +414,81 @@ function addCountForBattleResultPart(data) {
             addQuestCount(905, 1, 1) // 「海防艦」、海を護る！[1-1]
         }
     }
-    if (isEqualMap(1, 2) && isWinS(rank)) {
-        if (has280Org) {
-            addQuestCount(280, 1, 1) // 兵站線確保！海上警備を強化実施せよ！[1-2]
-        }
-        if (has905Org) {
-            addQuestCount(905, 1, 2) // 「海防艦」、海を護る！[1-2]
-        }
-    }
-    if (isEqualMap(1, 3) && isWinS(rank)) {
-        if (has280Org) {
-            addQuestCount(280, 1, 2) // 兵站線確保！海上警備を強化実施せよ！[1-3]
-        }
-        if (hasCV) {
-            addQuestCount(894, 1, 1) // 空母戦力の投入による兵站線戦闘哨戒[1-3]
-        }
-        if (has905Org) {
-            addQuestCount(905, 1, 3) // 「海防艦」、海を護る！[1-3]
-        }
-    }
-    if (isEqualMap(1, 4) && isWinA(rank)) {
-        if (setsubun1) {
-            addQuestCount(840, 1, 1) // 【節分任務】令和二年節分作戦[1-4]
-        }
-    }
-    if (isEqualMap(1, 4) && isWinS(rank)) {
-        // 軽巡旗艦、軽巡1~3隻、駆逐1隻以上、軽巡と駆逐のみ
-        if (ships[0].stype === SHIP_TYPE.CL) {
-            var cl = getLength(stypes[SHIP_TYPE.CL])
-            var dd = getLength(stypes[SHIP_TYPE.DD])
-            if (cl < 4 && dd > 0) {
-                var shipNum = cl + dd
-                if (ships.length === shipNum) {
-                    addQuestCount(257) // 「水雷戦隊」南西へ！
-                }
+    if (isEqualMap(1, 2)) {
+        if (isWinS(rank)) {
+            if (has280Org) {
+                addQuestCount(280, 1, 1) // 兵站線確保！海上警備を強化実施せよ！[1-2]
+            }
+            if (has905Org) {
+                addQuestCount(905, 1, 2) // 「海防艦」、海を護る！[1-2]
             }
         }
-        if (has280Org) {
-            addQuestCount(280, 1, 3) // 兵站線確保！海上警備を強化実施せよ！[1-4]
-        }
-        if (hasCV) {
-            addQuestCount(894, 1, 2) // 空母戦力の投入による兵站線戦闘哨戒[1-4]
-        }
-        if (has284Org) {
-            addQuestCount(284, 1, 1) // 南西諸島方面「海上警備行動」発令！[1-4]
+        if (isWinA(rank)) {
+            if (has906Org) {
+                addQuestCount(906, 1, 1) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-2]
+            }
         }
     }
-    if (isEqualMap(1, 5) && isWinA(rank)) {
-        addQuestCount(261) // 海上輸送路の安全確保に努めよ！
-        addQuestCount(265) // 海上護衛強化月間
+    if (isEqualMap(1, 3)) {
+        if (isWinS(rank)) {
+            if (has280Org) {
+                addQuestCount(280, 1, 2) // 兵站線確保！海上警備を強化実施せよ！[1-3]
+            }
+            if (hasCV) {
+                addQuestCount(894, 1, 1) // 空母戦力の投入による兵站線戦闘哨戒[1-3]
+            }
+            if (has905Org) {
+                addQuestCount(905, 1, 3) // 「海防艦」、海を護る！[1-3]
+            }
+        }
+        if (isWinA(rank)) {
+            if (has906Org) {
+                addQuestCount(906, 1, 2) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-3]
+            }
+        }
     }
-    if (isEqualMap(1, 5) && isWinS(rank)) {
-        addQuestCount(893, 1, 1) // 泊地周辺海域の安全確保を徹底せよ！[1-5]
-        if (has905Org) {
-            addQuestCount(905, 1, 4) // 「海防艦」、海を護る！[1-5]
+    if (isEqualMap(1, 4)) {
+        if (isWinS(rank)) {
+            // 軽巡旗艦、軽巡1~3隻、駆逐1隻以上、軽巡と駆逐のみ
+            if (ships[0].stype === SHIP_TYPE.CL) {
+                var cl = getLength(stypes[SHIP_TYPE.CL])
+                var dd = getLength(stypes[SHIP_TYPE.DD])
+                if (cl < 4 && dd > 0) {
+                    var shipNum = cl + dd
+                    if (ships.length === shipNum) {
+                        addQuestCount(257) // 「水雷戦隊」南西へ！
+                    }
+                }
+            }
+            if (has280Org) {
+                addQuestCount(280, 1, 3) // 兵站線確保！海上警備を強化実施せよ！[1-4]
+            }
+            if (hasCV) {
+                addQuestCount(894, 1, 2) // 空母戦力の投入による兵站線戦闘哨戒[1-4]
+            }
+            if (has284Org) {
+                addQuestCount(284, 1, 1) // 南西諸島方面「海上警備行動」発令！[1-4]
+            }
+        }
+        if (isWinA(rank)) {
+            if (setsubun1) {
+                addQuestCount(840, 1, 1) //【節分任務】令和二年節分作戦[1-4]
+            }
+        }
+    }
+    if (isEqualMap(1, 5)) {
+        if (isWinS(rank)) {
+            addQuestCount(893, 1, 1) // 泊地周辺海域の安全確保を徹底せよ！[1-5]
+            if (has905Org) {
+                addQuestCount(905, 1, 4) // 「海防艦」、海を護る！[1-5]
+            }
+        }
+        if (isWinA(rank)) {
+            addQuestCount(261) // 海上輸送路の安全確保に努めよ！
+            addQuestCount(265) // 海上護衛強化月間
+            if (has906Org) {
+                addQuestCount(906, 1, 3) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-5]
+            }
         }
     }
     // #endregion
@@ -435,48 +496,69 @@ function addCountForBattleResultPart(data) {
     if (isEqualArea(2) && isWin(rank)) {
         addQuestCount(226) // 南西諸島海域の制海権を握れ！
     }
-    if (isEqualMap(2, 1) && isWinA(rank)) {
-        if (setsubun1) {
-            addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
-        }
-    }
     if (isEqualMap(2, 1) && isWinS(rank)) {
-        if (has280Org) {
-            addQuestCount(280, 1, 4) // 兵站線確保！海上警備を強化実施せよ！[2-1]
+        if (isWinS(rank)) {
+            if (has280Org) {
+                addQuestCount(280, 1, 4) // 兵站線確保！海上警備を強化実施せよ！[2-1]
+            }
+            if (hasCV) {
+                addQuestCount(894, 1, 3) // 空母戦力の投入による兵站線戦闘哨戒[2-1]
+            }
+            if (has284Org) {
+                addQuestCount(284, 1, 2) // 南西諸島方面「海上警備行動」発令！[2-1]
+            }
         }
-        if (hasCV) {
-            addQuestCount(894, 1, 3) // 空母戦力の投入による兵站線戦闘哨戒[2-1]
-        }
-        if (has284Org) {
-            addQuestCount(284, 1, 2) // 南西諸島方面「海上警備行動」発令！[2-1]
-        }
-    }
-    if (isEqualMap(2, 2) && isWinA(rank)) {
-        if (setsubun1) {
-            addQuestCount(840, 1, 3) // 【節分任務】令和二年節分作戦[2-2]
+        if (isWinA(rank)) {
+            if (setsubun1) {
+                addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
+            }
+            if (has906Org) {
+                addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
+            }
         }
     }
     if (isEqualMap(2, 2) && isWinS(rank)) {
-        if (hasCV) {
-            addQuestCount(894, 1, 4) // 空母戦力の投入による兵站線戦闘哨戒[2-2]
+        if (isWinS(rank)) {
+            if (hasCV) {
+                addQuestCount(894, 1, 4) // 空母戦力の投入による兵站線戦闘哨戒[2-2]
+            }
+            if (has284Org) {
+                addQuestCount(284, 1, 3) // 南西諸島方面「海上警備行動」発令！[2-2]
+            }
         }
-        if (has284Org) {
-            addQuestCount(284, 1, 3) // 南西諸島方面「海上警備行動」発令！[2-2]
+        if (isWinA(rank)) {
+            if (setsubun1) {
+                addQuestCount(840, 1, 3) // 【節分任務】令和二年節分作戦[2-2]
+            }
+            if (has909Org) {
+                addQuestCount(909, 1, 1) // 【桃の節句作戦】主力オブ主力、駆ける！[2-2]
+            }
         }
     }
-    if (isEqualMap(2, 3) && isWinS(rank)) {
-        if (hasCV) {
-            addQuestCount(894, 1, 5) // 空母戦力の投入による兵站線戦闘哨戒[2-3]
+    if (isEqualMap(2, 3)) {
+        if (isWinS(rank)) {
+            if (hasCV) {
+                addQuestCount(894, 1, 5) // 空母戦力の投入による兵站線戦闘哨戒[2-3]
+            }
+            if (has284Org) {
+                addQuestCount(284, 1, 4) // 南西諸島方面「海上警備行動」発令！[2-3]
+            }
         }
-        if (has284Org) {
-            addQuestCount(284, 1, 4) // 南西諸島方面「海上警備行動」発令！[2-3]
+        if (isWinA(rank)) {
+            if (has909Org) {
+                addQuestCount(909, 1, 2) // 【桃の節句作戦】主力オブ主力、駆ける！[2-3]
+            }
         }
     }
-    if (isEqualMap(2, 4) && isWinA(rank) && Number(lastBattleDto.dock.id) === 1) {
-        addQuestCount(854, 1, 1) // 戦果拡張任務！「Z作戦」前段作戦[2-4]
-    }
-    if (isEqualMap(2, 4) && isWinS(rank)) {
-        addQuestCount(822) // 沖ノ島海域迎撃戦
+    if (isEqualMap(2, 4)) {
+        if (isWinS(rank)) {
+            addQuestCount(822) // 沖ノ島海域迎撃戦
+        }
+        if (isWinA(rank)) {
+            if (Number(lastBattleDto.dock.id) === 1) {
+                addQuestCount(854, 1, 1) // 戦果拡張任務！「Z作戦」前段作戦[2-4]
+            }
+        }
     }
     if (isEqualMap(2, 5) && isWinS(rank)) {
         var num = ships.map(function (ship) {
@@ -520,6 +602,11 @@ function addCountForBattleResultPart(data) {
     if (isEqualMap(3, 4) && isWinS(rank)) {
         if (has904Org) {
             addQuestCount(904, 1, 2) // 精鋭「十九駆」、躍り出る！[3-4]
+        }
+    }
+    if (isEqualMap(3, 5) && isWinA(rank)) {
+        if (has909Org) {
+            addQuestCount(909, 1, 3) // 【桃の節句作戦】主力オブ主力、駆ける！[3-5]
         }
     }
     if ((isEqualMap(3, 3) || isEqualMap(3, 4) || isEqualMap(3, 5)) && isWin(rank)) {
@@ -683,11 +770,17 @@ function addCountForBattleResultPart(data) {
     if (isEqualCell(7, 2, 7) && isWinS(rank)) {
         addQuestCount(893, 1, 3) // 泊地周辺海域の安全確保を徹底せよ！[7-2-1]
     }
-    if (isEqualCell(7, 2, 15) && isWinS(rank)) {
-        addQuestCount(893, 1, 4) // 泊地周辺海域の安全確保を徹底せよ！[7-2-2]
-
-        if (Number(lastBattleDto.dock.id) === 1) {
-            addQuestCount(872, 1, 4) // 戦果拡張任務！「Z作戦」後段作戦[7-2-2]
+    if (isEqualCell(7, 2, 15)) {
+        if (isWinS(rank)) {
+            addQuestCount(893, 1, 4) // 泊地周辺海域の安全確保を徹底せよ！[7-2-2]
+            if (Number(lastBattleDto.dock.id) === 1) {
+                addQuestCount(872, 1, 4) // 戦果拡張任務！「Z作戦」後段作戦[7-2-2]
+            }
+        }
+        if (isWinA(rank)) {
+            if (has909Org) {
+                addQuestCount(909, 1, 4) // 【桃の節句作戦】主力オブ主力、駆ける！[7-2-2]
+            }
         }
     }
     // #endregion
@@ -868,6 +961,31 @@ function addCountForPowerupPart(data) {
     if (powerup_flag === POWERUP_FLAG.SUCCESS) {
         addQuestCount(702) // 艦の「近代化改修」を実施せよ！
         addQuestCount(703) // 「近代化改修」を進め、戦備を整えよ！
+
+        var ids = String(data.getField("api_id_items")).split(",")
+        var shipList = getStoredShipMap()
+        if (shipList instanceof Map) {
+            var origin = shipList.get(data.jsonObject.api_data.api_ship.api_id.intValue())
+            var stypes = ids.map(function(id) {
+                return shipList.get(id | 0)
+            }).map(function(ship) {
+                return ship.stype
+            }).reduce(function(previous, stypes) {
+                previous[stypes] = (previous[stypes] | 0) + 1
+                return previous
+            }, {})
+
+            if (origin.stype === SHIP_TYPE.DE) {
+                if (stypes[SHIP_TYPE.DD] >= 5) {
+                    addQuestCount(708) // 【桃の節句任務】海防艦桃の節句改修
+                }
+            }
+            if (origin.stype === SHIP_TYPE.CVL) {
+                if (stypes[SHIP_TYPE.CVL] >= 3) {
+                    addQuestCount(712) // 【桃の節句任務】菱餅改修：週
+                }
+            }
+        }
     }
 }
 
@@ -891,6 +1009,7 @@ function addCountForMissionResultPart(data) {
             case "対潜警戒任務": // ID:04
                 addQuestCount(426, 1, 2) // 海上通商航路の警戒を厳とせよ！
                 addQuestCount(428, 1, 1) // 近海に侵入する敵潜を制圧せよ！
+                addQuestCount(435, 1, 1) // 特設護衛船団司令部、活動開始！
                 break
             case "海上護衛任務": // ID:05
                 addQuestCount(424) // 輸送船団護衛を強化せよ！
@@ -906,12 +1025,20 @@ function addCountForMissionResultPart(data) {
                 break
             case "長時間対潜警戒": // ID:A3
                 addQuestCount(428, 1, 3) // 近海に侵入する敵潜を制圧せよ！
+                addQuestCount(435, 1, 2) // 特設護衛船団司令部、活動開始！
                 break
             case "タンカー護衛任務": // ID:09
                 addQuestCount(434, 1, 5) // 特設護衛船団司令部、活動開始！
                 break
             case "強行偵察任務": // ID:10
                 addQuestCount(426, 1, 4) // 海上通商航路の警戒を厳とせよ！
+                addQuestCount(435, 1, 3) // 特設護衛船団司令部、活動開始！
+                break
+            case "包囲陸戦隊撤収作戦": // ID:14
+                addQuestCount(435, 1, 4) // 特設護衛船団司令部、活動開始！
+                break
+            case "南西方面航空偵察作戦": // ID:B1
+                addQuestCount(435, 1, 5) // 特設護衛船団司令部、活動開始！
                 break
         }
         //api_no渡してこないので仕方なく
@@ -995,6 +1122,9 @@ function addCountForPracticeBattleResultPart(data) {
             addQuestCount(339) // 「十九駆」演習！
         }
         var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
+        if (dedd >= 3) {
+            addQuestCount(340) // 【桃の節句任務】桃の節句演習！
+        }
         if (dedd >= 2) {
             addQuestCount(329) // 【節分任務】節分演習！
         }

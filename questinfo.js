@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.3.0
+ * 任務進捗詳細 Ver.2.3.1
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/02/10
+ * LastUpdate:2020/03/09
  */
 
 data_prefix = "QSE.Ver2."
@@ -473,6 +473,28 @@ var QUEST_DATA = {
         /** 鎮守府近海航路(1-6)ゴール地点到達 */
         new QuestData(1, false, true, RESET.QUARTERLY, "1-6")
     ],
+    /** [906]【桃の節句作戦】鎮守府近海の安全を図れ！ */
+    906: [
+        /** 敵主力艦隊(1-2 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "1-2"),
+        /** 敵主力艦隊(1-3 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "1-3"),
+        /** 敵通商破壊主力潜水艦隊(1-5 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "1-5"),
+        /** 敵主力艦隊(2-1 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-1")
+    ],
+    /** [909]【桃の節句作戦】主力オブ主力、駆ける！ */
+    909: [
+        /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)A勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-2"),
+        /** 敵主力打撃群(2-3ボス)A勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-3"),
+        /** 北方増援部隊主力(3-5 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "3-5"),
+        /** 深海任務部隊 主力機動部隊群(7-2-2 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "7-2-2")
+    ],
     // #endregion
     // #region 演習
     /** [302]大規模演習 */
@@ -521,6 +543,11 @@ var QUEST_DATA = {
     339: [
         /** S勝利 */
         new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY]),
+    ],
+    /** [340]【桃の節句任務】桃の節句演習！ */
+    340: [
+        /** S勝利 */
+        new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.WEEKLY]),
     ],
     // #endregion
     // #region 遠征
@@ -586,6 +613,19 @@ var QUEST_DATA = {
         new QuestData(1, false, true, RESET.YEARLY, "海峡"),
         /** 「タンカー護衛任務」成功 */
         new QuestData(1, false, true, RESET.YEARLY, "ﾀﾝｶｰ"),
+    ],
+    /** [435]特設護衛船団司令部、活動開始！ */
+    435: [
+        /** 「対潜警戒任務」成功 */
+        new QuestData(1, false, true, RESET.WEEKLY, "対潜"),
+        /** 「長時間対潜警戒」成功 */
+        new QuestData(1, false, true, RESET.WEEKLY, "長時間"),
+        /** 「強行偵察任務」成功 */
+        new QuestData(1, false, true, RESET.WEEKLY, "強行"),
+        /** 「包囲陸戦隊撤収作戦」成功 */
+        new QuestData(1, false, true, RESET.WEEKLY, "包囲"),
+        /** 「南西方面航空偵察作戦」成功 */
+        new QuestData(1, false, true, RESET.WEEKLY, "南西"),
     ],
     // #endregion
     // #region 補給/入渠
@@ -792,6 +832,21 @@ var QUEST_DATA = {
     703: [
         /** 近代化改修成功 */
         new QuestData(15, true, true, RESET.WEEKLY),
+    ],
+    /** [707]【桃の節句任務】駆逐艦桃の節句改修 */
+    707: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, RESET.WEEKLY),
+    ],
+    /** [708]【桃の節句任務】海防艦桃の節句改修 */
+    708: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, RESET.WEEKLY),
+    ],
+    /** [712]【桃の節句任務】菱餅改修：週 */
+    712: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, RESET.WEEKLY),
     ],
     // #endregion
 }
