@@ -1,5 +1,5 @@
 /**
- * 任務進捗詳細 Ver.2.3.2
+ * 任務進捗詳細 Ver.2.3.3
  * Author:Nishisonic,Nekopanda
  * LastUpdate:2020/03/10
  */
