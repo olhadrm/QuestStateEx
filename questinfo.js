@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.3.1
+ * 任務進捗詳細 Ver.2.3.2
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/03/09
+ * LastUpdate:2020/03/10
  */
 
 data_prefix = "QSE.Ver2."
@@ -481,6 +481,8 @@ var QUEST_DATA = {
         new QuestData(1, false, true, RESET.WEEKLY, "1-3"),
         /** 敵通商破壊主力潜水艦隊(1-5 ボス)A 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "1-5"),
+        /** 鎮守府近海航路(1-6)ゴール地点到達 */
+        new QuestData(1, false, true, RESET.WEEKLY, "1-6"),
         /** 敵主力艦隊(2-1 ボス)A 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "2-1")
     ],

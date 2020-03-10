@@ -332,6 +332,9 @@ function addCountForNextPart(data) {
         if (getLength(stypes[SHIP_TYPE.DE]) >= 3 && ships.length <= 5) {
             addQuestCount(905, 1, 5) // 「海防艦」、海を護る！[1-6]
         }
+        if ((getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DE])) >= 3) {
+            addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-6]
+        }
     }
 }
 
@@ -513,7 +516,7 @@ function addCountForBattleResultPart(data) {
                 addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
             }
             if (has906Org) {
-                addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
+                addQuestCount(906, 1, 5) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
             }
         }
     }
