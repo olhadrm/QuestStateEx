@@ -404,7 +404,7 @@ function addCountForBattleResultPart(data) {
     var has905Org = getLength(stypes[SHIP_TYPE.DE]) >= 3 && ships.length <= 5
     var has906Org = (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
     var has909Org = ships.map(function (ship) {
-        return ship.shipInfo.json.api_ctype
+        return (ship.shipInfo.json.api_ctype | 0)
     }).filter(function (ctype) {
         return ctype === 38 // 夕雲型
     }).length >= 3
@@ -784,6 +784,13 @@ function addCountForBattleResultPart(data) {
             if (has909Org) {
                 addQuestCount(909, 1, 4) // 【桃の節句作戦】主力オブ主力、駆ける！[7-2-2]
             }
+        }
+    }
+    // #endregion
+    // #region 桃の節句！沖に立つ波
+    if (isEqualCell(47, 1, 9) && isWinS(rank)) {
+        if (has909Org) {
+            addQuestCount(909, 1, 5) // 【桃の節句作戦】主力オブ主力、駆ける！[E-1-1]
         }
     }
     // #endregion

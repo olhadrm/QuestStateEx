@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.3.3
+ * 任務進捗詳細 Ver.2.3.4
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/03/10
+ * LastUpdate:2020/03/13
  */
 
 data_prefix = "QSE.Ver2."
@@ -495,7 +495,9 @@ var QUEST_DATA = {
         /** 北方増援部隊主力(3-5 ボス)A 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "3-5"),
         /** 深海任務部隊 主力機動部隊群(7-2-2 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "7-2-2")
+        new QuestData(1, false, true, RESET.WEEKLY, "7-2-2"),
+        /** 深海任務部隊 泊地急襲任務群(E-1-1 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "E-1-1")
     ],
     // #endregion
     // #region 演習
