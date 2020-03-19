@@ -985,6 +985,11 @@ function addCountForPowerupPart(data) {
                 return previous
             }, {})
 
+            if (origin.stype === SHIP_TYPE.DD) {
+                if (stypes[SHIP_TYPE.CL] >= 3) {
+                    addQuestCount(707) // 【桃の節句任務】駆逐艦桃の節句改修
+                }
+            }
             if (origin.stype === SHIP_TYPE.DE) {
                 if (stypes[SHIP_TYPE.DD] >= 5) {
                     addQuestCount(708) // 【桃の節句任務】海防艦桃の節句改修
