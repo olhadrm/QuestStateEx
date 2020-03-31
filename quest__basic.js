@@ -41,11 +41,11 @@ function questType(type) {
 			return "月";
 		case 7:
 			return "他";
-		case 8:
-			return "年";
-		default:
-			return "？";
 	}
+	if (type > 100) {
+		return "年";
+	}
+	return "？";
 }
 
 function body(quest) {

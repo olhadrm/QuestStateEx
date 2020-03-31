@@ -335,6 +335,9 @@ function addCountForNextPart(data) {
         if ((getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])) >= 3) {
             addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-6]
         }
+        if (ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3) {
+            addQuestCount(912, 1, 2) // 工作艦「明石」護衛任務[1-6]
+        }
     }
 }
 
@@ -408,6 +411,8 @@ function addCountForBattleResultPart(data) {
     }).filter(function (ctype) {
         return ctype === 38 // 夕雲型
     }).length >= 3
+    var has912Org = ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3
+    var has914Org = getLength(stypes[SHIP_TYPE.CA]) >= 3 && getLength(stypes[SHIP_TYPE.DD]) >= 1
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -447,6 +452,9 @@ function addCountForBattleResultPart(data) {
         if (isWinA(rank)) {
             if (has906Org) {
                 addQuestCount(906, 1, 2) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-3]
+            }
+            if (has912Org) {
+                addQuestCount(912, 1, 1) // 工作艦「明石」護衛任務[1-3]
             }
         }
     }
@@ -518,6 +526,9 @@ function addCountForBattleResultPart(data) {
             if (has906Org) {
                 addQuestCount(906, 1, 5) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
             }
+            if (has912Org) {
+                addQuestCount(912, 1, 3) // 工作艦「明石」護衛任務[2-1]
+            }
         }
     }
     if (isEqualMap(2, 2) && isWinS(rank)) {
@@ -536,6 +547,9 @@ function addCountForBattleResultPart(data) {
             if (has909Org) {
                 addQuestCount(909, 1, 1) // 【桃の節句作戦】主力オブ主力、駆ける！[2-2]
             }
+            if (has912Org) {
+                addQuestCount(912, 1, 4) // 工作艦「明石」護衛任務[2-2]
+            }
         }
     }
     if (isEqualMap(2, 3)) {
@@ -550,6 +564,9 @@ function addCountForBattleResultPart(data) {
         if (isWinA(rank)) {
             if (has909Org) {
                 addQuestCount(909, 1, 2) // 【桃の節句作戦】主力オブ主力、駆ける！[2-3]
+            }
+            if (has912Org) {
+                addQuestCount(912, 1, 5) // 工作艦「明石」護衛任務[2-3]
             }
         }
     }
@@ -620,32 +637,62 @@ function addCountForBattleResultPart(data) {
     if (isEqualArea(4) && isWin(rank)) {
         addQuestCount(229) // 敵東方艦隊を撃滅せよ！
     }
-    if (isEqualMap(4, 1) && isWinS(rank)) {
-        addQuestCount(845, 1, 1) // 発令！「西方海域作戦」[4-1]
-        if (setsubun2) {
-            addQuestCount(841, 1, 1) // 【節分任務】令和二年西方海域節分作戦[4-1]
+    if (isEqualMap(4, 1)) {
+        if (isWinS(rank)) {
+            addQuestCount(845, 1, 1) // 発令！「西方海域作戦」[4-1]
+            if (setsubun2) {
+                addQuestCount(841, 1, 1) // 【節分任務】令和二年西方海域節分作戦[4-1]
+            }
+        }
+        if (isWinA(rank)) {
+            if (has914Org) {
+                addQuestCount(914, 1, 1) // 重巡戦隊、西へ！[4-1]
+            }
         }
     }
-    if (isEqualMap(4, 2) && isWinS(rank)) {
-        // 空母2隻、駆逐2隻
-        var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])
-        if (cv >= 2 && getLength(stypes[SHIP_TYPE.DD]) >= 2) {
-            addQuestCount(264) // 「空母機動部隊」西へ！
+    if (isEqualMap(4, 2)) {
+        if (isWinS(rank)) {
+            // 空母2隻、駆逐2隻
+            var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])
+            if (cv >= 2 && getLength(stypes[SHIP_TYPE.DD]) >= 2) {
+                addQuestCount(264) // 「空母機動部隊」西へ！
+            }
+            addQuestCount(845, 1, 2) // 発令！「西方海域作戦」[4-2]
+            if (setsubun2) {
+                addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
+            }
         }
-        addQuestCount(845, 1, 2) // 発令！「西方海域作戦」[4-2]
-        if (setsubun2) {
-            addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
+        if (isWinA(rank)) {
+            if (has914Org) {
+                addQuestCount(914, 1, 2) // 重巡戦隊、西へ！[4-2]
+            }
         }
     }
-    if (isEqualMap(4, 3) && isWinS(rank)) {
-        addQuestCount(845, 1, 3) // 発令！「西方海域作戦」[4-3]
-        if (setsubun2) {
-            addQuestCount(841, 1, 3) // 【節分任務】令和二年西方海域節分作戦[4-3]
+    if (isEqualMap(4, 3)) {
+        if (isWinS(rank)) {
+            addQuestCount(845, 1, 3) // 発令！「西方海域作戦」[4-3]
+            if (setsubun2) {
+                addQuestCount(841, 1, 3) // 【節分任務】令和二年西方海域節分作戦[4-3]
+            }
+        }
+        if (isWinA(rank)) {
+            if (has914Org) {
+                addQuestCount(914, 1, 3) // 重巡戦隊、西へ！[4-3]
+            }
         }
     }
-    if (isEqualMap(4, 4) && isWin(rank)) {
-        addQuestCount(242) // 敵東方中枢艦隊を撃破せよ！
-        addQuestCount(845, 1, 4) // 発令！「西方海域作戦」[4-4]
+    if (isEqualMap(4, 4)) {
+        if (isWinS(rank)) {
+            addQuestCount(845, 1, 4) // 発令！「西方海域作戦」[4-4]
+        }
+        if (isWinA(rank)) {
+            if (has914Org) {
+                addQuestCount(914, 1, 4) // 重巡戦隊、西へ！[4-4]
+            }
+        }
+        if (isWin(rank)) {
+            addQuestCount(242) // 敵東方中枢艦隊を撃破せよ！
+        }
     }
     if (isEqualMap(4, 5) && isWinS(rank)) {
         addQuestCount(845, 1, 5) // 発令！「西方海域作戦」[4-5]
@@ -1017,14 +1064,22 @@ function addCountForMissionResultPart(data) {
         addQuestCount(403) //「遠征」を10回成功させよう！
         addQuestCount(404) //大規模遠征作戦、発令！
         switch (quest_name) {
-            case "警備任務": // ID:02
+            case "練習航海": // ID:01
+                addQuestCount(436, 1, 1) // 練習航海及び警備任務を実施せよ！
+                break
+            case "長距離練習航海": // ID:02
+                addQuestCount(436, 1, 2) // 練習航海及び警備任務を実施せよ！
+                break
+            case "警備任務": // ID:03
                 addQuestCount(426, 1, 1) // 海上通商航路の警戒を厳とせよ！
                 addQuestCount(434, 1, 1) // 特設護衛船団司令部、活動開始！
+                addQuestCount(436, 1, 3) // 練習航海及び警備任務を実施せよ！
                 break
             case "対潜警戒任務": // ID:04
                 addQuestCount(426, 1, 2) // 海上通商航路の警戒を厳とせよ！
                 addQuestCount(428, 1, 1) // 近海に侵入する敵潜を制圧せよ！
                 addQuestCount(435, 1, 1) // 特設護衛船団司令部、活動開始！
+                addQuestCount(436, 1, 4) // 練習航海及び警備任務を実施せよ！
                 break
             case "海上護衛任務": // ID:05
                 addQuestCount(424) // 輸送船団護衛を強化せよ！
@@ -1048,6 +1103,7 @@ function addCountForMissionResultPart(data) {
             case "強行偵察任務": // ID:10
                 addQuestCount(426, 1, 4) // 海上通商航路の警戒を厳とせよ！
                 addQuestCount(435, 1, 3) // 特設護衛船団司令部、活動開始！
+                addQuestCount(436, 1, 5) // 練習航海及び警備任務を実施せよ！
                 break
             case "包囲陸戦隊撤収作戦": // ID:14
                 addQuestCount(435, 1, 4) // 特設護衛船団司令部、活動開始！
@@ -1206,9 +1262,11 @@ function updateQuestCount() {
             (lastUpdateQuestTime.year.value === nowTime.year.value || !(lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12)))) {
         resetQuestCountOfQuarterly()
     }
-    // イヤリー(2月基準)
-    if (!lastUpdateQuestTime.minusMonths(1).withDayOfYear(1).equals(nowTime.minusMonths(1).withDayOfYear(1))) {
-        resetQuestCountOfYearly()
+    // イヤリー
+    for (var i = 0;i < 12; i++) {
+        if (!lastUpdateQuestTime.minusMonths(i).withDayOfYear(1).equals(nowTime.minusMonths(i).withDayOfYear(1))) {
+            resetQuestCountOfYearly(nowTime.monthValue)
+        }
     }
     saveLastUpdateQuestTime(nowTime)
 }
@@ -1409,33 +1467,22 @@ function resetQuestCountOfQuarterly() {
 /**
  * イヤリーのカウントをリセットする
  */
-function resetQuestCountOfYearly() {
+function resetQuestCountOfYearly(monthValue) {
     Object.keys(QUEST_DATA).map(function (id) {
         return QUEST_DATA[id].map(function (quest, i) {
             return [id, i + 1, quest]
         }).filter(function (data) {
             if (Array.isArray(data[2].reset)) {
-                return data[2].reset.some(function (reset) {
-                    return reset === RESET.YEARLY || reset === RESET.NOT_SATISFY_YEARLY && getQuestCount(data[0], data[1]) >= data[2].max
-                })
+                // あまり良くない書き方
+                return data[2].reset.indexOf(RESET.YEARLY) >= 0 && data[2].reset.indexOf(100 + monthValue) >= 0
             }
-            return data[2].reset === RESET.YEARLY || data[2].reset === RESET.NOT_SATISFY_YEARLY && getQuestCount(data[0], data[1]) >= data[2].max
+            return false
         })
     }).reduce(function (acc, val) {
         return acc.concat(val)
     }, []).forEach(function (data) {
         saveQuestCount(data[0], 0, data[1], true)
-        var isNotOrder = function (reset) {
-            if (Array.isArray(reset)) {
-                return reset.some(function (reset) {
-                    return reset === RESET.YEARLY
-                })
-            }
-            return reset === RESET.YEARLY
-        }(QUEST_DATA[data[0]][data[1] - 1].reset)
-        if (isNotOrder) {
-            notOrder(data[0])
-        }
+        notOrder(data[0])
     })
 }
 

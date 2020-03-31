@@ -1,7 +1,7 @@
 /**
- * 任務進捗詳細 Ver.2.3.5
+ * 任務進捗詳細 Ver.2.3.6
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/03/19
+ * LastUpdate:2020/03/29
  */
 
 data_prefix = "QSE.Ver2."
@@ -154,8 +154,30 @@ var RESET = {
     NOT_SATISFY_MONTHLY: -3,
     /** カウント=最大値でないならクォータリー */
     NOT_SATISFY_QUARTERLY: -4,
-    /** カウント=最大値でないならイヤリー */
-    NOT_SATISFY_YEARLY: -5,
+    /** 1月 */
+    JANUARY: 101,
+    /** 2月 */
+    FEBRUARY: 102,
+    /** 3月 */
+    MARCH: 103,
+    /** 4月 */
+    APRIL: 104,
+    /** 5月 */
+    MAY: 105,
+    /** 6月 */
+    JUNE: 106,
+    /** 7月 */
+    JULY: 107,
+    /** 8月 */
+    AUGUST: 108,
+    /** 9月 */
+    SEPTEMBER: 109,
+    /** 10月 */
+    OCTOBER: 110,
+    /** 11月 */
+    NOVEMBER: 111,
+    /** 12月 */
+    DECEMBER: 112,
 }
 
 /** 任務 */
@@ -452,26 +474,26 @@ var QUEST_DATA = {
     /** [904]精鋭「十九駆」、躍り出る！ */
     904: [
         /** 敵侵攻中枢艦隊(2-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "2-5"),
         /** 深海棲艦 北方艦隊中枢(3-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "3-4"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "3-4"),
         /** リランカ島港湾守備隊(4-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "4-5"),
         /** 敵南方艦隊 旗艦(5-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-3")
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "5-3")
     ],
     /** [905]「海防艦」、海を護る！ */
     905: [
         /** 敵主力艦隊(1-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-1"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-1"),
         /** 敵主力艦隊(1-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-2"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-2"),
         /** 敵主力艦隊(1-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-3"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-3"),
         /** 敵通商破壊主力潜水艦隊(1-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-5"),
         /** 鎮守府近海航路(1-6)ゴール地点到達 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-6")
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-6")
     ],
     /** [906]【桃の節句作戦】鎮守府近海の安全を図れ！ */
     906: [
@@ -498,6 +520,30 @@ var QUEST_DATA = {
         new QuestData(1, false, true, RESET.WEEKLY, "7-2-2"),
         /** 深海任務部隊 泊地急襲任務群(E-1-1 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "E-1-1")
+    ],
+    /** [912]工作艦「明石」護衛任務 */
+    912: [
+        /** 敵主力艦隊(1-3 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-3"),
+        /** 鎮守府近海航路(1-6)ゴール地点到達 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-6"),
+        /** 敵主力艦隊(2-1 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-1"),
+        /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)A勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-2"),
+        /** 敵主力打撃群(2-3ボス)A勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-3"),
+    ],
+    /**[914]重巡戦隊、西へ！ */
+    914: [
+        /** 敵深海連合部隊 司令部艦隊(4-1 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-1"),
+        /** 敵東方港湾基地(4-2 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-2"),
+        /** 敵東方中枢艦隊 旗艦(4-3 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-3"),
+        /** 敵東方中枢艦隊 旗艦(4-4 ボス)A 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-4"),
     ],
     // #endregion
     // #region 演習
@@ -546,7 +592,7 @@ var QUEST_DATA = {
     /** [339]「十九駆」演習！ */
     339: [
         /** S勝利 */
-        new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY]),
+        new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.FEBRUARY]),
     ],
     /** [340]【桃の節句任務】桃の節句演習！ */
     340: [
@@ -608,15 +654,15 @@ var QUEST_DATA = {
     /** [434]特設護衛船団司令部、活動開始！ */
     434: [
         /** 「警備任務」成功 */
-        new QuestData(1, false, true, RESET.YEARLY, "警備"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "警備"),
         /** 「海上護衛任務」成功 */
-        new QuestData(1, false, true, RESET.YEARLY, "海上"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "海上"),
         /** 「兵站強化任務」成功 */
-        new QuestData(1, false, true, RESET.YEARLY, "兵站"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "兵站"),
         /** 「海峡警備行動」成功 */
-        new QuestData(1, false, true, RESET.YEARLY, "海峡"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "海峡"),
         /** 「タンカー護衛任務」成功 */
-        new QuestData(1, false, true, RESET.YEARLY, "ﾀﾝｶｰ"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "ﾀﾝｶｰ"),
     ],
     /** [435]特設護衛船団司令部、活動開始！ */
     435: [
@@ -630,6 +676,19 @@ var QUEST_DATA = {
         new QuestData(1, false, true, RESET.WEEKLY, "包囲"),
         /** 「南西方面航空偵察作戦」成功 */
         new QuestData(1, false, true, RESET.WEEKLY, "南西"),
+    ],
+    /** [436]練習航海及び警備任務を実施せよ！ */
+    436: [
+        /** 「練習航海」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "練習"),
+        /** 「長距離練習航海」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "長距離"),
+        /** 「警備任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "警備"),
+        /** 「対潜警戒任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "対潜"),
+        /** 「強行偵察任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "強行"),
     ],
     // #endregion
     // #region 補給/入渠
