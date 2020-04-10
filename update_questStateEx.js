@@ -758,9 +758,6 @@ function addCountForBattleResultPart(data) {
         if (naganami && no31s) {
             addQuestCount(875) // 精鋭「三一駆」、鉄底海域に突入せよ！
         }
-        if (Number(lastBattleDto.dock.id) === 1) {
-            addQuestCount(872, 1, 1) // 戦果拡張任務！「Z作戦」後段作戦[5-5]
-        }
         if (isSixTpSquadron) {
             addQuestCount(903, 1, 2) // 拡張「六水戦」、最前線へ！[5-4]
         }
@@ -769,6 +766,9 @@ function addCountForBattleResultPart(data) {
         }
     }
     if (isEqualMap(5, 5) && isWinS(rank)) {
+        if (Number(lastBattleDto.dock.id) === 1) {
+            addQuestCount(872, 1, 1) // 戦果拡張任務！「Z作戦」後段作戦[5-5]
+        }
         if (setsubun3) {
             addQuestCount(843, 1, 2) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-5]
         }
