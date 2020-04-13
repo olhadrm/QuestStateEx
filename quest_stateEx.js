@@ -16,7 +16,10 @@ function header() {
 }
 
 function begin() {
-    updateFile()
+    if (!getData("update")) {
+        updateFile()
+        setTmpData("update", true)
+    }
 }
 
 function body(quest) {
