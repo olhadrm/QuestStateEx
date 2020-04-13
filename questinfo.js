@@ -1,10 +1,22 @@
 /**
- * 任務進捗詳細 Ver.2.3.7
+ * 任務進捗詳細 Ver.2.3.8
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/04/09
+ * LastUpdate:2020/04/13
  */
 
 data_prefix = "QSE.Ver2."
+/** バージョン */
+var VERSION = 2.38
+/** バージョン確認URL */
+var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
+/** ファイルの場所 */
+var FILE_URL = [
+    "https://raw.githubusercontent.com/Nishisonic/QuestStateEx/master/quest__basic.js",
+    "https://raw.githubusercontent.com/Nishisonic/QuestStateEx/master/quest_stateEx.js",
+    "https://raw.githubusercontent.com/Nishisonic/QuestStateEx/master/questinfo.js",
+    "https://raw.githubusercontent.com/Nishisonic/QuestStateEx/master/queststyle.js",
+    "https://raw.githubusercontent.com/Nishisonic/QuestStateEx/master/update_questStateEx.js",
+]
 
 /** 艦種 */
 var SHIP_TYPE = {

@@ -2,13 +2,22 @@ load("script/utils.js")
 load("script/ScriptData.js")
 load("script/questinfo.js")
 
+System = Java.type("java.lang.System")
+URI = Java.type("java.net.URI")
+StandardCharsets = Java.type("java.nio.charset.StandardCharsets")
+Files = Java.type("java.nio.file.Files")
+Paths = Java.type("java.nio.file.Paths")
+StandardOpenOption = Java.type("java.nio.file.StandardOpenOption")
 Optional = Java.type("java.util.Optional")
+IOUtils = Java.type("org.apache.commons.io.IOUtils")
 
 function header() {
     return ["進捗詳細"]
 }
 
-function begin() {}
+function begin() {
+    updateFile()
+}
 
 function body(quest) {
     return toComparable([getProgress(quest.no, quest.type, quest.progressFlag)])
@@ -51,5 +60,30 @@ function getProgress(questNo, questType, questProgressFlag) {
     } else {
         saveQuestRate(questNo, -1)
         return null
+    }
+}
+
+/**
+ * ファイルをアップデートします
+ */
+function updateFile() {
+    try {
+        var newVersion = Number(JSON.parse(
+                IOUtils.toString(URI.create(UPDATE_CHECK_URL), StandardCharsets.UTF_8))
+            .tag_name.replace(/v(.*)\.(\d)$/, "$1$2"))
+        if (VERSION < newVersion) {
+            FILE_URL.forEach(function (url) {
+                IOUtils.write(
+                    IOUtils.toString(URI.create(url), StandardCharsets.UTF_8),
+                    Files.newOutputStream(
+                        Paths.get("script/" + url.replace(/^.*\/(.*?\.js)$/, "$1")),
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING),
+                    StandardCharsets.UTF_8)
+            })
+        }
+    } catch (e) {
+        System.out.println("File Update Failed.")
+        e.printStackTrace()
     }
 }

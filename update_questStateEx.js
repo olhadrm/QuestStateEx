@@ -849,8 +849,9 @@ function addCountForBattleResultPart(data) {
  * @param {logbook.data.ActionData} data data
  */
 function addCountForCreateItemPart(data) {
-    addQuestCount(605) // 新装備「開発」指令
-    addQuestCount(607) // 装備「開発」集中強化！
+    var count = Number(data.getField("api_multiple_flag")) === 1 ? 3 : 1
+    addQuestCount(605, count, 1) // 新装備「開発」指令
+    addQuestCount(607, count, 1) // 装備「開発」集中強化！
 }
 
 /**
