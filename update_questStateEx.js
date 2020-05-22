@@ -1081,6 +1081,7 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(428, 1, 1) // 近海に侵入する敵潜を制圧せよ！
                 addQuestCount(435, 1, 1) // 特設護衛船団司令部、活動開始！
                 addQuestCount(436, 1, 4) // 練習航海及び警備任務を実施せよ！
+                addQuestCount(437, 1, 1) // 小笠原沖哨戒線の強化を実施せよ！
                 break
             case "海上護衛任務": // ID:05
                 addQuestCount(424) // 輸送船団護衛を強化せよ！
@@ -1098,6 +1099,12 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(428, 1, 3) // 近海に侵入する敵潜を制圧せよ！
                 addQuestCount(435, 1, 2) // 特設護衛船団司令部、活動開始！
                 break
+            case "小笠原沖哨戒線遠征": // ID:A5
+                addQuestCount(437, 1, 2) // 小笠原沖哨戒線の強化を実施せよ！
+                break
+            case "小笠原沖戦闘哨戒": // ID:A6
+                addQuestCount(437, 1, 3) // 小笠原沖哨戒線の強化を実施せよ！
+                break
             case "タンカー護衛任務": // ID:09
                 addQuestCount(434, 1, 5) // 特設護衛船団司令部、活動開始！
                 break
@@ -1111,6 +1118,7 @@ function addCountForMissionResultPart(data) {
                 break
             case "南西方面航空偵察作戦": // ID:B1
                 addQuestCount(435, 1, 5) // 特設護衛船団司令部、活動開始！
+                addQuestCount(437, 1, 4) // 小笠原沖哨戒線の強化を実施せよ！
                 break
         }
         //api_no渡してこないので仕方なく
@@ -1176,6 +1184,8 @@ function addCountForPracticeBattleResultPart(data) {
             }
         }
     }
+    var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
+    var deddcl = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.CL])
     if (isWinS(rank)) {
         var flotilla18 = ships.map(function (ship) {
             return ship.shipInfo.flagship
@@ -1193,12 +1203,16 @@ function addCountForPracticeBattleResultPart(data) {
         if (flotilla19 >= 4) {
             addQuestCount(339) // 「十九駆」演習！
         }
-        var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
         if (dedd >= 3) {
             addQuestCount(340) // 【桃の節句任務】桃の節句演習！
         }
         if (dedd >= 2) {
             addQuestCount(329) // 【節分任務】節分演習！
+        }
+    }
+    if (isWinA(rank)) {
+        if (dedd >= 3 && deddcl >= 4) {
+            addQuestCount(342) // 小艦艇群演習強化任務
         }
     }
 }

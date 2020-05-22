@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.3.9
+ * 任務進捗詳細 Ver.2.4.0
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/04/13
+ * LastUpdate:2020/05/22
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.38
+var VERSION = 2.40
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -611,6 +611,11 @@ var QUEST_DATA = {
         /** S勝利 */
         new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.WEEKLY]),
     ],
+    /** [342]小艦艇群演習強化任務 */
+    342: [
+        /** A勝利 */
+        new QuestData(4, true, true, RESET.QUARTERLY),
+    ],
     // #endregion
     // #region 遠征
     /** [402]「遠征」を3回成功させよう！ */
@@ -701,6 +706,17 @@ var QUEST_DATA = {
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "対潜"),
         /** 「強行偵察任務」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "強行"),
+    ],
+    /** [437]小笠原沖哨戒線の強化を実施せよ！ */
+    437: [
+        /** 「対潜警戒任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "対潜"),
+        /** 「小笠原沖哨戒線遠征」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "小笠原哨戒"),
+        /** 「小笠原沖戦闘哨戒」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "小笠原戦闘"),
+        /** 「南西方面航空偵察作戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "南西"),
     ],
     // #endregion
     // #region 補給/入渠
