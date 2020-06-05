@@ -720,7 +720,7 @@ function addCountForBattleResultPart(data) {
             addQuestCount(888, 1, 1) // 新編成「三川艦隊」、鉄底海峡に突入せよ！[5-1]
         }
         var num = ships.map(function (ship) {
-            return ship.shipInfo.json.api_ctype
+            return (ship.shipInfo.json.api_ctype | 0)
         }).filter(function (ctype) {
             // 扶桑型or伊勢型or長門型or大和型
             return ctype === 26 || ctype === 2 || ctype === 19 || ctype === 37

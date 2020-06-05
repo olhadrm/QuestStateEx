@@ -1,7 +1,7 @@
 load("script/utils.js");
 
 function header() {
-	return ["表示位置", "種", "分類", "状態", "進捗", "タイトル", "内容", "燃料", "弾薬", "鋼材", "ボーキ"];
+	return ["表示位置", "種", "分類", "状態", "進捗", "タイトル", "内容", "燃料", "弾薬", "鋼材", "ボーキ", "戦果"];
 }
 
 function begin() {}
@@ -48,7 +48,28 @@ function questType(type) {
 	return "？";
 }
 
+function getRankingPoint(questNo) {
+	switch(questNo) {
+		case 854: // 戦果拡張任務！「Z作戦」前段作戦
+			return 350;
+		case 888: // 新編成「三川艦隊」、鉄底海峡に突入せよ！
+			return 200;
+		case 893: // 泊地周辺海域の安全確保を徹底せよ！
+			return 300;
+		case 872: // 戦果拡張任務！「Z作戦」後段作戦
+			return 400;
+		case 284: // 南西諸島方面「海上警備行動」発令！
+			return 80;
+		case 845: // 発令！「西方海域作戦」
+			return 330;
+		case 903: // 拡張「六水戦」、最前線へ！
+			return 390;
+	}
+	return 0;
+}
+
 function body(quest) {
+    var point = getRankingPoint(quest.no);
 	return toComparable([
 		String("" + quest.getPage() + "-" + quest.getPos()),
 		questType(parseInt(quest.json.api_label_type)),
@@ -60,7 +81,8 @@ function body(quest) {
 		quest.getFuel(),
 		quest.getAmmo(),
 		quest.getMetal(),
-		quest.getBauxite()
+		quest.getBauxite(),
+		String(point > 0 ? point : ""),
 	]);
 }
 
