@@ -789,7 +789,7 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(6, 3) && isWinA(rank)) {
         // 水母1隻、軽巡2隻
-        if (getLength(stypes[SHIP_TYPE.AV]) === 1 && getLength(stypes[SHIP_TYPE.CL]) === 2) {
+        if (getLength(stypes[SHIP_TYPE.AV]) >= 1 && getLength(stypes[SHIP_TYPE.CL]) >= 2) {
             addQuestCount(862) // 前線の航空偵察を実施せよ！
         }
     }
@@ -1273,7 +1273,7 @@ function updateQuestCount() {
         resetQuestCountOfMonthly()
     }
     // クォータリー
-    if (!(((lastUpdateQuestTime.month.value + 2) % 3 === (nowTime.month.value + 2) % 3) &&
+    if (!((Math.floor(lastUpdateQuestTime.month.value / 3) % 4 === Math.floor(nowTime.month.value / 3) % 4) &&
             (lastUpdateQuestTime.year.value === nowTime.year.value || !(lastUpdateQuestTime.year.value === nowTime.year.value - 1 && lastUpdateQuestTime.month.value === 12)))) {
         resetQuestCountOfQuarterly()
     }

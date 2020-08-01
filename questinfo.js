@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.1
+ * 任務進捗詳細 Ver.2.4.2
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/06/06
+ * LastUpdate:2020/08/01
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.41
+var VERSION = 2.42
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
