@@ -1082,6 +1082,7 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(435, 1, 1) // 特設護衛船団司令部、活動開始！
                 addQuestCount(436, 1, 4) // 練習航海及び警備任務を実施せよ！
                 addQuestCount(437, 1, 1) // 小笠原沖哨戒線の強化を実施せよ！
+                addQuestCount(438, 1, 2) // 南西諸島方面の海上護衛を強化せよ！
                 break
             case "海上護衛任務": // ID:05
                 addQuestCount(424) // 輸送船団護衛を強化せよ！
@@ -1090,6 +1091,7 @@ function addCountForMissionResultPart(data) {
                 break
             case "兵站強化任務": // ID:A1
                 addQuestCount(434, 1, 3) // 特設護衛船団司令部、活動開始！
+                addQuestCount(438, 1, 1) // 南西諸島方面の海上護衛を強化せよ！
                 break
             case "海峡警備行動": // ID:A2
                 addQuestCount(428, 1, 2) // 近海に侵入する敵潜を制圧せよ！
@@ -1107,6 +1109,7 @@ function addCountForMissionResultPart(data) {
                 break
             case "タンカー護衛任務": // ID:09
                 addQuestCount(434, 1, 5) // 特設護衛船団司令部、活動開始！
+                addQuestCount(438, 1, 3) // 南西諸島方面の海上護衛を強化せよ！
                 break
             case "強行偵察任務": // ID:10
                 addQuestCount(426, 1, 4) // 海上通商航路の警戒を厳とせよ！
@@ -1119,6 +1122,9 @@ function addCountForMissionResultPart(data) {
             case "南西方面航空偵察作戦": // ID:B1
                 addQuestCount(435, 1, 5) // 特設護衛船団司令部、活動開始！
                 addQuestCount(437, 1, 4) // 小笠原沖哨戒線の強化を実施せよ！
+                break
+            case "南西諸島捜索撃滅戦": // ID:B5
+                addQuestCount(438, 1, 4) // 南西諸島方面の海上護衛を強化せよ！
                 break
         }
         //api_no渡してこないので仕方なく

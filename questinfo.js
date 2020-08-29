@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.2
+ * 任務進捗詳細 Ver.2.4.3
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/08/01
+ * LastUpdate:2020/08/29
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.42
+var VERSION = 2.43
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -717,6 +717,17 @@ var QUEST_DATA = {
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "小笠原戦闘"),
         /** 「南西方面航空偵察作戦」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MAY], "南西"),
+    ],
+    /** [438]南西諸島方面の海上護衛を強化せよ！ */
+    438: [
+        /** 「兵站強化任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "兵站"),
+        /** 「対潜警戒任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "対潜"),
+        /** 「タンカー護衛任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "ﾀﾝｶｰ"),
+        /** 「南西諸島捜索撃滅戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "南西"),
     ],
     // #endregion
     // #region 補給/入渠
