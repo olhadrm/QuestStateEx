@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.3
+ * 任務進捗詳細 Ver.2.4.4
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/08/29
+ * LastUpdate:2020/09/21
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.43
+var VERSION = 2.44
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -366,9 +366,9 @@ var QUEST_DATA = {
     841: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "4-1"),
-        /** 敵東方港湾基地(4-2 ボス)S 勝利 */
+        /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "4-2"),
-        /** 敵東方中枢艦隊 旗艦(4-3 ボス)S 勝利 */
+        /** 敵東方港湾基地(4-3 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "4-3")
     ],
     /** [843]【節分拡張任務】令和二年節分作戦、全力出撃！ */
@@ -550,12 +550,21 @@ var QUEST_DATA = {
     914: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)A 勝利 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-1"),
-        /** 敵東方港湾基地(4-2 ボス)A 勝利 */
+        /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)A 勝利 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-2"),
-        /** 敵東方中枢艦隊 旗艦(4-3 ボス)A 勝利 */
+        /** 敵東方港湾基地(4-3 ボス)A 勝利 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-3"),
         /** 敵東方中枢艦隊 旗艦(4-4 ボス)A 勝利 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-4"),
+    ],
+    /**[928]歴戦「第十方面艦隊」、全力出撃！ */
+    928: [
+        /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "4-2"),
+        /** 深海任務部隊 主力機動部隊群(7-2-2 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-2-2"),
+        /** 深海東方部隊 海峡封鎖部隊旗艦(7-3-2 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-3-2"),
     ],
     // #endregion
     // #region 演習
@@ -729,6 +738,30 @@ var QUEST_DATA = {
         /** 「南西諸島捜索撃滅戦」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "南西"),
     ],
+    /** [439]兵站強化遠征任務【基本作戦】 */
+    439: [
+        /** 「海上護衛任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "海上"),
+        /** 「兵站強化任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "兵站"),
+        /** 「ボーキサイト輸送任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ﾎﾞｰｷ"),
+        /** 「南西方面航空偵察作戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "南西"),
+    ],
+    /** [440]兵站強化遠征任務【拡張作戦】 */
+    440: [
+        /** 「ブルネイ泊地沖哨戒」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ﾌﾞﾙﾈｲ"),
+        /** 「海上護衛任務」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "海上"),
+        /** 「水上機前線輸送」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "水上機"),
+        /** 「強行鼠輸送作戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "強行鼠"),
+        /** 「南西海域戦闘哨戒」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "南西"),
+    ],
     // #endregion
     // #region 補給/入渠
     /** [503]艦隊大整備！ */
@@ -799,6 +832,17 @@ var QUEST_DATA = {
     638: [
         /** 「機銃」廃棄(一括は別々) */
         new QuestData(6, true, true, RESET.WEEKLY),
+    ],
+    /** [640]新型兵装開発整備の強化 */
+    640: [
+        /** 「小口径主砲」廃棄(一括は別々) */
+        new QuestData(6, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "小口径"),
+        /** 「中口径主砲」廃棄(一括は別々) */
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "中口径"),
+        /** 「魚雷」廃棄(一括は別々) */
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "魚雷"),
+        /** 「鋼材」用意 */
+        new QuestData(4000, false, false, RESET.NONE, "鋼材"),
     ],
     /** [643]主力「陸攻」の調達 */
     643: [

@@ -244,14 +244,15 @@ function isEqualMap(id, no) {
  * セルが一致しているか
  * @param {Number} id 「X」-Y
  * @param {Number} no X-「Y」
- * @param {Number} cell X-Y-「Z」
+ * @param {Number|Number[]} cell X-Y-「Z」
  * @return {Boolean} マップが一致しているか
  */
 function isEqualCell(id, no, cell) {
     var map = Optional.ofNullable(GlobalContext.sortieMap).map(function (map) {
         return map.map
     }).orElse([0, 0, 0])
-    return map[0] === id && map[1] === no && map[2] === cell
+    var cells = Array.isArray(cell) ? cell : [cell]
+    return map[0] === id && map[1] === no && cells.indexOf(map[2]) >= 0
 }
 
 /**
@@ -411,6 +412,11 @@ function addCountForBattleResultPart(data) {
     }).filter(function (ctype) {
         return ctype === 38 // 夕雲型
     }).length >= 3
+    var has928Org = ships.map(function (ship) {
+        return ship.shipInfo.flagship
+    }).filter(function (name) {
+        return ["はぐろ", "あしがら", "みょうこう", "たかお", "かみかぜ"].indexOf(name) >= 0
+    }).length >= 2
     var has912Org = ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3
     var has914Org = getLength(stypes[SHIP_TYPE.CA]) >= 3 && getLength(stypes[SHIP_TYPE.DD]) >= 1
     // #region ○-○ボス勝利など
@@ -661,6 +667,9 @@ function addCountForBattleResultPart(data) {
             if (setsubun2) {
                 addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
             }
+            if (has928Org) {
+                addQuestCount(928, 1, 1) // 歴戦「第十方面艦隊」、全力出撃！[4-2]
+            }
         }
         if (isWinA(rank)) {
             if (has914Org) {
@@ -826,11 +835,19 @@ function addCountForBattleResultPart(data) {
             if (Number(lastBattleDto.dock.id) === 1) {
                 addQuestCount(872, 1, 4) // 戦果拡張任務！「Z作戦」後段作戦[7-2-2]
             }
+            if (has928Org) {
+                addQuestCount(928, 1, 2) // 歴戦「第十方面艦隊」、全力出撃！[7-2-2]
+            }
         }
         if (isWinA(rank)) {
             if (has909Org) {
                 addQuestCount(909, 1, 4) // 【桃の節句作戦】主力オブ主力、駆ける！[7-2-2]
             }
+        }
+    }
+    if (isEqualCell(7, 3, [18, 23, 24, 25]) && isWinS(rank)) {
+        if (has928Org) {
+            addQuestCount(928, 1, 3) // 歴戦「第十方面艦隊」、全力出撃！[7-3-2]
         }
     }
     // #endregion
@@ -938,6 +955,10 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(688, getLength(type2[7]), 2) // 艦上爆撃機
         addQuestCount(688, getLength(type2[8]), 3) // 艦上攻撃機
         addQuestCount(688, getLength(type2[10]), 4) // 水上偵察機
+        // 新型兵装開発整備の強化
+        addQuestCount(657, getLength(type2[1]), 1) // 小口径主砲
+        addQuestCount(657, getLength(type2[2]), 2) // 中口径主砲
+        addQuestCount(677, getLength(type2[5]) + getLength(type2[32]), 3) // 魚雷
     }
     addQuestCount(613)
 }
@@ -1088,10 +1109,13 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(424) // 輸送船団護衛を強化せよ！
                 addQuestCount(426, 1, 3) // 海上通商航路の警戒を厳とせよ！
                 addQuestCount(434, 1, 2) // 特設護衛船団司令部、活動開始！
+                addQuestCount(439, 1, 1) // 兵站強化遠征任務【基本作戦】
+                addQuestCount(440, 1, 2) // 兵站強化遠征任務【拡張作戦】
                 break
             case "兵站強化任務": // ID:A1
                 addQuestCount(434, 1, 3) // 特設護衛船団司令部、活動開始！
                 addQuestCount(438, 1, 1) // 南西諸島方面の海上護衛を強化せよ！
+                addQuestCount(439, 1, 2) // 兵站強化遠征任務【基本作戦】
                 break
             case "海峡警備行動": // ID:A2
                 addQuestCount(428, 1, 2) // 近海に侵入する敵潜を制圧せよ！
@@ -1116,15 +1140,31 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(435, 1, 3) // 特設護衛船団司令部、活動開始！
                 addQuestCount(436, 1, 5) // 練習航海及び警備任務を実施せよ！
                 break
+            case "ボーキサイト輸送任務": // ID:11
+                addQuestCount(439, 1, 3) // 兵站強化遠征任務【基本作戦】
+                break
             case "包囲陸戦隊撤収作戦": // ID:14
                 addQuestCount(435, 1, 4) // 特設護衛船団司令部、活動開始！
                 break
             case "南西方面航空偵察作戦": // ID:B1
                 addQuestCount(435, 1, 5) // 特設護衛船団司令部、活動開始！
                 addQuestCount(437, 1, 4) // 小笠原沖哨戒線の強化を実施せよ！
+                addQuestCount(439, 1, 4) // 兵站強化遠征任務【基本作戦】
                 break
             case "南西諸島捜索撃滅戦": // ID:B5
                 addQuestCount(438, 1, 4) // 南西諸島方面の海上護衛を強化せよ！
+                break
+            case "水上機前線輸送": // ID:40
+                addQuestCount(440, 1, 3) // 兵站強化遠征任務【拡張作戦】
+                break
+            case "強行鼠輸送作戦": // ID:E2
+                addQuestCount(440, 1, 4) // 兵站強化遠征任務【拡張作戦】
+                break
+            case "ブルネイ泊地沖哨戒": // ID:41
+                addQuestCount(440, 1, 1) // 兵站強化遠征任務【拡張作戦】
+                break
+            case "南西海域戦闘哨戒": // ID:46
+                addQuestCount(440, 1, 5) // 兵站強化遠征任務【拡張作戦】
                 break
         }
         //api_no渡してこないので仕方なく
@@ -1243,6 +1283,7 @@ function updateMaterial() {
         saveQuestCount(676, steel, 4, true) // 装備開発力の集中整備[鋼材]
         saveQuestCount(677, steel, 4, true) // 継戦支援能力の整備[鋼材]
         saveQuestCount(686, steel, 3, true) // 戦時改修A型高角砲の量産[鋼材]
+        saveQuestCount(657, steel, 4, true) // 新型兵装開発整備の強化[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
