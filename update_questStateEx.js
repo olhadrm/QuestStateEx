@@ -1283,7 +1283,7 @@ function updateMaterial() {
         saveQuestCount(676, steel, 4, true) // 装備開発力の集中整備[鋼材]
         saveQuestCount(677, steel, 4, true) // 継戦支援能力の整備[鋼材]
         saveQuestCount(686, steel, 3, true) // 戦時改修A型高角砲の量産[鋼材]
-        saveQuestCount(657, steel, 4, true) // 新型兵装開発整備の強化[鋼材]
+        saveQuestCount(640, steel, 4, true) // 新型兵装開発整備の強化[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
