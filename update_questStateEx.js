@@ -956,9 +956,9 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(688, getLength(type2[8]), 3) // 艦上攻撃機
         addQuestCount(688, getLength(type2[10]), 4) // 水上偵察機
         // 新型兵装開発整備の強化
-        addQuestCount(657, getLength(type2[1]), 1) // 小口径主砲
-        addQuestCount(657, getLength(type2[2]), 2) // 中口径主砲
-        addQuestCount(677, getLength(type2[5]) + getLength(type2[32]), 3) // 魚雷
+        addQuestCount(640, getLength(type2[1]), 1) // 小口径主砲
+        addQuestCount(640, getLength(type2[2]), 2) // 中口径主砲
+        addQuestCount(640, getLength(type2[5]) + getLength(type2[32]), 3) // 魚雷
     }
     addQuestCount(613)
 }
