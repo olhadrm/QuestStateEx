@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.6
+ * 任務進捗詳細 Ver.2.4.7
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/09/30
+ * LastUpdate:2020/10/18
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.46
+var VERSION = 2.47
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -623,7 +623,17 @@ var QUEST_DATA = {
     /** [342]小艦艇群演習強化任務 */
     342: [
         /** A勝利 */
-        new QuestData(4, true, true, RESET.QUARTERLY),
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.QUARTERLY]),
+    ],
+    /** [345]演習ティータイム！ */
+    345: [
+        /** A勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.OCTOBER]),
+    ],
+    /** [346]最精鋭！主力オブ主力、演習開始！ */
+    346: [
+        /** S勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.OCTOBER]),
     ],
     // #endregion
     // #region 遠征
@@ -874,6 +884,17 @@ var QUEST_DATA = {
         new QuestData(3, false, false, RESET.NONE, "35.6cm連装砲"),
         /** 「九六式艦戦」用意 */
         new QuestData(3, false, false, RESET.NONE, "九六式艦戦"),
+    ],
+    /** [654]精鋭複葉機飛行隊の編成 */
+    654: [
+        /** 「Swordfish」廃棄(一括は別々) */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.OCTOBER], "Swordfish"),
+        /** 「Fulmar」廃棄(一括は別々) */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.OCTOBER], "Fulmar"),
+        /** 「弾薬」用意 */
+        new QuestData(1500, false, false, RESET.NONE, "弾薬"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(1500, false, false, RESET.NONE, "ボーキサイト"),
     ],
     /** [663]新型艤装の継続研究 */
     663: [

@@ -959,6 +959,11 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(640, getLength(type2[1]), 1) // 小口径主砲
         addQuestCount(640, getLength(type2[2]), 2) // 中口径主砲
         addQuestCount(640, getLength(type2[5]) + getLength(type2[32]), 3) // 魚雷
+        // 精鋭複葉機飛行隊の編成
+        if (isMatchSecretary(654)) {
+            addQuestCount(654, getLength(slotitemId[242]), 1) // Swordfish
+            addQuestCount(654, getLength(slotitemId[249]), 2) // Fulmar
+        }
     }
     addQuestCount(613)
 }
@@ -1023,6 +1028,14 @@ function isMatchSecretary(id) {
                     if (item2.size() > 0) {
                         var item = item2.get(0)
                         return item instanceof ItemDto && item.slotitemId === 294 && item.level === 10
+                    }
+                }
+                return false
+            case 654:
+                if (secretary.shipInfo.flagship.equals("アークロイヤル")) {
+                    var item = secretary.item2.get(0)
+                    if (item instanceof ItemDto) {
+                        return item.slotitemId === 242 && item.level === 10
                     }
                 }
                 return false
@@ -1243,6 +1256,11 @@ function addCountForPracticeBattleResultPart(data) {
         }).filter(function (name) {
             return ["いそなみ", "うらなみ", "あやなみ", "しきなみ"].indexOf(name) >= 0
         }).length
+        var teatime = ships.map(function (ship) {
+            return ship.shipInfo.flagship
+        }).filter(function (name) {
+            return ["ウォースパイト", "こんごう", "アークロイヤル", "ネルソン", "ジャーヴィス", "ジェーナス"].indexOf(name) >= 0
+        }).length
         if (flotilla18 >= 4) {
             addQuestCount(337) // 「十八駆」演習！
         }
@@ -1255,10 +1273,21 @@ function addCountForPracticeBattleResultPart(data) {
         if (dedd >= 2) {
             addQuestCount(329) // 【節分任務】節分演習！
         }
+        if (teatime >= 4) {
+            addQuestCount(345) // 演習ティータイム！
+        }
     }
     if (isWinA(rank)) {
         if (dedd >= 3 && deddcl >= 4) {
             addQuestCount(342) // 小艦艇群演習強化任務
+        }
+        var mfofmf = ships.map(function (ship) {
+            return ship.shipId
+        }).filter(function (id) {
+            return [542, 563, 564, 648].indexOf(id) >= 0
+        }).length
+        if (mfofmf >= 4) {
+            addQuestCount(346) // 最精鋭！主力オブ主力、演習開始！
         }
     }
 }
@@ -1277,6 +1306,7 @@ function updateMaterial() {
         saveQuestCount(645, fuel, 2, true) // 「洋上補給」物資の調達[燃料]
         // 弾薬
         saveQuestCount(645, ammo, 3, true) // 「洋上補給」物資の調達[弾薬]
+        saveQuestCount(654, ammo, 3, true) // 精鋭複葉機飛行隊の編成[弾薬]
         // 鋼材
         saveQuestCount(663, steel, 2, true) // 新型艤装の継続研究[鋼材]
         saveQuestCount(674, steel, 2, true) // 工廠環境の整備[鋼材]
@@ -1289,6 +1319,7 @@ function updateMaterial() {
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
         saveQuestCount(680, bauxite, 3, true) // 対空兵装の整備拡充[ボーキサイト]
         saveQuestCount(688, bauxite, 5, true) // 航空戦力の強化[ボーキサイト]
+        saveQuestCount(654, bauxite, 4, true) // 精鋭複葉機飛行隊の編成[ボーキサイト]
     }
 }
 
