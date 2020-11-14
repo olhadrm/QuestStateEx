@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.7
+ * 任務進捗詳細 Ver.2.4.8
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/10/18
+ * LastUpdate:2020/11/14
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.47
+var VERSION = 2.48
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -329,13 +329,13 @@ var QUEST_DATA = {
     /** [280]兵站線確保！海上警備を強化実施せよ！ */
     280: [
         /** 敵主力艦隊(1-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-2"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-2"),
         /** 敵主力艦隊(1-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-3"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-3"),
         /** 敵機動部隊(1-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-4"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-4"),
         /** 敵主力艦隊(2-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-1"),
+        new QuestData(1, false, true, RESET.MONTHLY, "2-1"),
     ],
     /** [284]南西諸島方面「海上警備行動」発令！ */
     284: [
@@ -896,6 +896,25 @@ var QUEST_DATA = {
         /** 「ボーキサイト」用意 */
         new QuestData(1500, false, false, RESET.NONE, "ボーキサイト"),
     ],
+    /** [655]工廠フル稼働！新兵装を開発せよ！ */
+    655: [
+        /** 「小口径主砲」廃棄(一括は別々) */
+        new QuestData(6, false, true, [RESET.YEARLY, RESET.NOVEMBER], "小口径"),
+        /** 「中口径主砲」廃棄(一括は別々) */
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "中口径"),
+        /** 「大口径主砲」廃棄(一括は別々) */
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "大口径"),
+        /** 「水偵」廃棄(一括は別々) */
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "水偵"),
+        /** 「艦攻」廃棄(一括は別々) */
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "艦攻"),
+        /** 「燃料」用意 */
+        new QuestData(1500, false, false, RESET.NONE, "燃料"),
+        /** 「鋼材」用意 */
+        new QuestData(1500, false, false, RESET.NONE, "鋼材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(1500, false, false, RESET.NONE, "ボーキサイト"),
+    ],
     /** [663]新型艤装の継続研究 */
     663: [
         /** 「大口径主砲」廃棄(一括は別々) */
@@ -1014,6 +1033,16 @@ var QUEST_DATA = {
     712: [
         /** 近代化改修成功 */
         new QuestData(2, true, true, RESET.WEEKLY),
+    ],
+    /** [714]「駆逐艦」の改修工事を実施せよ！ */
+    714: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, [RESET.YEARLY, RESET.NOVEMBER]),
+    ],
+    /** [715]続：「駆逐艦」の改修工事を実施せよ！ */
+    715: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, [RESET.YEARLY, RESET.NOVEMBER]),
     ],
     // #endregion
 }

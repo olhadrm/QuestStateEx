@@ -964,6 +964,12 @@ function addCountForDestroyItem2Part(data) {
             addQuestCount(654, getLength(slotitemId[242]), 1) // Swordfish
             addQuestCount(654, getLength(slotitemId[249]), 2) // Fulmar
         }
+        // 工廠フル稼働！新兵装を開発せよ！
+        addQuestCount(655, getLength(type2[1]), 1) // 小口径主砲
+        addQuestCount(655, getLength(type2[2]), 2) // 中口径主砲
+        addQuestCount(655, getLength(type2[3]), 3) // 大口径主砲
+        addQuestCount(655, getLength(type2[10]), 4) // 水上偵察機
+        addQuestCount(655, getLength(type2[8]), 5) // 艦上攻撃機
     }
     addQuestCount(613)
 }
@@ -1068,8 +1074,12 @@ function addCountForPowerupPart(data) {
             }, {})
 
             if (origin.stype === SHIP_TYPE.DD) {
+                if (stypes[SHIP_TYPE.DD] >= 3) {
+                    addQuestCount(714) // 「駆逐艦」の改修工事を実施せよ！
+                }
                 if (stypes[SHIP_TYPE.CL] >= 3) {
                     addQuestCount(707) // 【桃の節句任務】駆逐艦桃の節句改修
+                    addQuestCount(715) // 続：「駆逐艦」の改修工事を実施せよ！
                 }
             }
             if (origin.stype === SHIP_TYPE.DE) {
@@ -1304,6 +1314,7 @@ function updateMaterial() {
         var bauxite = material.bauxite
         // 燃料
         saveQuestCount(645, fuel, 2, true) // 「洋上補給」物資の調達[燃料]
+        saveQuestCount(655, fuel, 6, true) // 工廠フル稼働！新兵装を開発せよ！[燃料]
         // 弾薬
         saveQuestCount(645, ammo, 3, true) // 「洋上補給」物資の調達[弾薬]
         saveQuestCount(654, ammo, 3, true) // 精鋭複葉機飛行隊の編成[弾薬]
@@ -1314,12 +1325,14 @@ function updateMaterial() {
         saveQuestCount(677, steel, 4, true) // 継戦支援能力の整備[鋼材]
         saveQuestCount(686, steel, 3, true) // 戦時改修A型高角砲の量産[鋼材]
         saveQuestCount(640, steel, 4, true) // 新型兵装開発整備の強化[鋼材]
+        saveQuestCount(655, steel, 7, true) // 工廠フル稼働！新兵装を開発せよ！[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
         saveQuestCount(680, bauxite, 3, true) // 対空兵装の整備拡充[ボーキサイト]
         saveQuestCount(688, bauxite, 5, true) // 航空戦力の強化[ボーキサイト]
         saveQuestCount(654, bauxite, 4, true) // 精鋭複葉機飛行隊の編成[ボーキサイト]
+        saveQuestCount(655, bauxite, 8, true) // 工廠フル稼働！新兵装を開発せよ！[ボーキサイト]
     }
 }
 
