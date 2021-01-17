@@ -513,7 +513,7 @@ function addCountForBattleResultPart(data) {
     if (isEqualArea(2) && isWin(rank)) {
         addQuestCount(226) // 南西諸島海域の制海権を握れ！
     }
-    if (isEqualMap(2, 1) && isWinS(rank)) {
+    if (isEqualMap(2, 1)) {
         if (isWinS(rank)) {
             if (has280Org) {
                 addQuestCount(280, 1, 4) // 兵站線確保！海上警備を強化実施せよ！[2-1]
@@ -537,7 +537,7 @@ function addCountForBattleResultPart(data) {
             }
         }
     }
-    if (isEqualMap(2, 2) && isWinS(rank)) {
+    if (isEqualMap(2, 2)) {
         if (isWinS(rank)) {
             if (hasCV) {
                 addQuestCount(894, 1, 4) // 空母戦力の投入による兵站線戦闘哨戒[2-2]
