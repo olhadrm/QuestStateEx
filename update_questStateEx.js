@@ -400,7 +400,8 @@ function addCountForBattleResultPart(data) {
     var has284Org = has280Org
     var setsubun1 = [SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.CT, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 &&
         (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
-    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    // var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
+    var setsubun2 = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && getLength(stypes[ships[0].stype]) >= 2
     var setsubun3 = [SHIP_TYPE.BB, SHIP_TYPE.FBB, SHIP_TYPE.BBV, SHIP_TYPE.CV, SHIP_TYPE.CVB, SHIP_TYPE.CVL].indexOf(ships[0].stype) >= 0 && getLength(stypes[SHIP_TYPE.DD]) >= 2
     var has904Org = ships.filter(function (ship) {
         return [195, 627].indexOf(ship.shipId) >= 0
@@ -487,11 +488,11 @@ function addCountForBattleResultPart(data) {
                 addQuestCount(284, 1, 1) // 南西諸島方面「海上警備行動」発令！[1-4]
             }
         }
-        if (isWinA(rank)) {
-            if (setsubun1) {
-                addQuestCount(840, 1, 1) //【節分任務】令和二年節分作戦[1-4]
-            }
-        }
+        // if (isWinA(rank)) {
+        //     if (setsubun1) {
+        //         addQuestCount(840, 1, 1) //【節分任務】令和二年節分作戦[1-4]
+        //     }
+        // }
     }
     if (isEqualMap(1, 5)) {
         if (isWinS(rank)) {
@@ -526,8 +527,11 @@ function addCountForBattleResultPart(data) {
             }
         }
         if (isWinA(rank)) {
+            // if (setsubun1) {
+            //     addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
+            // }
             if (setsubun1) {
-                addQuestCount(840, 1, 2) // 【節分任務】令和二年節分作戦[2-1]
+                addQuestCount(840, 1, 1) // 【節分任務】令和三年節分作戦[2-1]
             }
             if (has906Org) {
                 addQuestCount(906, 1, 5) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
@@ -547,8 +551,11 @@ function addCountForBattleResultPart(data) {
             }
         }
         if (isWinA(rank)) {
+            // if (setsubun1) {
+            //     addQuestCount(840, 1, 3) // 【節分任務】令和二年節分作戦[2-2]
+            // }
             if (setsubun1) {
-                addQuestCount(840, 1, 3) // 【節分任務】令和二年節分作戦[2-2]
+                addQuestCount(840, 1, 2) // 【節分任務】令和三年節分作戦[2-2]
             }
             if (has909Org) {
                 addQuestCount(909, 1, 1) // 【桃の節句作戦】主力オブ主力、駆ける！[2-2]
@@ -573,6 +580,9 @@ function addCountForBattleResultPart(data) {
             }
             if (has912Org) {
                 addQuestCount(912, 1, 5) // 工作艦「明石」護衛任務[2-3]
+            }
+            if (setsubun1) {
+                addQuestCount(840, 1, 3) // 【節分任務】令和三年節分作戦[2-3]
             }
         }
     }
@@ -647,7 +657,8 @@ function addCountForBattleResultPart(data) {
         if (isWinS(rank)) {
             addQuestCount(845, 1, 1) // 発令！「西方海域作戦」[4-1]
             if (setsubun2) {
-                addQuestCount(841, 1, 1) // 【節分任務】令和二年西方海域節分作戦[4-1]
+                // addQuestCount(841, 1, 1) // 【節分任務】令和二年西方海域節分作戦[4-1]
+                addQuestCount(841, 1, 1) // 【節分任務】令和三年西方海域節分作戦[4-1]
             }
         }
         if (isWinA(rank)) {
@@ -665,7 +676,8 @@ function addCountForBattleResultPart(data) {
             }
             addQuestCount(845, 1, 2) // 発令！「西方海域作戦」[4-2]
             if (setsubun2) {
-                addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
+                // addQuestCount(841, 1, 2) // 【節分任務】令和二年西方海域節分作戦[4-2]
+                addQuestCount(841, 1, 2) // 【節分任務】令和三年西方海域節分作戦[4-2]
             }
             if (has928Org) {
                 addQuestCount(928, 1, 1) // 歴戦「第十方面艦隊」、全力出撃！[4-2]
@@ -681,7 +693,8 @@ function addCountForBattleResultPart(data) {
         if (isWinS(rank)) {
             addQuestCount(845, 1, 3) // 発令！「西方海域作戦」[4-3]
             if (setsubun2) {
-                addQuestCount(841, 1, 3) // 【節分任務】令和二年西方海域節分作戦[4-3]
+                // addQuestCount(841, 1, 3) // 【節分任務】令和二年西方海域節分作戦[4-3]
+                addQuestCount(841, 1, 3) // 【節分任務】令和三年西方海域節分作戦[4-3]
             }
         }
         if (isWinA(rank)) {
@@ -743,6 +756,9 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(5, 2) && isWinS(rank)) {
         addQuestCount(243) // 南方海域珊瑚諸島沖の制空権を握れ！
+        if (setsubun3) {
+            addQuestCount(843, 1, 1) // 【節分拡張任務】令和三年節分作戦、全力出撃！[5-2]
+        }
     }
     if (isEqualMap(5, 3) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
@@ -770,16 +786,17 @@ function addCountForBattleResultPart(data) {
         if (isSixTpSquadron) {
             addQuestCount(903, 1, 2) // 拡張「六水戦」、最前線へ！[5-4]
         }
-        if (setsubun3) {
-            addQuestCount(843, 1, 1) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-4]
-        }
+        // if (setsubun3) {
+        //     addQuestCount(843, 1, 1) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-4]
+        // }
     }
     if (isEqualMap(5, 5) && isWinS(rank)) {
         if (Number(lastBattleDto.dock.id) === 1) {
             addQuestCount(872, 1, 1) // 戦果拡張任務！「Z作戦」後段作戦[5-5]
         }
         if (setsubun3) {
-            addQuestCount(843, 1, 2) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-5]
+            // addQuestCount(843, 1, 2) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-5]
+            addQuestCount(843, 1, 2) // 【節分拡張任務】令和三年節分作戦、全力出撃！[5-5]
         }
     }
     // #endregion
@@ -810,7 +827,8 @@ function addCountForBattleResultPart(data) {
             addQuestCount(903, 1, 3) // 拡張「六水戦」、最前線へ！[6-4]
         }
         if (setsubun3) {
-            addQuestCount(843, 1, 3) // 【節分拡張任務】令和二年節分作戦、全力出撃！[6-4]
+            // addQuestCount(843, 1, 3) // 【節分拡張任務】令和二年節分作戦、全力出撃！[6-4]
+            addQuestCount(843, 1, 3) // 【節分拡張任務】令和三年節分作戦、全力出撃！[6-4]
         }
     }
     if (isEqualMap(6, 5) && isWinS(rank)) {
@@ -970,6 +988,9 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(655, getLength(type2[3]), 3) // 大口径主砲
         addQuestCount(655, getLength(type2[10]), 4) // 水上偵察機
         addQuestCount(655, getLength(type2[8]), 5) // 艦上攻撃機
+        // 航空戦力の再編増強準備
+        addQuestCount(681, getLength(type2[7]), 1) // 艦上爆撃機
+        addQuestCount(681, getLength(type2[8]), 2) // 艦上攻撃機
     }
     addQuestCount(613)
 }
@@ -1312,6 +1333,7 @@ function updateMaterial() {
         var ammo = material.ammo
         var steel = material.metal
         var bauxite = material.bauxite
+        var research = material.research
         // 燃料
         saveQuestCount(645, fuel, 2, true) // 「洋上補給」物資の調達[燃料]
         saveQuestCount(655, fuel, 6, true) // 工廠フル稼働！新兵装を開発せよ！[燃料]
@@ -1333,6 +1355,9 @@ function updateMaterial() {
         saveQuestCount(688, bauxite, 5, true) // 航空戦力の強化[ボーキサイト]
         saveQuestCount(654, bauxite, 4, true) // 精鋭複葉機飛行隊の編成[ボーキサイト]
         saveQuestCount(655, bauxite, 8, true) // 工廠フル稼働！新兵装を開発せよ！[ボーキサイト]
+        saveQuestCount(681, bauxite, 4, true) // 航空戦力の再編増強準備[ボーキサイト]
+        // 開発資材
+        saveQuestCount(681, research, 3, true) // 航空戦力の再編増強準備[開発資材]
     }
 }
 

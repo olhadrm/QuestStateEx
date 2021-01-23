@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.8
+ * 任務進捗詳細 Ver.2.4.9
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2020/11/14
+ * LastUpdate:2021/01/23
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.48
+var VERSION = 2.49
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -353,16 +353,26 @@ var QUEST_DATA = {
         /** 敵侵攻中核艦隊(2-4ボス)S勝利 */
         new QuestData(2, true, true, RESET.QUARTERLY),
     ],
-    /** [840]【節分任務】令和二年節分作戦 */
+    // /** [840]【節分任務】令和二年節分作戦 */
+    // 840: [
+    //     /** 敵機動部隊(1-4 ボス)A 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-4"),
+    //     /** 敵主力部隊(2-1 ボス)A 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-1"),
+    //     /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)A 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-2")
+    // ],
+    /** [840]【節分任務】令和三年節分作戦 */
     840: [
-        /** 敵機動部隊(1-4 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "1-4"),
         /** 敵主力部隊(2-1 ボス)A 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "2-1"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "2-2")
+        new QuestData(1, false, true, RESET.WEEKLY, "2-2"),
+        /** 敵主力打撃群(2-3 ボス)A 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "2-3"),
     ],
-    /** [841]【節分任務】令和二年西方海域節分作戦 */
+    // /** [841]【節分任務】令和二年西方海域節分作戦 */
+    /** 【節分任務】令和三年西方海域節分作戦 */
     841: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "4-1"),
@@ -371,10 +381,19 @@ var QUEST_DATA = {
         /** 敵東方港湾基地(4-3 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "4-3")
     ],
-    /** [843]【節分拡張任務】令和二年節分作戦、全力出撃！ */
+    // /** [843]【節分拡張任務】令和二年節分作戦、全力出撃！ */
+    // 843: [
+    //     /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "5-4"),
+    //     /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "5-5"),
+    //     /** 離島守備隊(6-4 ボス)S 勝利 */
+    //     new QuestData(1, false, true, RESET.WEEKLY, "6-4")
+    // ],
+    /** [843]【節分拡張任務】令和三年節分作戦、全力出撃！ */
     843: [
-        /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "5-4"),
+        /** 敵南方増援部隊 本隊(5-2 ボス)S 勝利 */
+        new QuestData(1, false, true, RESET.WEEKLY, "5-2"),
         /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
         new QuestData(1, false, true, RESET.WEEKLY, "5-5"),
         /** 離島守備隊(6-4 ボス)S 勝利 */
@@ -984,6 +1003,17 @@ var QUEST_DATA = {
         new QuestData(4, false, true, RESET.QUARTERLY, "電探"),
         /** 「ボーキサイト」用意 */
         new QuestData(1500, false, false, RESET.NONE, "ボーキ"),
+    ],
+    /** [681]航空戦力の再編増強準備 */
+    681: [
+        /** 「艦爆」廃棄(一括は別々) */
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "艦爆"),
+        /** 「艦攻」廃棄(一括は別々) */
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "艦攻"),
+        /** 「開発資材」用意 */
+        new QuestData(20, false, false, RESET.NONE, "開発資材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(1600, false, false, RESET.NONE, "ボーキ"),
     ],
     /** [686]戦時改修A型高角砲の量産 */
     686: [
