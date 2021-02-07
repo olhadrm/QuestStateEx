@@ -1113,6 +1113,14 @@ function addCountForPowerupPart(data) {
                     addQuestCount(712) // 【桃の節句任務】菱餅改修：週
                 }
             }
+            if ([SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.CT].indexOf(origin.stype) >= 0) {
+                if (stypes[SHIP_TYPE.CL] + stypes[SHIP_TYPE.CLT] + stypes[SHIP_TYPE.CT] >= 3) {
+                    addQuestCount(716) // 「軽巡」級の改修工事を実施せよ！
+                }
+                if (stypes[SHIP_TYPE.CA] + stypes[SHIP_TYPE.CAV] >= 3) {
+                    addQuestCount(717) // 続：「軽巡」級の改修工事を実施せよ！
+                }
+            }
         }
     }
 }
@@ -1198,23 +1206,38 @@ function addCountForMissionResultPart(data) {
             case "南西諸島捜索撃滅戦": // ID:B5
                 addQuestCount(438, 1, 4) // 南西諸島方面の海上護衛を強化せよ！
                 break
-            case "水上機前線輸送": // ID:40
-                addQuestCount(440, 1, 3) // 兵站強化遠征任務【拡張作戦】
-                break
-            case "強行鼠輸送作戦": // ID:E2
-                addQuestCount(440, 1, 4) // 兵站強化遠征任務【拡張作戦】
-                break
             case "ブルネイ泊地沖哨戒": // ID:41
                 addQuestCount(440, 1, 1) // 兵站強化遠征任務【拡張作戦】
                 break
             case "南西海域戦闘哨戒": // ID:46
                 addQuestCount(440, 1, 5) // 兵站強化遠征任務【拡張作戦】
                 break
-        }
-        //api_no渡してこないので仕方なく
-        if (quest_name.indexOf("東京急行") > -1) {
-            addQuestCount(410) // 南方への輸送作戦を成功させよ！
-            addQuestCount(411) // 南方への鼠輸送を継続実施せよ!
+            case "潜水艦派遣演習": // ID:29
+                addQuestCount(442, 1, 2) // 西方連絡作戦準備を実施せよ！
+                break
+            case "潜水艦派遣作戦": // ID:30
+                addQuestCount(442, 1, 3) // 西方連絡作戦準備を実施せよ！
+                break
+            case "西方海域偵察作戦": // ID:D1
+                addQuestCount(442, 1, 1) // 西方連絡作戦準備を実施せよ！
+                break
+            case "欧州方面友軍との接触": // ID:D3
+                addQuestCount(442, 1, 4) // 西方連絡作戦準備を実施せよ！
+                break
+            case "東京急行": // ID:37
+                addQuestCount(410) // 南方への輸送作戦を成功させよ！
+                addQuestCount(411) // 南方への鼠輸送を継続実施せよ!
+                break
+            case "東京急行(弐)": // ID:38
+                addQuestCount(410) // 南方への輸送作戦を成功させよ！
+                addQuestCount(411) // 南方への鼠輸送を継続実施せよ!
+                break
+            case "水上機前線輸送": // ID:40
+                addQuestCount(440, 1, 3) // 兵站強化遠征任務【拡張作戦】
+                break
+            case "強行鼠輸送作戦": // ID:E2
+                addQuestCount(440, 1, 4) // 兵站強化遠征任務【拡張作戦】
+                break
         }
     }
 }
@@ -1264,9 +1287,7 @@ function addCountForPracticeBattleResultPart(data) {
             addQuestCount(318, 1, 1) // 給糧艦「伊良湖」の支援[勝利]
         }
         // 旗艦に空母が居るか
-        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].some(function (stype) {
-                return ships[0].stype === stype
-            })) {
+        if ([SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].some(function (stype) { return ships[0].stype === stype })) {
             var dd = getLength(stypes[SHIP_TYPE.DD])
             var cv = getLength(stypes[SHIP_TYPE.CVL]) + getLength(stypes[SHIP_TYPE.CV]) + getLength(stypes[SHIP_TYPE.CVB])
             if (dd > 1 && cv > 1) {
@@ -1320,6 +1341,13 @@ function addCountForPracticeBattleResultPart(data) {
         if (mfofmf >= 4) {
             addQuestCount(346) // 最精鋭！主力オブ主力、演習開始！
         }
+        // 旗艦に軽巡級(雷巡を除く)が居るか
+        if ([SHIP_TYPE.CL, SHIP_TYPE.CT].some(function (stype) { return ships[0].stype === stype })) {
+            var cl = getLength(stypes[SHIP_TYPE.CL]) + getLength(stypes[SHIP_TYPE.CT])
+            if (cl >= 3) {
+                addQuestCount(348) // 「精鋭軽巡」演習！
+            }
+        }
     }
 }
 
@@ -1348,6 +1376,10 @@ function updateMaterial() {
         saveQuestCount(686, steel, 3, true) // 戦時改修A型高角砲の量産[鋼材]
         saveQuestCount(640, steel, 4, true) // 新型兵装開発整備の強化[鋼材]
         saveQuestCount(655, steel, 7, true) // 工廠フル稼働！新兵装を開発せよ！[鋼材]
+        saveQuestCount(714, steel, 2, true) // 「駆逐艦」の改修工事を実施せよ！[鋼材]
+        saveQuestCount(715, steel, 2, true) // 続：「駆逐艦」の改修工事を実施せよ！[鋼材]
+        saveQuestCount(716, steel, 2, true) // 「軽巡」級の改修工事を実施せよ！[鋼材]
+        saveQuestCount(717, steel, 2, true) // 続：「軽巡」級の改修工事を実施せよ！[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
@@ -1356,6 +1388,10 @@ function updateMaterial() {
         saveQuestCount(654, bauxite, 4, true) // 精鋭複葉機飛行隊の編成[ボーキサイト]
         saveQuestCount(655, bauxite, 8, true) // 工廠フル稼働！新兵装を開発せよ！[ボーキサイト]
         saveQuestCount(681, bauxite, 4, true) // 航空戦力の再編増強準備[ボーキサイト]
+        saveQuestCount(714, bauxite, 3, true) // 「駆逐艦」の改修工事を実施せよ！[ボーキサイト]
+        saveQuestCount(715, bauxite, 3, true) // 続：「駆逐艦」の改修工事を実施せよ！[ボーキサイト]
+        saveQuestCount(716, bauxite, 3, true) // 「軽巡」級の改修工事を実施せよ！[ボーキサイト]
+        saveQuestCount(717, bauxite, 3, true) // 続：「軽巡」級の改修工事を実施せよ！[ボーキサイト]
         // 開発資材
         saveQuestCount(681, research, 3, true) // 航空戦力の再編増強準備[開発資材]
     }

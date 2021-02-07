@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.4.9
+ * 任務進捗詳細 Ver.2.5.0
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2021/01/23
+ * LastUpdate:2021/02/07
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.49
+var VERSION = 2.50
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -654,6 +654,11 @@ var QUEST_DATA = {
         /** S勝利 */
         new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.OCTOBER]),
     ],
+    /** [348]「精鋭軽巡」演習！ */
+    348: [
+        /** A勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.FEBRUARY]),
+    ],
     // #endregion
     // #region 遠征
     /** [402]「遠征」を3回成功させよう！ */
@@ -717,7 +722,7 @@ var QUEST_DATA = {
         /** 「海峡警備行動」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "海峡"),
         /** 「タンカー護衛任務」成功 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "ﾀﾝｶｰ"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "タンカー"),
     ],
     /** [435]特設護衛船団司令部、活動開始！ */
     435: [
@@ -763,7 +768,7 @@ var QUEST_DATA = {
         /** 「対潜警戒任務」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "対潜"),
         /** 「タンカー護衛任務」成功 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "ﾀﾝｶｰ"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "タンカー"),
         /** 「南西諸島捜索撃滅戦」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.AUGUST], "南西"),
     ],
@@ -774,14 +779,14 @@ var QUEST_DATA = {
         /** 「兵站強化任務」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "兵站"),
         /** 「ボーキサイト輸送任務」成功 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ﾎﾞｰｷ"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ボーキ"),
         /** 「南西方面航空偵察作戦」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "南西"),
     ],
     /** [440]兵站強化遠征任務【拡張作戦】 */
     440: [
         /** 「ブルネイ泊地沖哨戒」成功 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ﾌﾞﾙﾈｲ"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "ブルネイ"),
         /** 「海上護衛任務」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "海上"),
         /** 「水上機前線輸送」成功 */
@@ -790,6 +795,17 @@ var QUEST_DATA = {
         new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "強行鼠"),
         /** 「南西海域戦闘哨戒」成功 */
         new QuestData(1, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "南西"),
+    ],
+    /** [442]西方連絡作戦準備を実施せよ！ */
+    442: [
+        /** 「西方海域偵察作戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "西方"),
+        /** 「潜水艦派遣演習」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "潜水演習"),
+        /** 「潜水艦派遣作戦」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "潜水作戦"),
+        /** 「欧州方面友軍との接触」成功 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "欧州"),
     ],
     // #endregion
     // #region 補給/入渠
@@ -1035,7 +1051,7 @@ var QUEST_DATA = {
         /** 「水偵」廃棄(一括は別々) */
         new QuestData(3, false, true, RESET.QUARTERLY, "水偵"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1800, false, false, RESET.NONE, "ﾎﾞｰｷ"),
+        new QuestData(1800, false, false, RESET.NONE, "ボーキ"),
     ],
     // #endregion
     // #region 近代化改修
@@ -1067,12 +1083,38 @@ var QUEST_DATA = {
     /** [714]「駆逐艦」の改修工事を実施せよ！ */
     714: [
         /** 近代化改修成功 */
-        new QuestData(2, true, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        /** 「鋼材」用意 */
+        new QuestData(600, false, false, RESET.NONE, "鋼材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(300, false, false, RESET.NONE, "ボーキ"),
     ],
     /** [715]続：「駆逐艦」の改修工事を実施せよ！ */
     715: [
         /** 近代化改修成功 */
         new QuestData(2, true, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        /** 「鋼材」用意 */
+        new QuestData(900, false, false, RESET.NONE, "鋼材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(500, false, false, RESET.NONE, "ボーキ"),
+    ],
+    /** [716]「軽巡」級の改修工事を実施せよ！ */
+    716: [
+        /** 近代化改修成功 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY]),
+        /** 「鋼材」用意 */
+        new QuestData(800, false, false, RESET.NONE, "鋼材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(400, false, false, RESET.NONE, "ボーキ"),
+    ],
+    /** [717]続：「軽巡」級の改修工事を実施せよ！ */
+    717: [
+        /** 近代化改修成功 */
+        new QuestData(2, true, true, [RESET.YEARLY, RESET.FEBRUARY]),
+        /** 「鋼材」用意 */
+        new QuestData(900, false, false, RESET.NONE, "鋼材"),
+        /** 「ボーキサイト」用意 */
+        new QuestData(900, false, false, RESET.NONE, "ボーキ"),
     ],
     // #endregion
 }
