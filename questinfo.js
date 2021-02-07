@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.5.0
+ * 任務進捗詳細 Ver.2.5.1
  * Author:Nishisonic,Nekopanda
  * LastUpdate:2021/02/07
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.50
+var VERSION = 2.51
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -1092,7 +1092,7 @@ var QUEST_DATA = {
     /** [715]続：「駆逐艦」の改修工事を実施せよ！ */
     715: [
         /** 近代化改修成功 */
-        new QuestData(2, true, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER]),
         /** 「鋼材」用意 */
         new QuestData(900, false, false, RESET.NONE, "鋼材"),
         /** 「ボーキサイト」用意 */
@@ -1110,7 +1110,7 @@ var QUEST_DATA = {
     /** [717]続：「軽巡」級の改修工事を実施せよ！ */
     717: [
         /** 近代化改修成功 */
-        new QuestData(2, true, true, [RESET.YEARLY, RESET.FEBRUARY]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY]),
         /** 「鋼材」用意 */
         new QuestData(900, false, false, RESET.NONE, "鋼材"),
         /** 「ボーキサイト」用意 */
