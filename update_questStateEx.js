@@ -334,7 +334,8 @@ function addCountForNextPart(data) {
             addQuestCount(905, 1, 5) // 「海防艦」、海を護る！[1-6]
         }
         if ((getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])) >= 3) {
-            addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-6]
+            // addQuestCount(906, 1, 4) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-6]
+            addQuestCount(906, 1, 4) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-6]
         }
         if (ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3) {
             addQuestCount(912, 1, 2) // 工作艦「明石」護衛任務[1-6]
@@ -408,11 +409,12 @@ function addCountForBattleResultPart(data) {
     }).length === 2
     var has905Org = getLength(stypes[SHIP_TYPE.DE]) >= 3 && ships.length <= 5
     var has906Org = (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 3
-    var has909Org = ships.map(function (ship) {
-        return (ship.shipInfo.json.api_ctype | 0)
-    }).filter(function (ctype) {
-        return ctype === 38 // 夕雲型
-    }).length >= 3
+    var has907Org = (getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.DE])) >= 4
+    // var has909Org = ships.map(function (ship) {
+    //     return (ship.shipInfo.json.api_ctype | 0)
+    // }).filter(function (ctype) {
+    //     return ctype === 38 // 夕雲型
+    // }).length >= 3
     var has928Org = ships.map(function (ship) {
         return ship.shipInfo.flagship
     }).filter(function (name) {
@@ -440,7 +442,8 @@ function addCountForBattleResultPart(data) {
         }
         if (isWinA(rank)) {
             if (has906Org) {
-                addQuestCount(906, 1, 1) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-2]
+                // addQuestCount(906, 1, 1) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-2]
+                addQuestCount(906, 1, 1) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-2]
             }
         }
     }
@@ -458,7 +461,8 @@ function addCountForBattleResultPart(data) {
         }
         if (isWinA(rank)) {
             if (has906Org) {
-                addQuestCount(906, 1, 2) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-3]
+                // addQuestCount(906, 1, 2) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-3]
+                addQuestCount(906, 1, 2) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-3]
             }
             if (has912Org) {
                 addQuestCount(912, 1, 1) // 工作艦「明石」護衛任務[1-3]
@@ -505,7 +509,8 @@ function addCountForBattleResultPart(data) {
             addQuestCount(261) // 海上輸送路の安全確保に努めよ！
             addQuestCount(265) // 海上護衛強化月間
             if (has906Org) {
-                addQuestCount(906, 1, 3) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-5]
+                // addQuestCount(906, 1, 3) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-5]
+                addQuestCount(906, 1, 3) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-5]
             }
         }
     }
@@ -525,6 +530,9 @@ function addCountForBattleResultPart(data) {
             if (has284Org) {
                 addQuestCount(284, 1, 2) // 南西諸島方面「海上警備行動」発令！[2-1]
             }
+            if (has907Org) {
+                addQuestCount(907, 1, 1) // 【桃の節句】南西諸島海域、春の戦闘哨戒！[2-1]
+            }
         }
         if (isWinA(rank)) {
             // if (setsubun1) {
@@ -533,9 +541,9 @@ function addCountForBattleResultPart(data) {
             if (setsubun1) {
                 addQuestCount(840, 1, 1) // 【節分任務】令和三年節分作戦[2-1]
             }
-            if (has906Org) {
-                addQuestCount(906, 1, 5) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
-            }
+            // if (has906Org) {
+            //     addQuestCount(906, 1, 5) // 【桃の節句作戦】鎮守府近海の安全を図れ！[2-1]
+            // }
             if (has912Org) {
                 addQuestCount(912, 1, 3) // 工作艦「明石」護衛任務[2-1]
             }
@@ -549,6 +557,9 @@ function addCountForBattleResultPart(data) {
             if (has284Org) {
                 addQuestCount(284, 1, 3) // 南西諸島方面「海上警備行動」発令！[2-2]
             }
+            if (has907Org) {
+                addQuestCount(907, 1, 2) // 【桃の節句】南西諸島海域、春の戦闘哨戒！[2-2]
+            }
         }
         if (isWinA(rank)) {
             // if (setsubun1) {
@@ -557,9 +568,9 @@ function addCountForBattleResultPart(data) {
             if (setsubun1) {
                 addQuestCount(840, 1, 2) // 【節分任務】令和三年節分作戦[2-2]
             }
-            if (has909Org) {
-                addQuestCount(909, 1, 1) // 【桃の節句作戦】主力オブ主力、駆ける！[2-2]
-            }
+            // if (has909Org) {
+            //     addQuestCount(909, 1, 1) // 【桃の節句作戦】主力オブ主力、駆ける！[2-2]
+            // }
             if (has912Org) {
                 addQuestCount(912, 1, 4) // 工作艦「明石」護衛任務[2-2]
             }
@@ -573,11 +584,14 @@ function addCountForBattleResultPart(data) {
             if (has284Org) {
                 addQuestCount(284, 1, 4) // 南西諸島方面「海上警備行動」発令！[2-3]
             }
+            if (has907Org) {
+                addQuestCount(907, 1, 3) // 【桃の節句】南西諸島海域、春の戦闘哨戒！[2-3]
+            }
         }
         if (isWinA(rank)) {
-            if (has909Org) {
-                addQuestCount(909, 1, 2) // 【桃の節句作戦】主力オブ主力、駆ける！[2-3]
-            }
+            // if (has909Org) {
+            //     addQuestCount(909, 1, 2) // 【桃の節句作戦】主力オブ主力、駆ける！[2-3]
+            // }
             if (has912Org) {
                 addQuestCount(912, 1, 5) // 工作艦「明石」護衛任務[2-3]
             }
@@ -640,9 +654,14 @@ function addCountForBattleResultPart(data) {
             addQuestCount(904, 1, 2) // 精鋭「十九駆」、躍り出る！[3-4]
         }
     }
-    if (isEqualMap(3, 5) && isWinA(rank)) {
-        if (has909Org) {
-            addQuestCount(909, 1, 3) // 【桃の節句作戦】主力オブ主力、駆ける！[3-5]
+    if (isEqualMap(3, 5)) {
+        if (isWinS(rank)) {
+            addQuestCount(909, 1, 1) // 【桃の節句：拡張作戦】春の攻勢作戦！[3-5]
+        }
+        if (isWinA(rank)) {
+            // if (has909Org) {
+            //     addQuestCount(909, 1, 3) // 【桃の節句作戦】主力オブ主力、駆ける！[3-5]
+            // }
         }
     }
     if ((isEqualMap(3, 3) || isEqualMap(3, 4) || isEqualMap(3, 5)) && isWin(rank)) {
@@ -718,6 +737,7 @@ function addCountForBattleResultPart(data) {
     }
     if (isEqualMap(4, 5) && isWinS(rank)) {
         addQuestCount(845, 1, 5) // 発令！「西方海域作戦」[4-5]
+        addQuestCount(909, 1, 2) // 【桃の節句：拡張作戦】春の攻勢作戦！[4-5]
         if (has904Org) {
             addQuestCount(904, 1, 3) // 精鋭「十九駆」、躍り出る！[4-5]
         }
@@ -820,6 +840,7 @@ function addCountForBattleResultPart(data) {
         }
     }
     if (isEqualMap(6, 4) && isWinS(rank)) {
+        addQuestCount(909, 1, 3) // 【桃の節句：拡張作戦】春の攻勢作戦！[6-4]
         if (Number(lastBattleDto.dock.id) === 1) {
             addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
         }
@@ -858,9 +879,9 @@ function addCountForBattleResultPart(data) {
             }
         }
         if (isWinA(rank)) {
-            if (has909Org) {
-                addQuestCount(909, 1, 4) // 【桃の節句作戦】主力オブ主力、駆ける！[7-2-2]
-            }
+            // if (has909Org) {
+            //     addQuestCount(909, 1, 4) // 【桃の節句作戦】主力オブ主力、駆ける！[7-2-2]
+            // }
         }
     }
     if (isEqualCell(7, 3, [18, 23, 24, 25]) && isWinS(rank)) {
@@ -871,9 +892,9 @@ function addCountForBattleResultPart(data) {
     // #endregion
     // #region 桃の節句！沖に立つ波
     if (isEqualCell(47, 1, 9) && isWinS(rank)) {
-        if (has909Org) {
-            addQuestCount(909, 1, 5) // 【桃の節句作戦】主力オブ主力、駆ける！[E-1-1]
-        }
+        // if (has909Org) {
+        //     addQuestCount(909, 1, 5) // 【桃の節句作戦】主力オブ主力、駆ける！[E-1-1]
+        // }
     }
     // #endregion
     // #endregion
@@ -1108,17 +1129,22 @@ function addCountForPowerupPart(data) {
                     addQuestCount(708) // 【桃の節句任務】海防艦桃の節句改修
                 }
             }
-            if (origin.stype === SHIP_TYPE.CVL) {
-                if (stypes[SHIP_TYPE.CVL] >= 3) {
-                    addQuestCount(712) // 【桃の節句任務】菱餅改修：週
-                }
-            }
+            // if (origin.stype === SHIP_TYPE.CVL) {
+            //     if (stypes[SHIP_TYPE.CVL] >= 3) {
+            //         addQuestCount(712) // 【桃の節句任務】菱餅改修：週
+            //     }
+            // }
             if ([SHIP_TYPE.CL, SHIP_TYPE.CLT, SHIP_TYPE.CT].indexOf(origin.stype) >= 0) {
                 if (stypes[SHIP_TYPE.CL] + stypes[SHIP_TYPE.CLT] + stypes[SHIP_TYPE.CT] >= 3) {
                     addQuestCount(716) // 「軽巡」級の改修工事を実施せよ！
                 }
                 if (stypes[SHIP_TYPE.CA] + stypes[SHIP_TYPE.CAV] >= 3) {
                     addQuestCount(717) // 続：「軽巡」級の改修工事を実施せよ！
+                }
+            }
+            if ([SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(origin.stype) >= 0) {
+                if (stypes[SHIP_TYPE.CL] >= 4) {
+                    addQuestCount(712, 1, 1) // 【桃の節句】菱餅改修：2021 週
                 }
             }
         }
@@ -1163,6 +1189,7 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(434, 1, 2) // 特設護衛船団司令部、活動開始！
                 addQuestCount(439, 1, 1) // 兵站強化遠征任務【基本作戦】
                 addQuestCount(440, 1, 2) // 兵站強化遠征任務【拡張作戦】
+                addQuestCount(444, 1, 1) // 新兵装開発資材輸送を船団護衛せよ！
                 break
             case "兵站強化任務": // ID:A1
                 addQuestCount(434, 1, 3) // 特設護衛船団司令部、活動開始！
@@ -1177,7 +1204,7 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(428, 1, 3) // 近海に侵入する敵潜を制圧せよ！
                 addQuestCount(435, 1, 2) // 特設護衛船団司令部、活動開始！
                 break
-            case "小笠原沖哨戒線遠征": // ID:A5
+            case "小笠原沖哨戒線": // ID:A5
                 addQuestCount(437, 1, 2) // 小笠原沖哨戒線の強化を実施せよ！
                 break
             case "小笠原沖戦闘哨戒": // ID:A6
@@ -1186,6 +1213,7 @@ function addCountForMissionResultPart(data) {
             case "タンカー護衛任務": // ID:09
                 addQuestCount(434, 1, 5) // 特設護衛船団司令部、活動開始！
                 addQuestCount(438, 1, 3) // 南西諸島方面の海上護衛を強化せよ！
+                addQuestCount(444, 1, 3) // 新兵装開発資材輸送を船団護衛せよ！
                 break
             case "強行偵察任務": // ID:10
                 addQuestCount(426, 1, 4) // 海上通商航路の警戒を厳とせよ！
@@ -1194,6 +1222,10 @@ function addCountForMissionResultPart(data) {
                 break
             case "ボーキサイト輸送任務": // ID:11
                 addQuestCount(439, 1, 3) // 兵站強化遠征任務【基本作戦】
+                addQuestCount(444, 1, 5) // 新兵装開発資材輸送を船団護衛せよ！
+                break
+            case "資源輸送任務": // ID:12
+                addQuestCount(444, 1, 2) // 新兵装開発資材輸送を船団護衛せよ！
                 break
             case "包囲陸戦隊撤収作戦": // ID:14
                 addQuestCount(435, 1, 4) // 特設護衛船団司令部、活動開始！
@@ -1202,6 +1234,7 @@ function addCountForMissionResultPart(data) {
                 addQuestCount(435, 1, 5) // 特設護衛船団司令部、活動開始！
                 addQuestCount(437, 1, 4) // 小笠原沖哨戒線の強化を実施せよ！
                 addQuestCount(439, 1, 4) // 兵站強化遠征任務【基本作戦】
+                addQuestCount(444, 1, 4) // 新兵装開発資材輸送を船団護衛せよ！
                 break
             case "南西諸島捜索撃滅戦": // ID:B5
                 addQuestCount(438, 1, 4) // 南西諸島方面の海上護衛を強化せよ！
@@ -1330,6 +1363,11 @@ function addCountForPracticeBattleResultPart(data) {
         }
     }
     if (isWinA(rank)) {
+        var flotilla7 = ships.map(function (ship) {
+            return ship.shipInfo.flagship
+        }).filter(function (name) {
+            return ["おぼろ", "あけぼの", "さざなみ", "うしお"].indexOf(name) >= 0
+        }).length
         if (dedd >= 3 && deddcl >= 4) {
             addQuestCount(342) // 小艦艇群演習強化任務
         }
@@ -1347,6 +1385,9 @@ function addCountForPracticeBattleResultPart(data) {
             if (cl >= 3) {
                 addQuestCount(348) // 「精鋭軽巡」演習！
             }
+        }
+        if (flotilla7 >= 4) {
+            addQuestCount(350) // 精鋭「第七駆逐隊」演習開始！
         }
     }
 }
@@ -1368,6 +1409,7 @@ function updateMaterial() {
         // 弾薬
         saveQuestCount(645, ammo, 3, true) // 「洋上補給」物資の調達[弾薬]
         saveQuestCount(654, ammo, 3, true) // 精鋭複葉機飛行隊の編成[弾薬]
+        saveQuestCount(712, ammo, 3, true) // 【桃の節句】菱餅改修：2021 週[弾薬]
         // 鋼材
         saveQuestCount(663, steel, 2, true) // 新型艤装の継続研究[鋼材]
         saveQuestCount(674, steel, 2, true) // 工廠環境の整備[鋼材]
@@ -1380,6 +1422,7 @@ function updateMaterial() {
         saveQuestCount(715, steel, 2, true) // 続：「駆逐艦」の改修工事を実施せよ！[鋼材]
         saveQuestCount(716, steel, 2, true) // 「軽巡」級の改修工事を実施せよ！[鋼材]
         saveQuestCount(717, steel, 2, true) // 続：「軽巡」級の改修工事を実施せよ！[鋼材]
+        saveQuestCount(712, steel, 4, true) // 【桃の節句】菱餅改修：2021 週[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
@@ -1394,6 +1437,7 @@ function updateMaterial() {
         saveQuestCount(717, bauxite, 3, true) // 続：「軽巡」級の改修工事を実施せよ！[ボーキサイト]
         // 開発資材
         saveQuestCount(681, research, 3, true) // 航空戦力の再編増強準備[開発資材]
+        saveQuestCount(712, research, 2, true) // 【桃の節句】菱餅改修：2021 週[開発資材]
     }
 }
 
