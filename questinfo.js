@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.5.2
+ * 任務進捗詳細 Ver.2.5.3
  * Author:Nishisonic,Nekopanda
  * LastUpdate:2021/04/01
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.52
+var VERSION = 2.53
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -329,24 +329,24 @@ var QUEST_DATA = {
     /** [280]兵站線確保！海上警備を強化実施せよ！ */
     280: [
         /** 敵主力艦隊(1-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.MONTHLY, "1-2"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-2ボスS勝利"),
         /** 敵主力艦隊(1-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.MONTHLY, "1-3"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-3ボスS勝利"),
         /** 敵機動部隊(1-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.MONTHLY, "1-4"),
+        new QuestData(1, false, true, RESET.MONTHLY, "1-4ボスS勝利"),
         /** 敵主力艦隊(2-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.MONTHLY, "2-1"),
+        new QuestData(1, false, true, RESET.MONTHLY, "2-1ボスS勝利"),
     ],
     /** [284]南西諸島方面「海上警備行動」発令！ */
     284: [
         /** 敵機動部隊(1-4ボス戦)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "1-4ボスS勝利"),
         /** 敵主力部隊(2-1ボス戦)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-1ボスS勝利"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-2ボスS勝利"),
         /** 敵主力打撃群(2-3ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-3ボスS勝利"),
     ],
     /** [822]沖ノ島海域迎撃戦 */
     822: [
@@ -356,72 +356,72 @@ var QUEST_DATA = {
     // /** [840]【節分任務】令和二年節分作戦 */
     // 840: [
     //     /** 敵機動部隊(1-4 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "1-4"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-4ボスA勝利"),
     //     /** 敵主力部隊(2-1 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "2-1"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-1ボスA勝利"),
     //     /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "2-2")
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-2ボスA勝利")
     // ],
     /** [840]【節分任務】令和三年節分作戦 */
     840: [
         /** 敵主力部隊(2-1 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "2-1"),
+        new QuestData(1, false, true, RESET.WEEKLY, "2-1ボスA勝利"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "2-2"),
+        new QuestData(1, false, true, RESET.WEEKLY, "2-2ボスA勝利"),
         /** 敵主力打撃群(2-3 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "2-3"),
+        new QuestData(1, false, true, RESET.WEEKLY, "2-3ボスA勝利"),
     ],
     // /** [841]【節分任務】令和二年西方海域節分作戦 */
     /** 【節分任務】令和三年西方海域節分作戦 */
     841: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "4-1"),
+        new QuestData(1, false, true, RESET.WEEKLY, "4-1ボスS勝利"),
         /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "4-2"),
+        new QuestData(1, false, true, RESET.WEEKLY, "4-2ボスS勝利"),
         /** 敵東方港湾基地(4-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "4-3")
+        new QuestData(1, false, true, RESET.WEEKLY, "4-3ボスS勝利")
     ],
     // /** [843]【節分拡張任務】令和二年節分作戦、全力出撃！ */
     // 843: [
     //     /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "5-4"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "5-4ボスS勝利"),
     //     /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "5-5"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "5-5ボスS勝利"),
     //     /** 離島守備隊(6-4 ボス)S 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "6-4")
+    //     new QuestData(1, false, true, RESET.WEEKLY, "6-4ボスS勝利")
     // ],
     /** [843]【節分拡張任務】令和三年節分作戦、全力出撃！ */
     843: [
         /** 敵南方増援部隊 本隊(5-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "5-2"),
+        new QuestData(1, false, true, RESET.WEEKLY, "5-2ボスS勝利"),
         /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "5-5"),
+        new QuestData(1, false, true, RESET.WEEKLY, "5-5ボスS勝利"),
         /** 離島守備隊(6-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "6-4")
+        new QuestData(1, false, true, RESET.WEEKLY, "6-4ボスS勝利")
     ],
     /** [845]発令！「西方海域作戦」 */
     845: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-1ボスS勝利"),
         /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-2ボスS勝利"),
         /** 敵東方港湾基地(4-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-3ボスS勝利"),
         /** 敵東方中枢艦隊 旗艦(4-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-4ボスS勝利"),
         /** リランカ島港湾守備隊(4-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-5"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-5ボスS勝利"),
     ],
     /** [854]戦果拡張任務！「Z作戦」前段作戦 */
     854: [
         /** 敵侵攻中核艦隊(2-4ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-4ボスA勝利"),
         /** 敵回航中空母(6-1ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-1ボスA勝利"),
         /** 留守泊地旗艦艦隊(6-3ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-3ボスA勝利"),
         /** 離島守備隊(6-4ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-4ボスS勝利"),
     ],
     /** [861]強行輸送艦隊、抜錨！ */
     861: [
@@ -436,22 +436,22 @@ var QUEST_DATA = {
     /** [872]戦果拡張任務！「Z作戦」後段作戦 */
     872: [
         /** 深海南方任務部隊 本隊(5-5ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-5"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-5ボスS勝利"),
         /** 敵攻略部隊本体(6-2ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-2ボスS勝利"),
         /** 任務部隊 主力群(6-5ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-5"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-5ボスS勝利"),
         /** 深海任務部隊 主力機動部隊群(7-2-2ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "7-2-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "7-2-2ボスS勝利"),
     ],
     /** [873]北方海域警備を実施せよ！ */
     873: [
         /** 敵北方侵攻艦隊(3-1ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "3-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "3-1ボスA勝利"),
         /** 敵キス島包囲艦隊(3-2ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "3-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "3-2ボスA勝利"),
         /** 深海棲艦泊地艦隊(3-3ボス)A勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "3-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "3-3ボスA勝利"),
     ],
     /** [875]精鋭「三一駆」、鉄底海域に突入せよ！ */
     875: [
@@ -461,158 +461,158 @@ var QUEST_DATA = {
     /** [888]新編成「三川艦隊」、鉄底海峡に突入せよ！ */
     888: [
         /** 敵前線司令艦隊(5-1ボス戦)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-1ボスS勝利"),
         /** 敵サーモン方面主力艦隊(5-3ボス戦)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-3ボスS勝利"),
         /** 敵補給部隊本体(5-4ボス)S勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-4ボスS勝利"),
     ],
     /** [893]泊地周辺海域の安全確保を徹底せよ！ */
     893: [
         /** 敵通商破壊主力潜水艦隊(1-5 ボス)S 勝利 */
-        new QuestData(3, false, true, RESET.QUARTERLY, "1-5"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "1-5ボスS勝利"),
         /** 深海潜水艦隊集団 旗艦戦隊(7-1 ボス)S 勝利 */
-        new QuestData(3, false, true, RESET.QUARTERLY, "7-1"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "7-1ボスS勝利"),
         /** セレベス海方面 旗艦哨戒潜水艦(7-2-G ボス)S 勝利 */
-        new QuestData(3, false, true, RESET.QUARTERLY, "7-2-1"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "7-2-1ボスS勝利"),
         /** 深海任務部隊 主力機動部隊群(7-2-M ボス)S 勝利 */
-        new QuestData(3, false, true, RESET.QUARTERLY, "7-2-2"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "7-2-2ボスS勝利"),
     ],
     /** [894]空母戦力の投入による兵站線戦闘哨戒 */
     894: [
         /** 敵主力艦隊(1-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "1-3ボスS勝利"),
         /** 敵機動部隊(1-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "1-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "1-4ボスS勝利"),
         /** 敵主力艦隊(2-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-1ボスS勝利"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-2"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-2ボスS勝利"),
         /** 敵主力打撃群(2-3 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "2-3"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "2-3ボスS勝利"),
     ],
     /** [903]拡張「六水戦」、最前線へ！ */
     903: [
         /** 敵南方前線司令艦隊(5-1 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-1"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-1ボスS勝利"),
         /** 敵南方増援部隊 本隊(5-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "5-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "5-4ボスS勝利"),
         /** 離島守備隊(6-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-4ボスS勝利"),
         /** 任務部隊 主力群(6-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-5")
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-5ボスS勝利")
     ],
     /** [904]精鋭「十九駆」、躍り出る！ */
     904: [
         /** 敵侵攻中枢艦隊(2-5 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "2-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "2-5ボスS勝利"),
         /** 深海棲艦 北方艦隊中枢(3-4 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "3-4"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "3-4ボスS勝利"),
         /** リランカ島港湾守備隊(4-5 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "4-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "4-5ボスS勝利"),
         /** 敵南方艦隊 旗艦(5-3 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "5-3")
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "5-3ボスS勝利")
     ],
     /** [905]「海防艦」、海を護る！ */
     905: [
         /** 敵主力艦隊(1-1 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-1"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-1ボスS勝利"),
         /** 敵主力艦隊(1-2 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-2"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-2ボスS勝利"),
         /** 敵主力艦隊(1-3 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-3"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-3ボスS勝利"),
         /** 敵通商破壊主力潜水艦隊(1-5 ボス)S 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-5"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-5ボスS勝利"),
         /** 鎮守府近海航路(1-6)ゴール地点到達 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-6")
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.FEBRUARY], "1-6ボスS勝利")
     ],
     // /** [906]【桃の節句作戦】鎮守府近海の安全を図れ！ */
     // 906: [
     //     /** 敵主力艦隊(1-2 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "1-2"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-2ボスA勝利"),
     //     /** 敵主力艦隊(1-3 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "1-3"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-3ボスA勝利"),
     //     /** 敵通商破壊主力潜水艦隊(1-5 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "1-5"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-5ボスA勝利"),
     //     /** 鎮守府近海航路(1-6)ゴール地点到達 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "1-6"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "1-6ボス到達"),
     //     /** 敵主力艦隊(2-1 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "2-1")
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-1ボスA勝利")
     // ],
     /** [906]【桃の節句】鎮守府近海、春の安全確保作戦 */
     906: [
         /** 敵主力艦隊(1-2 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "1-2"),
+        new QuestData(1, false, true, RESET.WEEKLY, "1-2ボスA勝利"),
         /** 敵主力艦隊(1-3 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "1-3"),
+        new QuestData(1, false, true, RESET.WEEKLY, "1-3ボスA勝利"),
         /** 敵通商破壊主力潜水艦隊(1-5 ボス)A 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "1-5"),
+        new QuestData(1, false, true, RESET.WEEKLY, "1-5ボスA勝利"),
         /** 鎮守府近海航路(1-6)ゴール地点到達 */
-        new QuestData(1, false, true, RESET.WEEKLY, "1-6"),
+        new QuestData(1, false, true, RESET.WEEKLY, "1-6ボス到達"),
     ],
     /** [907]【桃の節句】南西諸島海域、春の戦闘哨戒！ */
     907: [
         /** 敵主力艦隊(2-1 ボス)S 勝利 */
-        new QuestData(2, false, true, RESET.WEEKLY, "2-1"),
+        new QuestData(2, false, true, RESET.WEEKLY, "2-1ボスS勝利"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)S勝利 */
-        new QuestData(2, false, true, RESET.WEEKLY, "2-2"),
+        new QuestData(2, false, true, RESET.WEEKLY, "2-2ボスS勝利"),
         /** 敵主力打撃群(2-3ボス)S勝利 */
-        new QuestData(2, false, true, RESET.WEEKLY, "2-3"),
+        new QuestData(2, false, true, RESET.WEEKLY, "2-3ボスS勝利"),
     ],
     // /** [909]【桃の節句作戦】主力オブ主力、駆ける！ */
     // 909: [
     //     /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)A勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "2-2"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-2ボスA勝利"),
     //     /** 敵主力打撃群(2-3ボス)A勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "2-3"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "2-3ボスA勝利"),
     //     /** 北方増援部隊主力(3-5 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "3-5"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "3-5ボスA勝利"),
     //     /** 深海任務部隊 主力機動部隊群(7-2-2 ボス)A 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "7-2-2"),
+    //     new QuestData(1, false, true, RESET.WEEKLY, "7-2-2ボスA勝利"),
     //     /** 深海任務部隊 泊地急襲任務群(E-1-1 ボス)S 勝利 */
-    //     new QuestData(1, false, true, RESET.WEEKLY, "E-1-1")
+    //     new QuestData(1, false, true, RESET.WEEKLY, "E-1-1ボスS勝利")
     // ],
     /** [909]【桃の節句：拡張作戦】春の攻勢作戦！ */
     909: [
         /** 北方増援部隊主力(3-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.WEEKLY, "3-5"),
+        new QuestData(1, false, true, RESET.WEEKLY, "3-5ボスS勝利"),
         /** リランカ島港湾守備隊(4-5 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "4-5"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "4-5ボスS勝利"),
         /** 離島守備隊(6-4 ボス)S 勝利 */
-        new QuestData(1, false, true, RESET.QUARTERLY, "6-4"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "6-4ボスS勝利"),
     ],
     /** [912]工作艦「明石」護衛任務 */
     912: [
         /** 敵主力艦隊(1-3 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-3"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-3ボスA勝利"),
         /** 鎮守府近海航路(1-6)ゴール地点到達 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-6"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "1-6ボス到達"),
         /** 敵主力艦隊(2-1 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-1"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-1ボスA勝利"),
         /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)A勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-2"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-2ボスA勝利"),
         /** 敵主力打撃群(2-3ボス)A勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-3"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "2-3ボスA勝利"),
     ],
     /**[914]重巡戦隊、西へ！ */
     914: [
         /** 敵深海連合部隊 司令部艦隊(4-1 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-1"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-1ボスA勝利"),
         /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-2"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-2ボスA勝利"),
         /** 敵東方港湾基地(4-3 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-3"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-3ボスA勝利"),
         /** 敵東方中枢艦隊 旗艦(4-4 ボス)A 勝利 */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-4"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.MARCH], "4-4ボスA勝利"),
     ],
     /**[928]歴戦「第十方面艦隊」、全力出撃！ */
     928: [
         /** 敵東方艦隊 強襲上陸主力艦隊(4-2 ボス)S 勝利 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "4-2"),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "4-2ボスS勝利"),
         /** 深海任務部隊 主力機動部隊群(7-2-2 ボス)S 勝利 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-2-2"),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-2-2ボスS勝利"),
         /** 深海東方部隊 海峡封鎖部隊旗艦(7-3-2 ボス)S 勝利 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-3-2"),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-3-2ボスS勝利"),
     ],
     // #endregion
     // #region 演習
@@ -639,9 +639,9 @@ var QUEST_DATA = {
     /** [318]給糧艦「伊良湖」の支援 */
     318: [
         /** 勝利 */
-        new QuestData(3, false, true, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "勝利"),
+        new QuestData(3, false, true, [RESET.NOT_SATISFY_DAILY, RESET.MONTHLY], "演習B勝利"),
         /** 戦闘糧食 */
-        new QuestData(1, false, false, RESET.NONE, "糧食"),
+        new QuestData(1, false, false, RESET.NONE, "「戦闘糧食」装備"),
     ],
     /** [329]【節分任務】節分演習！ */
     329: [
@@ -906,9 +906,9 @@ var QUEST_DATA = {
     /** [626]精鋭「艦戦」隊の新編成 */
     626: [
         /** 「零式艦戦21型」廃棄 */
-        new QuestData(2, false, true, RESET.MONTHLY, "21型"),
+        new QuestData(2, false, true, RESET.MONTHLY, "「零式艦戦21型」廃棄"),
         /** 「九六式艦戦」廃棄 */
-        new QuestData(1, false, true, RESET.MONTHLY, "96式"),
+        new QuestData(1, false, true, RESET.MONTHLY, "「九六式艦戦」廃棄"),
     ],
     /** [628]機種転換 */
     628: [
@@ -928,81 +928,81 @@ var QUEST_DATA = {
     /** [640]新型兵装開発整備の強化 */
     640: [
         /** 「小口径主砲」廃棄(一括は別々) */
-        new QuestData(6, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "小口径"),
+        new QuestData(6, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "「小口径主砲」廃棄"),
         /** 「中口径主砲」廃棄(一括は別々) */
-        new QuestData(5, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "中口径"),
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "「中口径主砲」廃棄"),
         /** 「魚雷」廃棄(一括は別々) */
-        new QuestData(4, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "魚雷"),
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "「魚雷」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(4000, false, false, RESET.NONE, "鋼材"),
+        new QuestData(4000, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [643]主力「陸攻」の調達 */
     643: [
         /** 「零式艦戦21型」廃棄(一括は別々) */
-        new QuestData(2, false, true, RESET.QUARTERLY, "21型"),
+        new QuestData(2, false, true, RESET.QUARTERLY, "「零式艦戦21型」廃棄"),
         /** 「九六式陸攻」用意 */
-        new QuestData(1, false, false, RESET.NONE, "陸攻"),
+        new QuestData(1, false, false, RESET.NONE, "「九六式陸攻」用意"),
         /** 「九七式艦攻」用意 */
-        new QuestData(2, false, false, RESET.NONE, "艦攻"),
+        new QuestData(2, false, false, RESET.NONE, "「九七式艦攻」用意"),
     ],
     /** [645]「洋上補給」物資の調達 */
     645: [
         /** 「三式弾」廃棄(一括は別々) */
-        new QuestData(1, false, true, RESET.MONTHLY, "三式弾"),
+        new QuestData(1, false, true, RESET.MONTHLY, "「三式弾」廃棄"),
         /** 「燃料」用意 */
-        new QuestData(750, false, false, RESET.NONE, "燃料"),
+        new QuestData(750, false, false, RESET.NONE, "「燃料」用意"),
         /** 「弾薬」用意 */
-        new QuestData(750, false, false, RESET.NONE, "弾薬"),
+        new QuestData(750, false, false, RESET.NONE, "「弾薬」用意"),
         /** 「ドラム缶(輸送用)」用意 */
-        new QuestData(2, false, false, RESET.NONE, "ドラム"),
+        new QuestData(2, false, false, RESET.NONE, "「ドラム缶(輸送用)」用意"),
         /** 「九一式徹甲弾」用意 */
-        new QuestData(1, false, false, RESET.NONE, "徹甲弾"),
+        new QuestData(1, false, false, RESET.NONE, "「九一式徹甲弾」用意"),
     ],
     /** [653]工廠稼働！次期作戦準備！ */
     653: [
         /** 「14cm単装砲」廃棄(一括は別々) */
-        new QuestData(6, false, true, RESET.QUARTERLY, "14cm単装砲"),
+        new QuestData(6, false, true, RESET.QUARTERLY, "「14cm単装砲」廃棄"),
         /** 「35.6cm連装砲」用意 */
-        new QuestData(3, false, false, RESET.NONE, "35.6cm連装砲"),
+        new QuestData(3, false, false, RESET.NONE, "「35.6cm連装砲」用意"),
         /** 「九六式艦戦」用意 */
-        new QuestData(3, false, false, RESET.NONE, "九六式艦戦"),
+        new QuestData(3, false, false, RESET.NONE, "「九六式艦戦」用意"),
     ],
     /** [654]精鋭複葉機飛行隊の編成 */
     654: [
         /** 「Swordfish」廃棄(一括は別々) */
-        new QuestData(1, false, true, [RESET.YEARLY, RESET.OCTOBER], "Swordfish"),
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.OCTOBER], "「Swordfish」廃棄"),
         /** 「Fulmar」廃棄(一括は別々) */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.OCTOBER], "Fulmar"),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.OCTOBER], "「Fulmar」廃棄"),
         /** 「弾薬」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "弾薬"),
+        new QuestData(1500, false, false, RESET.NONE, "「弾薬」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "ボーキサイト"),
+        new QuestData(1500, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [655]工廠フル稼働！新兵装を開発せよ！ */
     655: [
         /** 「小口径主砲」廃棄(一括は別々) */
-        new QuestData(6, false, true, [RESET.YEARLY, RESET.NOVEMBER], "小口径"),
+        new QuestData(6, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「小口径主砲」廃棄"),
         /** 「中口径主砲」廃棄(一括は別々) */
-        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "中口径"),
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「中口径主砲」廃棄"),
         /** 「大口径主砲」廃棄(一括は別々) */
-        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "大口径"),
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「大口径主砲」廃棄"),
         /** 「水偵」廃棄(一括は別々) */
-        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "水偵"),
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「水偵」廃棄"),
         /** 「艦攻」廃棄(一括は別々) */
-        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "艦攻"),
+        new QuestData(5, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「艦攻」廃棄"),
         /** 「燃料」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "燃料"),
+        new QuestData(1500, false, false, RESET.NONE, "「燃料」用意"),
         /** 「鋼材」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "鋼材"),
+        new QuestData(1500, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "ボーキサイト"),
+        new QuestData(1500, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [663]新型艤装の継続研究 */
     663: [
         /** 「大口径主砲」廃棄(一括は別々) */
-        new QuestData(10, false, true, RESET.QUARTERLY, "主砲"),
+        new QuestData(10, false, true, RESET.QUARTERLY, "「大口径主砲」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(18000, false, false, RESET.NONE, "鋼材"),
+        new QuestData(18000, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [673]装備開発力の整備 */
     673: [
@@ -1012,93 +1012,93 @@ var QUEST_DATA = {
     /** [674]工廠環境の整備 */
     674: [
         /** 「機銃」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.DAILY, "機銃"),
+        new QuestData(3, false, true, RESET.DAILY, "「機銃」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(300, false, false, RESET.NONE, "鋼材"),
+        new QuestData(300, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [675]運用装備の統合整備 */
     675: [
-        /** 「艦上戦闘機」廃棄(一括は別々) */
-        new QuestData(6, false, true, RESET.QUARTERLY, "艦戦"),
+        /** 「艦戦」廃棄(一括は別々) */
+        new QuestData(6, false, true, RESET.QUARTERLY, "「艦戦」廃棄"),
         /** 「機銃」廃棄(一括は別々) */
-        new QuestData(4, false, true, RESET.QUARTERLY, "機銃"),
+        new QuestData(4, false, true, RESET.QUARTERLY, "「機銃」廃棄"),
         /** 「ボーキサイト」用意 */
-        new QuestData(800, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(800, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [676]装備開発力の集中整備 */
     676: [
         /** 「中口径主砲」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.WEEKLY, "主砲"),
+        new QuestData(3, false, true, RESET.WEEKLY, "「中口径主砲」廃棄"),
         /** 「副砲」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.WEEKLY, "副砲"),
+        new QuestData(3, false, true, RESET.WEEKLY, "「副砲」廃棄"),
         /** 「ドラム缶(輸送用)」廃棄(一括は別々) */
-        new QuestData(1, false, true, RESET.WEEKLY, "ドラム"),
+        new QuestData(1, false, true, RESET.WEEKLY, "「ドラム缶(輸送用)」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(2400, false, false, RESET.NONE, "鋼材"),
+        new QuestData(2400, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [677]継戦支援能力の整備 */
     677: [
         /** 「大口径主砲」廃棄(一括は別々) */
-        new QuestData(4, false, true, RESET.WEEKLY, "主砲"),
+        new QuestData(4, false, true, RESET.WEEKLY, "「大口径主砲」廃棄"),
         /** 「水上偵察機」廃棄(一括は別々) */
-        new QuestData(2, false, true, RESET.WEEKLY, "水偵"),
+        new QuestData(2, false, true, RESET.WEEKLY, "「水上偵察機」廃棄"),
         /** 「魚雷」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.WEEKLY, "魚雷"),
+        new QuestData(3, false, true, RESET.WEEKLY, "「魚雷」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(3600, false, false, RESET.NONE, "鋼材"),
+        new QuestData(3600, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [678]主力艦上戦闘機の更新 */
     678: [
         /** 「九六式艦戦」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.QUARTERLY, "96式"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "「九六式艦戦」廃棄"),
         /** 「零式艦戦21型」廃棄(一括は別々) */
-        new QuestData(5, false, true, RESET.QUARTERLY, "21型"),
+        new QuestData(5, false, true, RESET.QUARTERLY, "「零式艦戦21型」廃棄"),
         /** 「ボーキサイト」用意 */
-        new QuestData(4000, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(4000, false, false, RESET.NONE, "「ボーキサイト」用意"),
         /** 秘書艦一番及び二番スロットに「零式艦戦52型」装備 */
-        new QuestData(1, false, false, RESET.NONE, "配置"),
+        new QuestData(1, false, false, RESET.NONE, "「零式艦戦52型」装備"),
     ],
     /** [680]対空兵装の整備拡充 */
     680: [
         /** 「機銃」廃棄(一括は別々) */
-        new QuestData(4, false, true, RESET.QUARTERLY, "機銃"),
+        new QuestData(4, false, true, RESET.QUARTERLY, "「機銃」廃棄"),
         /** 「電探」廃棄(一括は別々) */
-        new QuestData(4, false, true, RESET.QUARTERLY, "電探"),
+        new QuestData(4, false, true, RESET.QUARTERLY, "「電探」廃棄"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1500, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(1500, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [681]航空戦力の再編増強準備 */
     681: [
         /** 「艦爆」廃棄(一括は別々) */
-        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "艦爆"),
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "「艦爆」廃棄"),
         /** 「艦攻」廃棄(一括は別々) */
-        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "艦攻"),
+        new QuestData(4, false, true, [RESET.YEARLY, RESET.JANUARY], "「艦攻」廃棄"),
         /** 「開発資材」用意 */
-        new QuestData(20, false, false, RESET.NONE, "開発資材"),
+        new QuestData(20, false, false, RESET.NONE, "「開発資材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1600, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(1600, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [686]戦時改修A型高角砲の量産 */
     686: [
         /** 「10cm連装高角砲」廃棄(一括は別々) */
-        new QuestData(4, false, true, RESET.QUARTERLY, "高角砲"),
+        new QuestData(4, false, true, RESET.QUARTERLY, "「10cm連装高角砲」廃棄"),
         /** 「94式高射装置」廃棄(一括は別々) */
-        new QuestData(1, false, true, RESET.QUARTERLY, "高射"),
+        new QuestData(1, false, true, RESET.QUARTERLY, "「94式高射装置」廃棄"),
         /** 「鋼材」用意 */
-        new QuestData(900, false, false, RESET.NONE, "鋼材"),
+        new QuestData(900, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [688]航空戦力の強化 */
     688: [
         /** 「艦戦」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.QUARTERLY, "艦戦"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "「艦戦」廃棄"),
         /** 「艦爆」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.QUARTERLY, "艦爆"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "「艦爆」廃棄"),
         /** 「艦攻」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.QUARTERLY, "艦攻"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "「艦攻」廃棄"),
         /** 「水偵」廃棄(一括は別々) */
-        new QuestData(3, false, true, RESET.QUARTERLY, "水偵"),
+        new QuestData(3, false, true, RESET.QUARTERLY, "「水偵」廃棄"),
         /** 「ボーキサイト」用意 */
-        new QuestData(1800, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(1800, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     // #endregion
     // #region 近代化改修
@@ -1130,49 +1130,49 @@ var QUEST_DATA = {
     /** [712]【桃の節句】菱餅改修：2021 週 */
     712: [
         /** 近代化改修成功 */
-        new QuestData(2, true, true, RESET.WEEKLY),
+        new QuestData(2, true, true, RESET.WEEKLY, "「近代化改修」成功"),
         /** 「開発資材」用意 */
-        new QuestData(20, false, false, RESET.NONE, "開発資材"),
+        new QuestData(20, false, false, RESET.NONE, "「開発資材」用意"),
         /** 「弾薬」用意 */
-        new QuestData(2400, false, false, RESET.NONE, "弾薬"),
+        new QuestData(2400, false, false, RESET.NONE, "「弾薬」用意"),
         /** 「鋼材」用意 */
-        new QuestData(2400, false, false, RESET.NONE, "鋼材"),
+        new QuestData(2400, false, false, RESET.NONE, "「鋼材」用意"),
     ],
     /** [714]「駆逐艦」の改修工事を実施せよ！ */
     714: [
         /** 近代化改修成功 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「近代化改修」成功"),
         /** 「鋼材」用意 */
-        new QuestData(600, false, false, RESET.NONE, "鋼材"),
+        new QuestData(600, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(300, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(300, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [715]続：「駆逐艦」の改修工事を実施せよ！ */
     715: [
         /** 近代化改修成功 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.NOVEMBER], "「近代化改修」成功"),
         /** 「鋼材」用意 */
-        new QuestData(900, false, false, RESET.NONE, "鋼材"),
+        new QuestData(900, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(500, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(500, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [716]「軽巡」級の改修工事を実施せよ！ */
     716: [
         /** 近代化改修成功 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY], "「近代化改修」成功"),
         /** 「鋼材」用意 */
-        new QuestData(800, false, false, RESET.NONE, "鋼材"),
+        new QuestData(800, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(400, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(400, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     /** [717]続：「軽巡」級の改修工事を実施せよ！ */
     717: [
         /** 近代化改修成功 */
-        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY]),
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.FEBRUARY], "「近代化改修」成功"),
         /** 「鋼材」用意 */
-        new QuestData(900, false, false, RESET.NONE, "鋼材"),
+        new QuestData(900, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
-        new QuestData(900, false, false, RESET.NONE, "ボーキ"),
+        new QuestData(900, false, false, RESET.NONE, "「ボーキサイト」用意"),
     ],
     // #endregion
 }

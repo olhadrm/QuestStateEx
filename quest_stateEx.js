@@ -41,7 +41,7 @@ function getProgress(questNo, questType, questProgressFlag) {
                 sum += rate
                 if (rate < 100) {
                     result += Optional.ofNullable(condition.title).map(function (title) {
-                        return " " + title + ":"
+                        return "  " + title + ": "
                     }).orElse(" ") + Math.min(count, max) + "/" + max
                 }
             })
