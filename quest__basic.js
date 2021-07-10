@@ -64,6 +64,10 @@ function getRankingPoint(questNo) {
 			return 330;
 		case 903: // 拡張「六水戦」、最前線へ！
 			return 390;
+		case 947: // AL作戦
+			return 480;
+		case 948: // 機動部隊決戦
+			return 600;
 	}
 	return 0;
 }

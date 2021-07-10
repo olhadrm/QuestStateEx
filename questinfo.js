@@ -1,12 +1,12 @@
 /**
- * 任務進捗詳細 Ver.2.5.3
+ * 任務進捗詳細 Ver.2.5.4
  * Author:Nishisonic,Nekopanda
- * LastUpdate:2021/04/01
+ * LastUpdate:2021/07/10
  */
 
 data_prefix = "QSE.Ver2."
 /** バージョン */
-var VERSION = 2.53
+var VERSION = 2.54
 /** バージョン確認URL */
 var UPDATE_CHECK_URL = "https://api.github.com/repos/Nishisonic/QuestStateEx/releases/latest"
 /** ファイルの場所 */
@@ -614,6 +614,28 @@ var QUEST_DATA = {
         /** 深海東方部隊 海峡封鎖部隊旗艦(7-3-2 ボス)S 勝利 */
         new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-3-2ボスS勝利"),
     ],
+    /**[947]AL 作戦 */
+    947: [
+        /** 敵北方侵攻艦隊(3-1 ボス)S 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "3-1ボスS勝利"),
+        /** 敵深海北方泊地艦隊(3-3 ボス)S 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "3-3ボスS勝利"),
+        /** 深海棲艦 北方艦隊中枢(3-4 ボス)S 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "3-4ボスS勝利"),
+        /** 北方増援部隊主力(3-5 ボス)S 勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "3-5ボスS勝利"),
+    ],
+    /**[948]機動部隊決戦 */
+    948: [
+        /** 敵任務部隊 機動部隊本隊(5-2 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "5-2ボスS勝利"),
+        /** 深海南方任務部隊 本隊(5-5 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "5-5ボスS勝利"),
+        /** 任務部隊 主力群(6-5 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "6-5ボスS勝利"),
+        /** 離島守備隊(6-4 ボス)A 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "6-4ボスA勝利"),
+    ],
     // #endregion
     // #region 演習
     /** [302]大規模演習 */
@@ -1173,6 +1195,28 @@ var QUEST_DATA = {
         new QuestData(900, false, false, RESET.NONE, "「鋼材」用意"),
         /** 「ボーキサイト」用意 */
         new QuestData(900, false, false, RESET.NONE, "「ボーキサイト」用意"),
+    ],
+    /** [1103]潜水艦強化兵装の量産 */
+    1103: [
+        /** 「61cm三連装(酸素)魚雷」廃棄(一括は別々) */
+        new QuestData(3, false, true, [RESET.YEARLY, RESET.JUNE], "「61cm三連装(酸素)魚雷」廃棄"),
+        /** 「開発資材」用意 */
+        new QuestData(60, false, false, RESET.NONE, "「開発資材」用意"),
+        /** 「九三式水中聴音機」用意 */
+        new QuestData(2, false, false, RESET.NONE, "「九三式水中聴音機」用意"),
+        /** 「13号対空電探改」用意 */
+        new QuestData(2, false, false, RESET.NONE, "「13号対空電探改」用意"),
+    ],
+    /** [1104]潜水艦電子兵装の量産 */
+    1104: [
+        /** 「13号対空電探改」廃棄(一括は別々) */
+        new QuestData(3, false, true, [RESET.YEARLY, RESET.JUNE], "「13号対空電探改」廃棄"),
+        /** 「開発資材」用意 */
+        new QuestData(100, false, false, RESET.NONE, "「開発資材」用意"),
+        /** 「九三式水中聴音機」用意 */
+        new QuestData(2, false, false, RESET.NONE, "「九三式水中聴音機」用意"),
+        /** 「22号対水上電探」用意 */
+        new QuestData(2, false, false, RESET.NONE, "「22号対水上電探」用意"),
     ],
     // #endregion
 }

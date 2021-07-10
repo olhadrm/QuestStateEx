@@ -212,6 +212,10 @@ function savePortItem(data) {
         saveQuestCount(645, getLength(itemList[36]), 5, true) // 「洋上補給」物資の調達[九一式徹甲弾]
         saveQuestCount(653, getLength(itemList[7]), 2, true) // 工廠稼働！次期作戦準備！[35.6cm連装砲]
         saveQuestCount(653, getLength(itemList[19]), 3, true) // 工廠稼働！次期作戦準備！[九六式艦戦]
+        saveQuestCount(1103, getLength(itemList[46]), 3, true) // 潜水艦強化兵装の量産[九三式水中聴音機]
+        saveQuestCount(1103, getLength(itemList[106]), 4, true) // 潜水艦強化兵装の量産[13号対空電探改]
+        saveQuestCount(1104, getLength(itemList[46]), 3, true) // 潜水艦電子兵装の量産[九三式水中聴音機]
+        saveQuestCount(1104, getLength(itemList[28]), 4, true) // 潜水艦強化兵装の量産[22号対水上電探]
     }
 }
 
@@ -422,6 +426,7 @@ function addCountForBattleResultPart(data) {
     }).length >= 2
     var has912Org = ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3
     var has914Org = getLength(stypes[SHIP_TYPE.CA]) >= 3 && getLength(stypes[SHIP_TYPE.DD]) >= 1
+    var has948Org = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && Number(lastBattleDto.dock.id) === 1
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
@@ -631,10 +636,17 @@ function addCountForBattleResultPart(data) {
     }
     // #endregion
     // #region 北方海域
-    if (isEqualMap(3, 1) && isWinA(rank)) {
-        // 軽巡1隻以上
-        if (getLength(stypes[SHIP_TYPE.CL]) > 0) {
-            addQuestCount(873, 1, 1) // 北方海域警備を実施せよ！[3-1]
+    if (isEqualMap(3, 1)) {
+        if (isWinS(rank)) {
+            if (getLength(stypes[SHIP_TYPE.CVL]) >= 2) {
+                addQuestCount(947, 1, 1) // AL 作戦[3-1]
+            }
+        }
+        if (isWinA(rank)) {
+            // 軽巡1隻以上
+            if (getLength(stypes[SHIP_TYPE.CL]) > 0) {
+                addQuestCount(873, 1, 1) // 北方海域警備を実施せよ！[3-1]
+            }
         }
     }
     if (isEqualMap(3, 2) && isWinA(rank)) {
@@ -643,19 +655,32 @@ function addCountForBattleResultPart(data) {
             addQuestCount(873, 1, 2) // 北方海域警備を実施せよ！[3-2]
         }
     }
-    if (isEqualMap(3, 3) && isWinA(rank)) {
-        // 軽巡1隻以上
-        if (getLength(stypes[SHIP_TYPE.CL]) > 0) {
-            addQuestCount(873, 1, 3) // 北方海域警備を実施せよ！[3-3]
+    if (isEqualMap(3, 3)) {
+        if (isWinS(rank)) {
+            if (getLength(stypes[SHIP_TYPE.CVL]) >= 2) {
+                addQuestCount(947, 1, 2) // AL 作戦[3-3]
+            }
+        }
+        if (isWinA(rank)) {
+            // 軽巡1隻以上
+            if (getLength(stypes[SHIP_TYPE.CL]) > 0) {
+                addQuestCount(873, 1, 3) // 北方海域警備を実施せよ！[3-3]
+            }
         }
     }
     if (isEqualMap(3, 4) && isWinS(rank)) {
+        if (getLength(stypes[SHIP_TYPE.CVL]) >= 2) {
+            addQuestCount(947, 1, 3) // AL 作戦[3-4]
+        }
         if (has904Org) {
             addQuestCount(904, 1, 2) // 精鋭「十九駆」、躍り出る！[3-4]
         }
     }
     if (isEqualMap(3, 5)) {
         if (isWinS(rank)) {
+            if (getLength(stypes[SHIP_TYPE.CVL]) >= 2) {
+                addQuestCount(947, 1, 4) // AL 作戦[3-5]
+            }
             addQuestCount(909, 1, 1) // 【桃の節句：拡張作戦】春の攻勢作戦！[3-5]
         }
         if (isWinA(rank)) {
@@ -779,6 +804,9 @@ function addCountForBattleResultPart(data) {
         if (setsubun3) {
             addQuestCount(843, 1, 1) // 【節分拡張任務】令和三年節分作戦、全力出撃！[5-2]
         }
+        if (has948Org) {
+            addQuestCount(948, 1, 1) // 機動部隊決戦[5-2]
+        }
     }
     if (isEqualMap(5, 3) && isWinS(rank)) {
         if (newMikawaNum >= 4) {
@@ -818,6 +846,9 @@ function addCountForBattleResultPart(data) {
             // addQuestCount(843, 1, 2) // 【節分拡張任務】令和二年節分作戦、全力出撃！[5-5]
             addQuestCount(843, 1, 2) // 【節分拡張任務】令和三年節分作戦、全力出撃！[5-5]
         }
+        if (has948Org) {
+            addQuestCount(948, 1, 2) // 機動部隊決戦[5-5]
+        }
     }
     // #endregion
     // #region 中部海域
@@ -839,17 +870,24 @@ function addCountForBattleResultPart(data) {
             addQuestCount(862) // 前線の航空偵察を実施せよ！
         }
     }
-    if (isEqualMap(6, 4) && isWinS(rank)) {
-        addQuestCount(909, 1, 3) // 【桃の節句：拡張作戦】春の攻勢作戦！[6-4]
-        if (Number(lastBattleDto.dock.id) === 1) {
-            addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+    if (isEqualMap(6, 4)) {
+        if (isWinS(rank)) {
+            addQuestCount(909, 1, 3) // 【桃の節句：拡張作戦】春の攻勢作戦！[6-4]
+            if (Number(lastBattleDto.dock.id) === 1) {
+                addQuestCount(854, 1, 4) // 戦果拡張任務！「Z作戦」前段作戦[6-4]
+            }
+            if (isSixTpSquadron) {
+                addQuestCount(903, 1, 3) // 拡張「六水戦」、最前線へ！[6-4]
+            }
+            if (setsubun3) {
+                // addQuestCount(843, 1, 3) // 【節分拡張任務】令和二年節分作戦、全力出撃！[6-4]
+                addQuestCount(843, 1, 3) // 【節分拡張任務】令和三年節分作戦、全力出撃！[6-4]
+            }
         }
-        if (isSixTpSquadron) {
-            addQuestCount(903, 1, 3) // 拡張「六水戦」、最前線へ！[6-4]
-        }
-        if (setsubun3) {
-            // addQuestCount(843, 1, 3) // 【節分拡張任務】令和二年節分作戦、全力出撃！[6-4]
-            addQuestCount(843, 1, 3) // 【節分拡張任務】令和三年節分作戦、全力出撃！[6-4]
+        if (isWinA(rank)) {
+            if (has948Org) {
+                addQuestCount(948, 1, 4) // 機動部隊決戦[6-4]
+            }
         }
     }
     if (isEqualMap(6, 5) && isWinS(rank)) {
@@ -858,6 +896,9 @@ function addCountForBattleResultPart(data) {
         }
         if (isSixTpSquadron) {
             addQuestCount(903, 1, 4) // 拡張「六水戦」、最前線へ！[6-5]
+        }
+        if (has948Org) {
+            addQuestCount(948, 1, 3) // 機動部隊決戦[6-5]
         }
     }
     // #endregion
@@ -1012,6 +1053,10 @@ function addCountForDestroyItem2Part(data) {
         // 航空戦力の再編増強準備
         addQuestCount(681, getLength(type2[7]), 1) // 艦上爆撃機
         addQuestCount(681, getLength(type2[8]), 2) // 艦上攻撃機
+        // 潜水艦強化兵装の量産
+        addQuestCount(1103, getLength(slotitemId[125]), 1) // 61cm三連装(酸素)魚雷
+        // 潜水艦電子兵装の量産
+        addQuestCount(1104, getLength(slotitemId[106]), 1) // 13号対空電探改
     }
     addQuestCount(613)
 }
@@ -1438,6 +1483,8 @@ function updateMaterial() {
         // 開発資材
         saveQuestCount(681, research, 3, true) // 航空戦力の再編増強準備[開発資材]
         saveQuestCount(712, research, 2, true) // 【桃の節句】菱餅改修：2021 週[開発資材]
+        saveQuestCount(1103, research, 2, true) // 潜水艦強化兵装の量産[開発資材]
+        saveQuestCount(1104, research, 2, true) // 潜水艦電子兵装の量産[開発資材]
     }
 }
 
