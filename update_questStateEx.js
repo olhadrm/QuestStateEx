@@ -426,7 +426,7 @@ function addCountForBattleResultPart(data) {
     }).length >= 2
     var has912Org = ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3
     var has914Org = getLength(stypes[SHIP_TYPE.CA]) >= 3 && getLength(stypes[SHIP_TYPE.DD]) >= 1
-    var has948Org = [SHIP_TYPE.AV, SHIP_TYPE.CA, SHIP_TYPE.CAV].indexOf(ships[0].stype) >= 0 && Number(lastBattleDto.dock.id) === 1
+    var has948Org = [SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].indexOf(ships[0].stype) >= 0 && Number(lastBattleDto.dock.id) === 1
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
     if (!isEqualEvent(EVENT_ID.BOSS_BATTLE)) return
