@@ -344,6 +344,10 @@ function addCountForNextPart(data) {
         if (ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3) {
             addQuestCount(912, 1, 2) // 工作艦「明石」護衛任務[1-6]
         }
+        if ([SHIP_TYPE.CL, SHIP_TYPE.CT, SHIP_TYPE.DD].indexOf(ships[0].stype) >= 0 && (getLength(stypes[SHIP_TYPE.DD] + getLength(stypes[SHIP_TYPE.DE]))) >= 3) {
+            addQuestCount(945, 1, 2) // 南西方面の兵站航路の安全を図れ！[1-6]
+        }
+
     }
 }
 
@@ -426,6 +430,9 @@ function addCountForBattleResultPart(data) {
     }).length >= 2
     var has912Org = ships[0].shipInfo.flagship === "あかし" && getLength(stypes[SHIP_TYPE.DD]) >= 3
     var has914Org = getLength(stypes[SHIP_TYPE.CA]) >= 3 && getLength(stypes[SHIP_TYPE.DD]) >= 1
+    var has944Org = [SHIP_TYPE.CA, SHIP_TYPE.DD].indexOf(ships[0].stype) >= 0 && (getLength(stypes[SHIP_TYPE.DD] + getLength(stypes[SHIP_TYPE.DE]))) >= 3
+    var has945Org = [SHIP_TYPE.CL, SHIP_TYPE.CT, SHIP_TYPE.DD].indexOf(ships[0].stype) >= 0 && (getLength(stypes[SHIP_TYPE.DD] + getLength(stypes[SHIP_TYPE.DE]))) >= 3
+    var has946Org = [SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].indexOf(ships[0].stype) >= 0 && (getLength(stypes[SHIP_TYPE.CA] + getLength(stypes[SHIP_TYPE.CAV]))) >= 2
     var has948Org = [SHIP_TYPE.CVL, SHIP_TYPE.CV, SHIP_TYPE.CVB].indexOf(ships[0].stype) >= 0 && Number(lastBattleDto.dock.id) === 1
     // #region ○-○ボス勝利など
     // ボス戦じゃないなら処理終了
@@ -450,6 +457,9 @@ function addCountForBattleResultPart(data) {
                 // addQuestCount(906, 1, 1) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-2]
                 addQuestCount(906, 1, 1) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-2]
             }
+            if (has944Org) {
+                addQuestCount(944, 1, 1) // 鎮守府近海海域の哨戒を実施せよ！[1-2]
+            }
         }
     }
     if (isEqualMap(1, 3)) {
@@ -471,6 +481,9 @@ function addCountForBattleResultPart(data) {
             }
             if (has912Org) {
                 addQuestCount(912, 1, 1) // 工作艦「明石」護衛任務[1-3]
+            }
+            if (has944Org) {
+                addQuestCount(944, 1, 2) // 鎮守府近海海域の哨戒を実施せよ！[1-3]
             }
         }
     }
@@ -497,11 +510,14 @@ function addCountForBattleResultPart(data) {
                 addQuestCount(284, 1, 1) // 南西諸島方面「海上警備行動」発令！[1-4]
             }
         }
-        // if (isWinA(rank)) {
-        //     if (setsubun1) {
-        //         addQuestCount(840, 1, 1) //【節分任務】令和二年節分作戦[1-4]
-        //     }
-        // }
+        if (isWinA(rank)) {
+            //     if (setsubun1) {
+            //         addQuestCount(840, 1, 1) //【節分任務】令和二年節分作戦[1-4]
+            //     }
+            if (has944Org) {
+                addQuestCount(944, 1, 3) // 鎮守府近海海域の哨戒を実施せよ！[1-4]
+            }
+        }
     }
     if (isEqualMap(1, 5)) {
         if (isWinS(rank)) {
@@ -516,6 +532,9 @@ function addCountForBattleResultPart(data) {
             if (has906Org) {
                 // addQuestCount(906, 1, 3) // 【桃の節句作戦】鎮守府近海の安全を図れ！[1-5]
                 addQuestCount(906, 1, 3) // 【桃の節句】鎮守府近海、春の安全確保作戦[1-5]
+            }
+            if (has945Org) {
+                addQuestCount(945, 1, 1) // 南西方面の兵站航路の安全を図れ！[1-5]
             }
         }
     }
@@ -552,6 +571,9 @@ function addCountForBattleResultPart(data) {
             if (has912Org) {
                 addQuestCount(912, 1, 3) // 工作艦「明石」護衛任務[2-1]
             }
+            if (has945Org) {
+                addQuestCount(945, 1, 3) // 南西方面の兵站航路の安全を図れ！[2-1]
+            }
         }
     }
     if (isEqualMap(2, 2)) {
@@ -564,6 +586,9 @@ function addCountForBattleResultPart(data) {
             }
             if (has907Org) {
                 addQuestCount(907, 1, 2) // 【桃の節句】南西諸島海域、春の戦闘哨戒！[2-2]
+            }
+            if (has946Org) {
+                addQuestCount(946, 1, 1) // 空母機動部隊、出撃！敵艦隊を迎撃せよ！[2-2]
             }
         }
         if (isWinA(rank)) {
@@ -592,6 +617,9 @@ function addCountForBattleResultPart(data) {
             if (has907Org) {
                 addQuestCount(907, 1, 3) // 【桃の節句】南西諸島海域、春の戦闘哨戒！[2-3]
             }
+            if (has946Org) {
+                addQuestCount(946, 1, 2) // 空母機動部隊、出撃！敵艦隊を迎撃せよ！[2-3]
+            }
         }
         if (isWinA(rank)) {
             // if (has909Org) {
@@ -608,6 +636,9 @@ function addCountForBattleResultPart(data) {
     if (isEqualMap(2, 4)) {
         if (isWinS(rank)) {
             addQuestCount(822) // 沖ノ島海域迎撃戦
+            if (has946Org) {
+                addQuestCount(946, 1, 1) // 空母機動部隊、出撃！敵艦隊を迎撃せよ！[2-4]
+            }
         }
         if (isWinA(rank)) {
             if (Number(lastBattleDto.dock.id) === 1) {

@@ -614,6 +614,33 @@ var QUEST_DATA = {
         /** 深海東方部隊 海峡封鎖部隊旗艦(7-3-2 ボス)S 勝利 */
         new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "7-3-2ボスS勝利"),
     ],
+    /**[944]鎮守府近海海域の哨戒を実施せよ！ */
+    944: [
+        /** 敵主力艦隊(1-2 ボス)A 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "1-2ボスA勝利"),
+        /** 敵主力艦隊(1-3 ボス)A 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "1-3ボスA勝利"),
+        /** 敵機動部隊(1-4 ボス)A 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "1-4ボスA勝利"),
+    ],
+    /**[945]南西方面の兵站航路の安全を図れ！ */
+    945: [
+        /** 敵北方侵攻艦隊(3-1 ボス)S 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "1-5ボスA勝利"),
+        /** 鎮守府近海航路(1-6)ゴール地点到達 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "1-6ボス到達"),
+        /** 敵主力艦隊(2-1 ボス)A 勝利 */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.JUNE], "2-1ボスA勝利"),
+    ],
+    /**[946]空母機動部隊、出撃！敵艦隊を迎撃せよ！ */
+    946: [
+        /** 敵通商破壊機動部隊 主力艦隊(2-2ボス)S勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "2-2ボスS勝利"),
+        /** 敵主力打撃群(2-3ボス)A勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "2-3ボスS勝利"),
+        /** 敵侵攻中核艦隊(2-4ボス)A勝利 */
+        new QuestData(1, false, true, [RESET.YEARLY, RESET.JUNE], "2-4ボスS勝利"),
+    ],
     /**[947]AL 作戦 */
     947: [
         /** 敵北方侵攻艦隊(3-1 ボス)S 勝利 */
