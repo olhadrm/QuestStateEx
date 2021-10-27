@@ -637,7 +637,7 @@ function addCountForBattleResultPart(data) {
         if (isWinS(rank)) {
             addQuestCount(822) // 沖ノ島海域迎撃戦
             if (has946Org) {
-                addQuestCount(946, 1, 1) // 空母機動部隊、出撃！敵艦隊を迎撃せよ！[2-4]
+                addQuestCount(946, 1, 3) // 空母機動部隊、出撃！敵艦隊を迎撃せよ！[2-4]
             }
         }
         if (isWinA(rank)) {
@@ -1088,6 +1088,12 @@ function addCountForDestroyItem2Part(data) {
         addQuestCount(1103, getLength(slotitemId[125]), 1) // 61cm三連装(酸素)魚雷
         // 潜水艦電子兵装の量産
         addQuestCount(1104, getLength(slotitemId[106]), 1) // 13号対空電探改
+        // 夏の格納庫整備＆航空基地整備
+        addQuestCount(1105, getLength(type2[47]), 1) // 陸上攻撃機
+        // 【鋼材輸出】基地航空兵力を増備せよ！
+        addQuestCount(1107, getLength(type2[6]), 1) // 艦上戦闘機
+        addQuestCount(1107, getLength(type2[8]), 2) // 艦上攻撃機
+
     }
     addQuestCount(613)
 }
@@ -1403,6 +1409,13 @@ function addCountForPracticeBattleResultPart(data) {
                 addQuestCount(330) // 空母機動部隊、演習始め！
             }
         }
+        // 旗艦に重巡が居るか
+        if ([SHIP_TYPE.CA, SHIP_TYPE.CAV].some(function (stype) { return ships[0].stype === stype })) {
+            var ca = getLength(stypes[SHIP_TYPE.CA] + getLength(stypes[SHIP_TYPE.CAV]))
+            if (ca >= 4 && stypes[SHIP_TYPE.DD] >= 2) {
+                addQuestCount(353) // 「巡洋艦戦隊」演習！
+            }
+        }
     }
     var dedd = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD])
     var deddcl = getLength(stypes[SHIP_TYPE.DE]) + getLength(stypes[SHIP_TYPE.DD]) + getLength(stypes[SHIP_TYPE.CL])
@@ -1436,6 +1449,22 @@ function addCountForPracticeBattleResultPart(data) {
         }
         if (teatime >= 4) {
             addQuestCount(345) // 演習ティータイム！
+        }
+        // Gambier Bay Mk.II旗艦
+        if ([707].indexOf(ships[0].shipId) >= 0 && ships.map(function (ship) {
+            return ship.shipInfo.flagship
+        }).filter(function (name) {
+            return ["ジョンストン", "フレッチャー", "サミュエル"].indexOf(name) >= 0
+        }).length >= 2) {
+            addQuestCount(354) // 「改装特務空母」任務部隊演習！
+        }
+        // 黒潮改二と親潮改二が旗艦もしくは二番艦
+        if ([568, 670].indexOf(ships[0].shipId) >= 0 && ships.map(function (ship) {
+            return ship.shipInfo.flagship
+        }).ships.some(function (ship) {
+            return [568, 670].indexOf(ship[1].shipId >= 0)
+        })) {
+            addQuestCount(355) // 精鋭「第十五駆逐隊」第一小隊演習！
         }
     }
     if (isWinA(rank)) {
@@ -1499,6 +1528,7 @@ function updateMaterial() {
         saveQuestCount(716, steel, 2, true) // 「軽巡」級の改修工事を実施せよ！[鋼材]
         saveQuestCount(717, steel, 2, true) // 続：「軽巡」級の改修工事を実施せよ！[鋼材]
         saveQuestCount(712, steel, 4, true) // 【桃の節句】菱餅改修：2021 週[鋼材]
+        saveQuestCount(1107, steel, 3, true) // 【鋼材輸出】基地航空兵力を増備せよ！[鋼材]
         // ボーキサイト
         saveQuestCount(675, bauxite, 3, true) // 運用装備の統合整備[ボーキサイト]
         saveQuestCount(678, bauxite, 3, true) // 主力艦上戦闘機の更新[ボーキサイト]
@@ -1511,11 +1541,13 @@ function updateMaterial() {
         saveQuestCount(715, bauxite, 3, true) // 続：「駆逐艦」の改修工事を実施せよ！[ボーキサイト]
         saveQuestCount(716, bauxite, 3, true) // 「軽巡」級の改修工事を実施せよ！[ボーキサイト]
         saveQuestCount(717, bauxite, 3, true) // 続：「軽巡」級の改修工事を実施せよ！[ボーキサイト]
+        saveQuestCount(1105, bauxite, 4, true) // 夏の格納庫整備＆航空基地整備[ボーキサイト]
         // 開発資材
         saveQuestCount(681, research, 3, true) // 航空戦力の再編増強準備[開発資材]
         saveQuestCount(712, research, 2, true) // 【桃の節句】菱餅改修：2021 週[開発資材]
         saveQuestCount(1103, research, 2, true) // 潜水艦強化兵装の量産[開発資材]
         saveQuestCount(1104, research, 2, true) // 潜水艦電子兵装の量産[開発資材]
+        saveQuestCount(1107, research, 4, true) // 【鋼材輸出】基地航空兵力を増備せよ！[開発資材]
     }
 }
 

@@ -742,6 +742,21 @@ var QUEST_DATA = {
         /** A勝利 */
         new QuestData(3, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.MARCH]),
     ],
+    /** [353]「巡洋艦戦隊」演習！ */
+    353: [
+        /** B勝利 */
+        new QuestData(5, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.JUNE]),
+    ],
+    /** [354]「改装特務空母」任務部隊演習！ */
+    354: [
+        /** S勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.JUNE]),
+    ],
+    /** [355]精鋭「第十五駆逐隊」第一小隊演習！ */
+    354: [
+        /** S勝利 */
+        new QuestData(4, true, true, [RESET.NOT_SATISFY_DAILY, RESET.YEARLY, RESET.JUNE]),
+    ],
     // #endregion
     // #region 遠征
     /** [402]「遠征」を3回成功させよう！ */
@@ -1244,6 +1259,28 @@ var QUEST_DATA = {
         new QuestData(2, false, false, RESET.NONE, "「九三式水中聴音機」用意"),
         /** 「22号対水上電探」用意 */
         new QuestData(2, false, false, RESET.NONE, "「22号対水上電探」用意"),
+    ],
+    /** [1105]夏の格納庫整備＆航空基地整備	 */
+    1105: [
+        /** 陸上攻撃機廃棄(一括は別々) */
+        new QuestData(3, false, true, [RESET.YEARLY, RESET.JULY], "陸上攻撃機廃棄"),
+        /** 「九七式艦攻」用意 */
+        new QuestData(4, false, false, RESET.NONE, "「九七式艦攻」用意"),
+        /** 「天山」用意 */
+        new QuestData(4, false, false, RESET.NONE, "「天山」用意"),
+        /** 「弾薬」用意 */
+        new QuestData(2800, false, false, RESET.NONE, "「弾薬」用意"),
+    ],
+    /** [1107]【鋼材輸出】基地航空兵力を増備せよ！	 */
+    1107: [
+        /** 「艦戦」廃棄(一括は別々) */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "「艦戦」廃棄"),
+        /** 「艦攻」廃棄(一括は別々) */
+        new QuestData(2, false, true, [RESET.YEARLY, RESET.SEPTEMBER], "「艦攻」廃棄"),
+        /** 「鋼材」用意 */
+        new QuestData(24000, false, false, RESET.NONE, "「鋼材」用意"),
+        /** 「開発資材」用意 */
+        new QuestData(10, false, false, RESET.NONE, "「開発資材」用意"),
     ],
     // #endregion
 }
